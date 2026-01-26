@@ -1,4 +1,4 @@
-package com.study.myspringstudydiary.domain.studylog.entity;
+package com.study.myspringstudydiary.entity;
 
 public enum Category {
     JAVA("☕", "Java 기초/심화"),
