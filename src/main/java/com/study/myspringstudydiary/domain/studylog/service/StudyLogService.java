@@ -3,6 +3,8 @@ package com.study.myspringstudydiary.domain.studylog.service;
 import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogResponse;
+import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogDeleteResponse;
+import com.study.myspringstudydiary.domain.studylog.exception.StudyLogNotFoundException;
 import com.study.myspringstudydiary.domain.studylog.entity.Category;
 import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
 import com.study.myspringstudydiary.domain.studylog.entity.Understanding;
@@ -208,5 +210,36 @@ public class StudyLogService {
         if (request.getStudyDate() != null && request.getStudyDate().isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("학습 날짜는 미래일 수 없습니다.");
         }
+    }
+
+    // ========== DELETE ==========
+
+    /**
+     * 학습 일지를 삭제합니다.
+     *
+     * @param id 삭제할 학습 일지 ID
+     * @return 삭제 결과 응답
+     * @throws StudyLogNotFoundException 해당 ID의 학습 일지가 없는 경우
+     */
+    public StudyLogDeleteResponse deleteStudyLog(Long id) {
+        // 1. 존재 여부 확인
+        if (!studyLogRepository.existsById(id)) {
+            throw new StudyLogNotFoundException(id);
+        }
+
+        // 2. 삭제 수행
+        studyLogRepository.deleteById(id);
+
+        // 3. 삭제 결과 반환
+        return StudyLogDeleteResponse.of(id);
+    }
+
+    /**
+     * 학습 일지 총 개수를 반환합니다.
+     *
+     * @return 학습 일지 총 개수
+     */
+    public long getStudyLogCount() {
+        return studyLogRepository.count();
     }
 }

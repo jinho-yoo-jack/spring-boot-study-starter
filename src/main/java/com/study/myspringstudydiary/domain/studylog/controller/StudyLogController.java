@@ -3,6 +3,7 @@ package com.study.myspringstudydiary.domain.studylog.controller;
 import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogResponse;
+import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogDeleteResponse;
 import com.study.myspringstudydiary.domain.studylog.service.StudyLogService;
 import com.study.myspringstudydiary.global.common.ApiResponse;
 import org.springframework.http.HttpStatus;
@@ -116,6 +117,24 @@ public class StudyLogController {
 
         StudyLogResponse response = studyLogService.updateStudyLog(id, request);
 
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    // ========== DELETE ==========
+
+    /**
+     * 학습 일지 삭제 API
+     *
+     * DELETE /api/v1/logs/{id}
+     *
+     * @param id 삭제할 학습 일지 ID
+     * @return 삭제 결과
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<StudyLogDeleteResponse>> deleteStudyLog(
+            @PathVariable Long id) {
+
+        StudyLogDeleteResponse response = studyLogService.deleteStudyLog(id);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

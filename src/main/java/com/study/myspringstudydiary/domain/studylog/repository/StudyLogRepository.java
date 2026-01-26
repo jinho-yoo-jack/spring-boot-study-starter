@@ -2,6 +2,8 @@ package com.study.myspringstudydiary.domain.studylog.repository;
 
 import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
 import org.springframework.stereotype.Repository;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,5 +82,68 @@ public class StudyLogRepository {
         }
         database.put(studyLog.getId(), studyLog);
         return studyLog;
+    }
+
+    // ========== DELETE ==========
+
+    /**
+     * ID로 학습 일지를 삭제합니다.
+     *
+     * @param id 삭제할 학습 일지 ID
+     * @return 삭제 성공 여부 (true: 삭제됨, false: 해당 ID 없음)
+     */
+    public boolean deleteById(Long id) {
+        // Map.remove()는 삭제된 값을 반환, 없으면 null 반환
+        StudyLog removed = database.remove(id);
+        return removed != null;
+    }
+
+    /**
+     * ID에 해당하는 학습 일지가 존재하는지 확인합니다.
+     *
+     * @param id 확인할 학습 일지 ID
+     * @return 존재 여부
+     */
+    public boolean existsById(Long id) {
+        return database.containsKey(id);
+    }
+
+    /**
+     * 저장된 전체 학습 일지 수를 반환합니다.
+     *
+     * @return 학습 일지 총 개수
+     */
+    public long count() {
+        return database.size();
+    }
+
+    /**
+     * 모든 학습 일지를 삭제합니다.
+     * (테스트용)
+     */
+    public void deleteAll() {
+        database.clear();
+    }
+
+    // ========== 생명주기 콜백 ==========
+
+    @PostConstruct
+    public void init() {
+        System.out.println("========================================");
+        System.out.println("📦 StudyLogRepository 초기화 완료!");
+        System.out.println("   - 데이터 저장소(Map) 준비됨");
+        System.out.println("   - ID 생성기 준비됨");
+        System.out.println("========================================");
+    }
+
+    @PreDestroy
+    public void cleanup() {
+        System.out.println("========================================");
+        System.out.println("🧹 StudyLogRepository 정리 중...");
+        System.out.println("   - 저장된 데이터 수: " + database.size());
+        System.out.println("   - 마지막 ID: " + (sequence.get() - 1));
+        database.clear();  // 데이터 정리
+        System.out.println("   - 데이터 정리 완료!");
+        System.out.println("========================================");
     }
 }
