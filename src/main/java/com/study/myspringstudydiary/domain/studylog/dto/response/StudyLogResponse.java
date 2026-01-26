@@ -1,6 +1,6 @@
-package com.study.myspringstudydiary.studylog.dto.response;
+package com.study.myspringstudydiary.domain.studylog.dto.response;
 
-import com.study.myspringstudydiary.studylog.entity.StudyLog;
+import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

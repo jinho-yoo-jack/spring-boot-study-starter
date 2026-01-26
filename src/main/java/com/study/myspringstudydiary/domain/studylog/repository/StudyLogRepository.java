@@ -1,6 +1,6 @@
-package com.study.myspringstudydiary.studylog.repository;
+package com.study.myspringstudydiary.domain.studylog.repository;
 
-import com.study.myspringstudydiary.studylog.entity.StudyLog;
+import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

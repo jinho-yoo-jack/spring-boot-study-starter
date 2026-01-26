@@ -1,4 +1,4 @@
-package com.study.myspringstudydiary.studylog.entity;
+package com.study.myspringstudydiary.domain.studylog.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

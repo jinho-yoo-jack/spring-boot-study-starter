@@ -1,8 +1,11 @@
-package com.study.myspringstudydiary.studylog.controller;
+package com.study.myspringstudydiary.domain.studylog.controller;
 
-import com.study.myspringstudydiary.studylog.dto.request.StudyLogCreateRequest;
-import com.study.myspringstudydiary.studylog.dto.response.StudyLogResponse;
-import com.study.myspringstudydiary.studylog.service.StudyLogService;
+import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogCreateRequest;
+import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogResponse;
+import com.study.myspringstudydiary.domain.studylog.service.StudyLogService;
+import com.study.myspringstudydiary.global.common.ApiResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -15,10 +18,10 @@ import org.springframework.web.bind.annotation.*;
  *
  * @RequestMapping 어노테이션 설명:
  * - 이 컨트롤러의 기본 URL 경로를 설정
- * - 모든 메서드의 URL 앞에 "/api/v1/study-logs"가 붙음
+ * - 모든 메서드의 URL 앞에 "/api/v1/logs"가 붙음
  */
 @RestController  // ⭐ REST API 컨트롤러로 등록!
-@RequestMapping("/api/v1/study-logs")  // 기본 URL 경로 설정
+@RequestMapping("/api/v1/logs")  // 기본 URL 경로 설정
 public class StudyLogController {
 
     // ⭐ 의존성 주입: Service를 주입받음
@@ -38,12 +41,18 @@ public class StudyLogController {
      * @PostMapping: POST 요청을 처리
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
      *
-     * POST /api/v1/study-logs
+     * POST /api/v1/logs
      */
     @PostMapping
-    public StudyLogResponse createStudyLog(@RequestBody StudyLogCreateRequest request) {
+    public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
+            @RequestBody StudyLogCreateRequest request) {
+
         // Service 호출하여 학습 일지 생성
         StudyLogResponse response = studyLogService.createStudyLog(request);
-        return response;
+
+        // 201 Created 상태 코드와 함께 응답
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(response));
     }
 }

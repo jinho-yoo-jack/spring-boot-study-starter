@@ -1,4 +1,4 @@
-package com.study.myspringstudydiary.studylog.dto.request;
+package com.study.myspringstudydiary.domain.studylog.dto.request;
 
 import java.time.LocalDate;
 

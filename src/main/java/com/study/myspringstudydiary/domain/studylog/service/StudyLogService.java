@@ -1,11 +1,11 @@
-package com.study.myspringstudydiary.studylog.service;
+package com.study.myspringstudydiary.domain.studylog.service;
 
-import com.study.myspringstudydiary.studylog.dto.request.StudyLogCreateRequest;
-import com.study.myspringstudydiary.studylog.dto.response.StudyLogResponse;
-import com.study.myspringstudydiary.studylog.entity.Category;
-import com.study.myspringstudydiary.studylog.entity.StudyLog;
-import com.study.myspringstudydiary.studylog.entity.Understanding;
-import com.study.myspringstudydiary.studylog.repository.StudyLogRepository;
+import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogCreateRequest;
+import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogResponse;
+import com.study.myspringstudydiary.domain.studylog.entity.Category;
+import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
+import com.study.myspringstudydiary.domain.studylog.entity.Understanding;
+import com.study.myspringstudydiary.domain.studylog.repository.StudyLogRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
