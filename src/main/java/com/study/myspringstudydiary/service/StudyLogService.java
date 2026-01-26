@@ -4,7 +4,7 @@ import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogDeleteResponse;
-import com.study.myspringstudydiary.exception.StudyLogNotFoundException;
+import com.study.myspringstudydiary.exception.ResourceNotFoundException;
 import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;
@@ -93,7 +93,7 @@ public class StudyLogService {
 
         // 2. 존재하지 않으면 예외 처리
         StudyLog studyLog = studyLogOpt.orElseThrow(() ->
-            new IllegalArgumentException("ID " + id + "에 해당하는 학습 일지를 찾을 수 없습니다.")
+            new ResourceNotFoundException("Study Log", id)
         );
 
         // 3. Entity → Response DTO 변환 후 반환
@@ -112,7 +112,7 @@ public class StudyLogService {
         // 1. 기존 학습 일지 조회 (DAO 사용)
         Optional<StudyLog> studyLogOpt = studyLogDao.findById(id);
         StudyLog studyLog = studyLogOpt.orElseThrow(() ->
-            new IllegalArgumentException("해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")")
+            new ResourceNotFoundException("Study Log", id)
         );
 
         // 2. 수정할 내용이 있는지 확인
@@ -219,12 +219,12 @@ public class StudyLogService {
      *
      * @param id 삭제할 학습 일지 ID
      * @return 삭제 결과 응답
-     * @throws StudyLogNotFoundException 해당 ID의 학습 일지가 없는 경우
+     * @throws ResourceNotFoundException 해당 ID의 학습 일지가 없는 경우
      */
     public StudyLogDeleteResponse deleteStudyLog(Long id) {
         // 1. 존재 여부 확인 (DAO 사용)
         if (!studyLogDao.existsById(id)) {
-            throw new StudyLogNotFoundException(id);
+            throw new ResourceNotFoundException("Study Log", id);
         }
 
         // 2. 삭제 수행 (DAO 사용)
