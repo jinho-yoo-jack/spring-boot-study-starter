@@ -3,7 +3,9 @@ package com.study.myspringstudydiary.domain.studylog.repository;
 import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -42,5 +44,24 @@ public class StudyLogRepository {
         database.put(studyLog.getId(), studyLog);
 
         return studyLog;
+    }
+
+    /**
+     * 모든 학습 일지 조회
+     * @return 모든 학습 일지 리스트
+     */
+    public List<StudyLog> findAll() {
+        // Map의 모든 값을 리스트로 변환하여 반환
+        return new ArrayList<>(database.values());
+    }
+
+    /**
+     * ID로 학습 일지 조회
+     * @param id 조회할 학습 일지 ID
+     * @return 학습 일지 (없으면 null)
+     */
+    public StudyLog findById(Long id) {
+        // Map에서 ID로 조회
+        return database.get(id);
     }
 }

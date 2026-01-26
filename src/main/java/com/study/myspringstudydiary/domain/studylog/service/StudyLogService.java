@@ -9,6 +9,8 @@ import com.study.myspringstudydiary.domain.studylog.repository.StudyLogRepositor
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 학습 일지 서비스
@@ -60,6 +62,38 @@ public class StudyLogService {
 
         // 4. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(savedStudyLog);
+    }
+
+    /**
+     * 모든 학습 일지 조회
+     * @return 모든 학습 일지 응답 DTO 리스트
+     */
+    public List<StudyLogResponse> getAllStudyLogs() {
+        // 1. Repository에서 모든 학습 일지 조회
+        List<StudyLog> studyLogs = studyLogRepository.findAll();
+
+        // 2. Entity 리스트 → Response DTO 리스트 변환
+        return studyLogs.stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * ID로 학습 일지 조회
+     * @param id 조회할 학습 일지 ID
+     * @return 학습 일지 응답 DTO
+     */
+    public StudyLogResponse getStudyLogById(Long id) {
+        // 1. Repository에서 ID로 조회
+        StudyLog studyLog = studyLogRepository.findById(id);
+
+        // 2. 존재하지 않으면 예외 처리
+        if (studyLog == null) {
+            throw new IllegalArgumentException("ID " + id + "에 해당하는 학습 일지를 찾을 수 없습니다.");
+        }
+
+        // 3. Entity → Response DTO 변환 후 반환
+        return StudyLogResponse.from(studyLog);
     }
 
     /**

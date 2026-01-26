@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 학습 일지 컨트롤러
  *
@@ -53,6 +55,46 @@ public class StudyLogController {
         // 201 Created 상태 코드와 함께 응답
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                .body(ApiResponse.success(response));
+    }
+
+    /**
+     * 모든 학습 일지 조회 (READ - All)
+     *
+     * @GetMapping: GET 요청을 처리
+     *
+     * GET /api/v1/logs
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<StudyLogResponse>>> getAllStudyLogs() {
+
+        // Service 호출하여 모든 학습 일지 조회
+        List<StudyLogResponse> responses = studyLogService.getAllStudyLogs();
+
+        // 200 OK 상태 코드와 함께 응답
+        return ResponseEntity
+                .ok()
+                .body(ApiResponse.success(responses));
+    }
+
+    /**
+     * 특정 학습 일지 조회 (READ - Single)
+     *
+     * @GetMapping("/{id}"): GET 요청을 처리 (경로 변수 포함)
+     * @PathVariable: URL 경로의 {id} 값을 매개변수로 받음
+     *
+     * GET /api/v1/logs/{id}
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<StudyLogResponse>> getStudyLogById(
+            @PathVariable Long id) {
+
+        // Service 호출하여 ID로 학습 일지 조회
+        StudyLogResponse response = studyLogService.getStudyLogById(id);
+
+        // 200 OK 상태 코드와 함께 응답
+        return ResponseEntity
+                .ok()
                 .body(ApiResponse.success(response));
     }
 }
