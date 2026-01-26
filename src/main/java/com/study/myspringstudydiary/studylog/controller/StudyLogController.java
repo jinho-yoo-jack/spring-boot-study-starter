@@ -3,9 +3,6 @@ package com.study.myspringstudydiary.studylog.controller;
 import com.study.myspringstudydiary.studylog.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.studylog.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.studylog.service.StudyLogService;
-import com.study.myspringstudydiary.global.common.ApiResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -44,15 +41,9 @@ public class StudyLogController {
      * POST /api/v1/study-logs
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
-            @RequestBody StudyLogCreateRequest request) {
-
+    public StudyLogResponse createStudyLog(@RequestBody StudyLogCreateRequest request) {
         // Service 호출하여 학습 일지 생성
         StudyLogResponse response = studyLogService.createStudyLog(request);
-
-        // 201 Created 상태 코드와 함께 응답
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
+        return response;
     }
 }

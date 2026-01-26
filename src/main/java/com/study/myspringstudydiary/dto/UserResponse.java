@@ -1,7 +1,7 @@
 package com.study.myspringstudydiary.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.study.myspringstudydiary.entity.User;
+import com.study.myspringstudydiary.model.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -32,7 +32,7 @@ public class UserResponse {
                 .id(user.getId())
                 .userName(user.getUserName())
                 .email(user.getEmail())
-                .diaryCount(user.getDiaries() != null ? user.getDiaries().size() : 0)
+                .diaryCount(0) // day1에서는 diary count 기능 구현 안함
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

@@ -1,7 +1,7 @@
 package com.study.myspringstudydiary.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.study.myspringstudydiary.entity.Diary;
+import com.study.myspringstudydiary.model.Diary;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -34,8 +34,8 @@ public class DiaryResponse {
                 .id(diary.getId())
                 .title(diary.getTitle())
                 .content(diary.getContent())
-                .userId(diary.getUser() != null ? diary.getUser().getId() : null)
-                .userName(diary.getUser() != null ? diary.getUser().getUserName() : null)
+                .userId(diary.getUserId())
+                .userName(diary.getUserName())
                 .createdAt(diary.getCreatedAt())
                 .updatedAt(diary.getUpdatedAt())
                 .build();
