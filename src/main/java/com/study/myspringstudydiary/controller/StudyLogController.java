@@ -1,8 +1,8 @@
-package com.study.myspringstudydiary.domain.studylog.controller;
+package com.study.myspringstudydiary.controller;
 
-import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogCreateRequest;
-import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogResponse;
-import com.study.myspringstudydiary.domain.studylog.service.StudyLogService;
+import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
+import com.study.myspringstudydiary.dto.response.StudyLogResponse;
+import com.study.myspringstudydiary.service.StudyLogService;
 import com.study.myspringstudydiary.global.common.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
