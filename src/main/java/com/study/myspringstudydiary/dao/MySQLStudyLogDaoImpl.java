@@ -1,8 +1,8 @@
-package com.study.myspringstudydiary.domain.studylog.dao;
+package com.study.myspringstudydiary.dao;
 
-import com.study.myspringstudydiary.domain.studylog.entity.Category;
-import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
-import com.study.myspringstudydiary.domain.studylog.entity.Understanding;
+import com.study.myspringstudydiary.entity.Category;
+import com.study.myspringstudydiary.entity.StudyLog;
+import com.study.myspringstudydiary.entity.Understanding;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -10,7 +10,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 

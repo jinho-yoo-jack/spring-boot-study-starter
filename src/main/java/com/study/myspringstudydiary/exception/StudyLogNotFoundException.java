@@ -1,4 +1,4 @@
-package com.study.myspringstudydiary.domain.studylog.exception;
+package com.study.myspringstudydiary.exception;
 
 /**
  * 학습 일지를 찾을 수 없을 때 발생하는 예외

@@ -1,14 +1,14 @@
-package com.study.myspringstudydiary.domain.studylog.service;
+package com.study.myspringstudydiary.service;
 
-import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogCreateRequest;
-import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogUpdateRequest;
-import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogResponse;
-import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogDeleteResponse;
-import com.study.myspringstudydiary.domain.studylog.exception.StudyLogNotFoundException;
-import com.study.myspringstudydiary.domain.studylog.entity.Category;
-import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
-import com.study.myspringstudydiary.domain.studylog.entity.Understanding;
-import com.study.myspringstudydiary.domain.studylog.dao.StudyLogDao;
+import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
+import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
+import com.study.myspringstudydiary.dto.response.StudyLogResponse;
+import com.study.myspringstudydiary.dto.response.StudyLogDeleteResponse;
+import com.study.myspringstudydiary.exception.StudyLogNotFoundException;
+import com.study.myspringstudydiary.entity.Category;
+import com.study.myspringstudydiary.entity.StudyLog;
+import com.study.myspringstudydiary.entity.Understanding;
+import com.study.myspringstudydiary.dao.StudyLogDao;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

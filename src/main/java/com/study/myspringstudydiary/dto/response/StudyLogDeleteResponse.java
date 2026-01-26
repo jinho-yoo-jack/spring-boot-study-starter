@@ -1,4 +1,4 @@
-package com.study.myspringstudydiary.domain.studylog.dto.response;
+package com.study.myspringstudydiary.dto.response;
 
 public class StudyLogDeleteResponse {
 

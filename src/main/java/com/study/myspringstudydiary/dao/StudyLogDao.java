@@ -1,6 +1,6 @@
-package com.study.myspringstudydiary.domain.studylog.dao;
+package com.study.myspringstudydiary.dao;
 
-import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
+import com.study.myspringstudydiary.entity.StudyLog;
 import java.util.List;
 import java.util.Optional;
 
