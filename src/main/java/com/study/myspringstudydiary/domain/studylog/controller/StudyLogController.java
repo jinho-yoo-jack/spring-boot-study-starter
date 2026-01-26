@@ -1,6 +1,7 @@
 package com.study.myspringstudydiary.domain.studylog.controller;
 
 import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogCreateRequest;
+import com.study.myspringstudydiary.domain.studylog.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.domain.studylog.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.domain.studylog.service.StudyLogService;
 import com.study.myspringstudydiary.global.common.ApiResponse;
@@ -96,5 +97,25 @@ public class StudyLogController {
         return ResponseEntity
                 .ok()
                 .body(ApiResponse.success(response));
+    }
+
+    /**
+     * 학습 일지 수정
+     * PUT /api/v1/logs/{id}
+     *
+     * @PutMapping: PUT 요청을 처리하는 어노테이션
+     *              리소스의 전체 또는 일부를 수정할 때 사용
+     *
+     * @PathVariable: URL의 {id} 부분을 파라미터로 받음
+     * @RequestBody: HTTP Body의 JSON을 객체로 변환
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<StudyLogResponse>> updateStudyLog(
+            @PathVariable Long id,
+            @RequestBody StudyLogUpdateRequest request) {
+
+        StudyLogResponse response = studyLogService.updateStudyLog(id, request);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 }

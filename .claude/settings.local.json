@@ -19,7 +19,9 @@
       "Bash(python3:*)",
       "mcp__mcp-obsidian__obsidian_patch_content",
       "mcp__mcp-obsidian__obsidian_simple_search",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "Bash(xargs kill:*)",
+      "Bash(./gradlew bootRun)"
     ],
     "deny": [],
     "ask": []
