@@ -8,11 +8,12 @@ import com.study.myspringstudydiary.domain.studylog.exception.StudyLogNotFoundEx
 import com.study.myspringstudydiary.domain.studylog.entity.Category;
 import com.study.myspringstudydiary.domain.studylog.entity.StudyLog;
 import com.study.myspringstudydiary.domain.studylog.entity.Understanding;
-import com.study.myspringstudydiary.domain.studylog.repository.StudyLogRepository;
+import com.study.myspringstudydiary.domain.studylog.dao.StudyLogDao;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -26,17 +27,17 @@ import java.util.stream.Collectors;
 @Service  // ⭐ Spring Bean으로 등록!
 public class StudyLogService {
 
-    // ⭐ 의존성 주입: Repository를 주입받음
-    private final StudyLogRepository studyLogRepository;
+    // ⭐ 의존성 주입: DAO를 주입받음 (Repository 대신 DAO 사용)
+    private final StudyLogDao studyLogDao;
 
     /**
      * 생성자 주입 (Constructor Injection)
      *
-     * Spring이 StudyLogRepository Bean을 찾아서 자동으로 주입해줍니다.
-     * 생성자가 1개만 있으면 @Autowired 생략 가능!
+     * Spring이 StudyLogDao Bean을 찾아서 자동으로 주입해줍니다.
+     * DAO 패턴을 사용하여 데이터베이스 접근을 추상화합니다.
      */
-    public StudyLogService(StudyLogRepository studyLogRepository) {
-        this.studyLogRepository = studyLogRepository;
+    public StudyLogService(StudyLogDao studyLogDao) {
+        this.studyLogDao = studyLogDao;
     }
 
     /**
@@ -60,8 +61,8 @@ public class StudyLogService {
             request.getStudyDate() != null ? request.getStudyDate() : LocalDate.now()
         );
 
-        // 3. 저장
-        StudyLog savedStudyLog = studyLogRepository.save(studyLog);
+        // 3. 저장 (DAO 사용)
+        StudyLog savedStudyLog = studyLogDao.save(studyLog);
 
         // 4. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(savedStudyLog);
@@ -72,8 +73,8 @@ public class StudyLogService {
      * @return 모든 학습 일지 응답 DTO 리스트
      */
     public List<StudyLogResponse> getAllStudyLogs() {
-        // 1. Repository에서 모든 학습 일지 조회
-        List<StudyLog> studyLogs = studyLogRepository.findAll();
+        // 1. DAO에서 모든 학습 일지 조회
+        List<StudyLog> studyLogs = studyLogDao.findAll();
 
         // 2. Entity 리스트 → Response DTO 리스트 변환
         return studyLogs.stream()
@@ -87,13 +88,13 @@ public class StudyLogService {
      * @return 학습 일지 응답 DTO
      */
     public StudyLogResponse getStudyLogById(Long id) {
-        // 1. Repository에서 ID로 조회
-        StudyLog studyLog = studyLogRepository.findById(id);
+        // 1. DAO에서 ID로 조회 (Optional 반환)
+        Optional<StudyLog> studyLogOpt = studyLogDao.findById(id);
 
         // 2. 존재하지 않으면 예외 처리
-        if (studyLog == null) {
-            throw new IllegalArgumentException("ID " + id + "에 해당하는 학습 일지를 찾을 수 없습니다.");
-        }
+        StudyLog studyLog = studyLogOpt.orElseThrow(() ->
+            new IllegalArgumentException("ID " + id + "에 해당하는 학습 일지를 찾을 수 없습니다.")
+        );
 
         // 3. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(studyLog);
@@ -108,12 +109,11 @@ public class StudyLogService {
      */
     public StudyLogResponse updateStudyLog(Long id, StudyLogUpdateRequest request) {
 
-        // 1. 기존 학습 일지 조회
-        StudyLog studyLog = studyLogRepository.findById(id);
-        if (studyLog == null) {
-            throw new IllegalArgumentException(
-                "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")");
-        }
+        // 1. 기존 학습 일지 조회 (DAO 사용)
+        Optional<StudyLog> studyLogOpt = studyLogDao.findById(id);
+        StudyLog studyLog = studyLogOpt.orElseThrow(() ->
+            new IllegalArgumentException("해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")")
+        );
 
         // 2. 수정할 내용이 있는지 확인
         if (request.hasNoUpdates()) {
@@ -154,8 +154,8 @@ public class StudyLogService {
             request.getStudyDate()
         );
 
-        // 6. 저장 및 응답 반환
-        StudyLog updatedStudyLog = studyLogRepository.update(studyLog);
+        // 6. 저장 및 응답 반환 (DAO 사용)
+        StudyLog updatedStudyLog = studyLogDao.update(studyLog);
         return StudyLogResponse.from(updatedStudyLog);
     }
 
@@ -222,13 +222,13 @@ public class StudyLogService {
      * @throws StudyLogNotFoundException 해당 ID의 학습 일지가 없는 경우
      */
     public StudyLogDeleteResponse deleteStudyLog(Long id) {
-        // 1. 존재 여부 확인
-        if (!studyLogRepository.existsById(id)) {
+        // 1. 존재 여부 확인 (DAO 사용)
+        if (!studyLogDao.existsById(id)) {
             throw new StudyLogNotFoundException(id);
         }
 
-        // 2. 삭제 수행
-        studyLogRepository.deleteById(id);
+        // 2. 삭제 수행 (DAO 사용)
+        studyLogDao.deleteById(id);
 
         // 3. 삭제 결과 반환
         return StudyLogDeleteResponse.of(id);
@@ -240,6 +240,6 @@ public class StudyLogService {
      * @return 학습 일지 총 개수
      */
     public long getStudyLogCount() {
-        return studyLogRepository.count();
+        return studyLogDao.count();
     }
 }
