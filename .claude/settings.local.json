@@ -3,7 +3,15 @@
     "allow": [
       "Bash(./gradlew clean build:*)",
       "Bash(timeout 5 ./gradlew bootRun:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Read(//Users/black/.claude/**)",
+      "Bash(claude mcp:*)",
+      "Read(//Users/black/Library/Mobile Documents/com~apple~CloudDocs/claude-sync/**)",
+      "Read(//Users/black/Library/**)",
+      "Read(//Users/black/Documents/**)",
+      "Read(//Users/black/**)",
+      "Bash(mdfind:*)",
+      "Bash(git fetch:*)"
     ],
     "deny": [],
     "ask": []
