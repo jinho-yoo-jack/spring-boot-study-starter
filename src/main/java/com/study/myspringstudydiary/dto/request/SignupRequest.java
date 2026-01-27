@@ -14,16 +14,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SignupRequest {
 
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    @NotBlank(message = "사용자명은 필수입니다")
+    @Size(min = 3, max = 50, message = "사용자명은 3자 이상 50자 이하여야 합니다")
     private String username;
 
-    @NotBlank(message = "Email is required")
-    @Email(message = "Email should be valid")
-    @Size(max = 100, message = "Email must not exceed 100 characters")
+    @NotBlank(message = "이메일은 필수입니다")
+    @Email(message = "올바른 이메일 형식이어야 합니다")
+    @Size(max = 100, message = "이메일은 100자를 초과할 수 없습니다")
     private String email;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters")
+    @NotBlank(message = "비밀번호는 필수입니다")
+    @Size(min = 6, max = 100, message = "비밀번호는 6자 이상 100자 이하여야 합니다")
     private String password;
 }

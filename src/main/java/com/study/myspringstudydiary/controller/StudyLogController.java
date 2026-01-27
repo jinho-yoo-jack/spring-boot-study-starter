@@ -6,8 +6,10 @@ import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogDeleteResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
 import com.study.myspringstudydiary.global.common.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.List;
  */
 @RestController  // ⭐ REST API 컨트롤러로 등록!
 @RequestMapping("/api/v1/logs")  // 기본 URL 경로 설정
+@Validated  // 클래스 레벨 validation 활성화
 public class StudyLogController {
 
     // ⭐ 의존성 주입: Service를 주입받음
@@ -49,7 +52,7 @@ public class StudyLogController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
-            @RequestBody StudyLogCreateRequest request) {
+            @Valid @RequestBody StudyLogCreateRequest request) {
 
         // Service 호출하여 학습 일지 생성
         StudyLogResponse response = studyLogService.createStudyLog(request);
@@ -113,7 +116,7 @@ public class StudyLogController {
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<StudyLogResponse>> updateStudyLog(
             @PathVariable Long id,
-            @RequestBody StudyLogUpdateRequest request) {
+            @Valid @RequestBody StudyLogUpdateRequest request) {
 
         StudyLogResponse response = studyLogService.updateStudyLog(id, request);
 

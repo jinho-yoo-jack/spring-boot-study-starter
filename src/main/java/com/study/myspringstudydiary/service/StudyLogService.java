@@ -17,7 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,17 +66,15 @@ public class StudyLogService {
         // 1. Get current authenticated user ID
         Long userId = getCurrentUserId();
 
-        // 2. 요청 데이터 유효성 검증
-        validateCreateRequest(request);
-
-        // 3. DTO → Entity 변환 (Using Builder pattern with Lombok)
+        // 2. DTO → Entity 변환 (Using Builder pattern with Lombok)
+        // Validation is now handled by @Valid annotation in Controller
         StudyLog studyLog = request.toEntity(userId);
 
-        // 4. 저장 (DAO 사용)
+        // 3. 저장 (DAO 사용)
         StudyLog savedStudyLog = studyLogDao.save(studyLog);
         log.info("Successfully created study log with ID: {} for user: {}", savedStudyLog.getId(), userId);
 
-        // 5. Entity → Response DTO 변환 후 반환
+        // 4. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(savedStudyLog);
     }
 
@@ -152,36 +149,24 @@ public class StudyLogService {
             throw new ForbiddenException("Study Log", id);
         }
 
-        // 4. 수정할 내용이 있는지 확인
+        // 4. 수정할 내용이 있는지 확인 (Business logic validation)
         if (request.hasNoUpdates()) {
             throw new IllegalArgumentException("수정할 내용이 없습니다.");
         }
 
-        // 5. 수정할 값들의 유효성 검증
-        validateUpdateRequest(request);
-
-        // 6. 카테고리와 이해도 변환 (null이 아닌 경우에만)
+        // 5. 카테고리와 이해도 변환 (null이 아닌 경우에만)
+        // Validation is now handled by @Valid annotation in Controller
         Category category = null;
         if (request.getCategory() != null) {
-            try {
-                category = Category.valueOf(request.getCategory().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException(
-                    "유효하지 않은 카테고리입니다: " + request.getCategory());
-            }
+            category = Category.valueOf(request.getCategory().toUpperCase());
         }
 
         Understanding understanding = null;
         if (request.getUnderstanding() != null) {
-            try {
-                understanding = Understanding.valueOf(request.getUnderstanding().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException(
-                    "유효하지 않은 이해도입니다: " + request.getUnderstanding());
-            }
+            understanding = Understanding.valueOf(request.getUnderstanding().toUpperCase());
         }
 
-        // 7. Entity 업데이트 (null이 아닌 값만 반영)
+        // 6. Entity 업데이트 (null이 아닌 값만 반영)
         studyLog.update(
             request.getTitle(),
             request.getContent(),
@@ -191,62 +176,9 @@ public class StudyLogService {
             request.getStudyDate()
         );
 
-        // 8. 저장 및 응답 반환 (DAO 사용)
+        // 7. 저장 및 응답 반환 (DAO 사용)
         StudyLog updatedStudyLog = studyLogDao.update(studyLog);
         return StudyLogResponse.from(updatedStudyLog);
-    }
-
-    /**
-     * 생성 요청 유효성 검증
-     */
-    private void validateCreateRequest(StudyLogCreateRequest request) {
-        if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
-            throw new IllegalArgumentException("학습 주제는 필수입니다.");
-        }
-        if (request.getTitle().length() > 100) {
-            throw new IllegalArgumentException("학습 주제는 100자를 초과할 수 없습니다.");
-        }
-        if (request.getContent() == null || request.getContent().trim().isEmpty()) {
-            throw new IllegalArgumentException("학습 내용은 필수입니다.");
-        }
-        if (request.getContent().length() > 1000) {
-            throw new IllegalArgumentException("학습 내용은 1000자를 초과할 수 없습니다.");
-        }
-        if (request.getStudyTime() == null || request.getStudyTime() < 1) {
-            throw new IllegalArgumentException("학습 시간은 1분 이상이어야 합니다.");
-        }
-    }
-
-    /**
-     * 수정 요청 유효성 검증
-     * null이 아닌 값만 검증합니다.
-     */
-    private void validateUpdateRequest(StudyLogUpdateRequest request) {
-        if (request.getTitle() != null) {
-            if (request.getTitle().trim().isEmpty()) {
-                throw new IllegalArgumentException("학습 주제는 빈 값일 수 없습니다.");
-            }
-            if (request.getTitle().length() > 100) {
-                throw new IllegalArgumentException("학습 주제는 100자를 초과할 수 없습니다.");
-            }
-        }
-
-        if (request.getContent() != null) {
-            if (request.getContent().trim().isEmpty()) {
-                throw new IllegalArgumentException("학습 내용은 빈 값일 수 없습니다.");
-            }
-            if (request.getContent().length() > 1000) {
-                throw new IllegalArgumentException("학습 내용은 1000자를 초과할 수 없습니다.");
-            }
-        }
-
-        if (request.getStudyTime() != null && request.getStudyTime() < 1) {
-            throw new IllegalArgumentException("학습 시간은 1분 이상이어야 합니다.");
-        }
-
-        if (request.getStudyDate() != null && request.getStudyDate().isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("학습 날짜는 미래일 수 없습니다.");
-        }
     }
 
     // ========== DELETE ==========

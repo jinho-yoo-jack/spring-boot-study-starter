@@ -3,6 +3,7 @@ package com.study.myspringstudydiary.global.exception;
 import com.study.myspringstudydiary.global.common.ApiResponse;
 import com.study.myspringstudydiary.exception.ResourceNotFoundException;
 import com.study.myspringstudydiary.exception.DuplicateResourceException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
 
 /**
  * Global exception handler for all controllers
@@ -44,18 +47,46 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handle validation errors
+     * Handle @Valid validation errors (@RequestBody validation)
+     * Triggered when validation fails on DTOs with @Valid annotation
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidation(
+    public ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e) {
 
+        // 모든 에러 메시지를 하나로 결합
         String message = e.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .reduce((a, b) -> a + ", " + b)
-                .orElse("Validation failed");
+                .collect(Collectors.joining(", "));
+
+        if (message.isEmpty()) {
+            message = "입력값 검증에 실패했습니다";
+        }
+
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.error("VALIDATION_ERROR", message));
+    }
+
+    /**
+     * Handle @Validated validation errors (method parameter validation)
+     * Triggered when validation fails on method parameters with constraints
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleConstraintViolation(
+            ConstraintViolationException e) {
+
+        // 모든 위반사항 메시지를 하나로 결합
+        String message = e.getConstraintViolations()
+                .stream()
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                .collect(Collectors.joining(", "));
+
+        if (message.isEmpty()) {
+            message = "입력값 검증에 실패했습니다";
+        }
 
         return ResponseEntity
                 .badRequest()
