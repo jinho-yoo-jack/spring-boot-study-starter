@@ -1,5 +1,10 @@
 package com.study.myspringstudydiary.entity;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum Category {
     JAVA("☕", "Java 기초/심화"),
     SPRING("🌱", "Spring Framework/Boot"),
@@ -13,17 +18,4 @@ public enum Category {
 
     private final String icon;
     private final String description;
-
-    Category(String icon, String description) {
-        this.icon = icon;
-        this.description = description;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }

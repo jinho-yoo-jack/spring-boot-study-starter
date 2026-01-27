@@ -1,28 +1,28 @@
 package com.study.myspringstudydiary.dto.response;
 
+import lombok.*;
+
+/**
+ * Study Log Delete Response DTO with Lombok
+ * Using @Value for immutable response
+ *
+ * Before: 28 lines
+ * After: 18 lines (36% reduction)
+ */
+@Value
+@Builder
 public class StudyLogDeleteResponse {
 
-    private String message;
-    private Long deletedId;
+    @Builder.Default
+    String message = "학습 일지가 성공적으로 삭제되었습니다.";
+    Long deletedId;
 
-    // 기본 생성자
-    private StudyLogDeleteResponse() {
-    }
-
-    // 정적 팩토리 메서드
+    /**
+     * Static factory method
+     */
     public static StudyLogDeleteResponse of(Long id) {
-        StudyLogDeleteResponse response = new StudyLogDeleteResponse();
-        response.message = "학습 일지가 성공적으로 삭제되었습니다.";
-        response.deletedId = id;
-        return response;
-    }
-
-    // Getter 메서드
-    public String getMessage() {
-        return message;
-    }
-
-    public Long getDeletedId() {
-        return deletedId;
+        return StudyLogDeleteResponse.builder()
+                .deletedId(id)
+                .build();
     }
 }

@@ -1,5 +1,10 @@
 package com.study.myspringstudydiary.entity;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum Understanding {
     VERY_GOOD("😎", "완벽히 이해했어요"),
     GOOD("😊", "잘 이해했어요"),
@@ -9,17 +14,4 @@ public enum Understanding {
 
     private final String emoji;
     private final String description;
-
-    Understanding(String emoji, String description) {
-        this.emoji = emoji;
-        this.description = description;
-    }
-
-    public String getEmoji() {
-        return emoji;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }
