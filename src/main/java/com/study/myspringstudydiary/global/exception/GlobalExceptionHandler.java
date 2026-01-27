@@ -5,6 +5,8 @@ import com.study.myspringstudydiary.exception.ResourceNotFoundException;
 import com.study.myspringstudydiary.exception.DuplicateResourceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -70,6 +72,32 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(ApiResponse.error("INVALID_ARGUMENT", e.getMessage()));
+    }
+
+    /**
+     * Handle BadCredentialsException (invalid username or password)
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBadCredentials(
+            BadCredentialsException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("AUTHENTICATION_FAILED",
+                        "Invalid username or password"));
+    }
+
+    /**
+     * Handle UsernameNotFoundException
+     */
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUsernameNotFound(
+            UsernameNotFoundException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("AUTHENTICATION_FAILED",
+                        "Invalid username or password"));
     }
 
     /**

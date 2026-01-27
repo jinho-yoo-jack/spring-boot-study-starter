@@ -22,12 +22,19 @@ spring:
       platform: mysql
       encoding: UTF-8
 
+# JWT Configuration
+app:
+  jwt:
+    secret: mySecretKeyForJWTTokenGenerationAndValidationWithAtLeast256BitsLength
+    expiration-ms: 86400000 # 24 hours in milliseconds
+
 # 로깅 설정
 logging:
   level:
     root: INFO
     com.study.myspringstudydiary: DEBUG
     org.springframework.jdbc: DEBUG
+    org.springframework.security: DEBUG
     com.zaxxer.hikari: DEBUG
 
 # 서버 설정

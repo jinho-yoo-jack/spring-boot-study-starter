@@ -36,6 +36,13 @@ public interface StudyLogDao {
     List<StudyLog> findAll();
 
     /**
+     * Find all study logs by user ID
+     * @param userId User ID
+     * @return List of study logs for the user
+     */
+    List<StudyLog> findByUserId(Long userId);
+
+    /**
      * Find study logs by category
      * @param category Category
      * @return List of study logs in the category

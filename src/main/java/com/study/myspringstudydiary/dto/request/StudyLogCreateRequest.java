@@ -29,9 +29,11 @@ public class StudyLogCreateRequest {
 
     /**
      * Convert to Entity
+     * @param userId ID of the user creating this study log
      */
-    public StudyLog toEntity() {
+    public StudyLog toEntity(Long userId) {
         return StudyLog.builder()
+                .userId(userId)
                 .title(this.title)
                 .content(this.content)
                 .category(Category.valueOf(this.category))

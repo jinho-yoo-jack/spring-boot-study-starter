@@ -42,6 +42,7 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
     private final RowMapper<StudyLog> studyLogRowMapper = (rs, rowNum) -> {
         StudyLog studyLog = new StudyLog();
         studyLog.setId(rs.getLong("id"));
+        studyLog.setUserId(rs.getLong("user_id"));
         studyLog.setTitle(rs.getString("title"));
         studyLog.setContent(rs.getString("content"));
         studyLog.setCategory(Category.valueOf(rs.getString("category")));
@@ -54,8 +55,8 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
     @Override
     public StudyLog save(StudyLog studyLog) {
         String sql = """
-            INSERT INTO study_logs (title, content, category, understanding, study_time, study_date)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO study_logs (user_id, title, content, category, understanding, study_time, study_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """;
 
         // KeyHolder: Object to receive auto-generated ID
@@ -63,12 +64,13 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, studyLog.getTitle());
-            ps.setString(2, studyLog.getContent());
-            ps.setString(3, studyLog.getCategory().name());
-            ps.setString(4, studyLog.getUnderstanding().name());
-            ps.setInt(5, studyLog.getStudyTime());
-            ps.setDate(6, Date.valueOf(studyLog.getStudyDate()));
+            ps.setLong(1, studyLog.getUserId());
+            ps.setString(2, studyLog.getTitle());
+            ps.setString(3, studyLog.getContent());
+            ps.setString(4, studyLog.getCategory().name());
+            ps.setString(5, studyLog.getUnderstanding().name());
+            ps.setInt(6, studyLog.getStudyTime());
+            ps.setDate(7, Date.valueOf(studyLog.getStudyDate()));
             return ps;
         }, keyHolder);
 
@@ -101,6 +103,12 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
     }
 
     @Override
+    public List<StudyLog> findByUserId(Long userId) {
+        String sql = "SELECT * FROM study_logs WHERE user_id = ? ORDER BY study_date DESC, id DESC";
+        return jdbcTemplate.query(sql, studyLogRowMapper, userId);
+    }
+
+    @Override
     public List<StudyLog> findByCategory(String category) {
         String sql = "SELECT * FROM study_logs WHERE category = ? ORDER BY study_date DESC";
         return jdbcTemplate.query(sql, studyLogRowMapper, category);
@@ -112,7 +120,7 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
             UPDATE study_logs
             SET title = ?, content = ?, category = ?, understanding = ?,
                 study_time = ?, study_date = ?
-            WHERE id = ?
+            WHERE id = ? AND user_id = ?
             """;
 
         int updated = jdbcTemplate.update(sql,
@@ -122,10 +130,11 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
                 studyLog.getUnderstanding().name(),
                 studyLog.getStudyTime(),
                 studyLog.getStudyDate(),
-                studyLog.getId());
+                studyLog.getId(),
+                studyLog.getUserId());
 
         if (updated == 0) {
-            throw new RuntimeException("Study log not found. ID: " + studyLog.getId());
+            throw new RuntimeException("Study log not found or you don't have permission. ID: " + studyLog.getId());
         }
 
         return studyLog;
@@ -135,6 +144,12 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
     public boolean deleteById(Long id) {
         String sql = "DELETE FROM study_logs WHERE id = ?";
         int deleted = jdbcTemplate.update(sql, id);
+        return deleted > 0;
+    }
+
+    public boolean deleteByIdAndUserId(Long id, Long userId) {
+        String sql = "DELETE FROM study_logs WHERE id = ? AND user_id = ?";
+        int deleted = jdbcTemplate.update(sql, id, userId);
         return deleted > 0;
     }
 

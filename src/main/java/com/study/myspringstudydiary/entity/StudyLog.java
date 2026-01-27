@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 public class StudyLog {
 
     private Long id;
+    private Long userId;  // User who created this study log
     private String title;
     private String content;
     private Category category;
