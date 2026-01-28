@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -75,8 +76,13 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
         }, keyHolder);
 
         // Set the generated ID to StudyLog object
-        Number generatedId = keyHolder.getKey();
-        if (generatedId != null) {
+        // H2에서는 여러 키가 반환될 수 있으므로 getKeyList() 사용
+        List<Map<String, Object>> keyList = keyHolder.getKeyList();
+        if (!keyList.isEmpty() && keyList.get(0).containsKey("ID")) {
+            Number generatedId = (Number) keyList.get(0).get("ID");
+            studyLog.setId(generatedId.longValue());
+        } else if (!keyList.isEmpty() && keyList.get(0).containsKey("id")) {
+            Number generatedId = (Number) keyList.get(0).get("id");
             studyLog.setId(generatedId.longValue());
         }
 
