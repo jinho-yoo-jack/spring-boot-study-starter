@@ -1,0 +1,289 @@
+### Spring Study Diary API Tests
+### 테스트 환경: localhost:7777
+### Branch: day1
+
+### 1. 학습 로그 생성 - 기본 예제
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Spring Boot REST API 학습",
+  "content": "오늘은 Spring Boot로 REST API를 만드는 방법을 학습했습니다. Controller, Service, Repository 패턴에 대해 이해했습니다.",
+  "category": "SPRING",
+  "understanding": "GOOD",
+  "studyTime": 120,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 2. 학습 로그 생성 - Java 카테고리
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Java Stream API 심화 학습",
+  "content": "Stream의 중간 연산과 최종 연산에 대해 학습했습니다. filter, map, reduce 등의 메서드를 활용한 함수형 프로그래밍을 연습했습니다.",
+  "category": "JAVA",
+  "understanding": "VERY_GOOD",
+  "studyTime": 180,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 3. 학습 로그 생성 - JPA 카테고리 (이해도 낮음)
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "JPA N+1 문제 해결 방법",
+  "content": "JPA의 N+1 문제가 발생하는 원인과 fetch join, @EntityGraph 등을 사용한 해결 방법을 학습했지만 아직 완전히 이해하지 못했습니다.",
+  "category": "JPA",
+  "understanding": "BAD",
+  "studyTime": 90,
+  "studyDate": "2024-02-02"
+}
+
+###
+
+### 4. 학습 로그 생성 - 알고리즘 카테고리
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "동적 프로그래밍 - LCS 알고리즘",
+  "content": "최장 공통 부분 수열(Longest Common Subsequence) 알고리즘을 학습하고 백준 문제를 풀었습니다.",
+  "category": "ALGORITHM",
+  "understanding": "NORMAL",
+  "studyTime": 150,
+  "studyDate": "2024-02-01"
+}
+
+###
+
+### 5. 학습 로그 생성 - 데이터베이스 카테고리
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "MySQL 인덱스 최적화",
+  "content": "B-Tree 인덱스의 동작 원리와 복합 인덱스 설계 시 고려사항을 학습했습니다. 실행 계획 분석 방법도 배웠습니다.",
+  "category": "DATABASE",
+  "understanding": "GOOD",
+  "studyTime": 200,
+  "studyDate": "2024-01-31"
+}
+
+###
+
+### 6. 학습 로그 생성 - 네트워크 카테고리
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "HTTP/2와 HTTP/3의 차이점",
+  "content": "HTTP/2의 멀티플렉싱과 HTTP/3의 QUIC 프로토콜에 대해 학습했습니다.",
+  "category": "NETWORK",
+  "understanding": "NORMAL",
+  "studyTime": 75,
+  "studyDate": "2024-01-30"
+}
+
+###
+
+### 7. 학습 로그 생성 - CS 카테고리 (매우 잘 이해함)
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "운영체제 - 데드락",
+  "content": "데드락의 4가지 필요조건과 데드락 예방, 회피, 탐지, 복구 방법에 대해 완벽하게 이해했습니다.",
+  "category": "CS",
+  "understanding": "VERY_GOOD",
+  "studyTime": 240,
+  "studyDate": "2024-01-29"
+}
+
+###
+
+### 8. 학습 로그 생성 - Git 카테고리
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Git Rebase vs Merge",
+  "content": "Git에서 브랜치 병합 시 rebase와 merge의 차이점과 각각의 사용 시기를 학습했습니다.",
+  "category": "GIT",
+  "understanding": "GOOD",
+  "studyTime": 60,
+  "studyDate": "2024-01-28"
+}
+
+###
+
+### 9. 학습 로그 생성 - 기타 카테고리
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Docker Compose 활용법",
+  "content": "Docker Compose를 사용하여 멀티 컨테이너 애플리케이션을 구성하는 방법을 학습했습니다.",
+  "category": "ETC",
+  "understanding": "NORMAL",
+  "studyTime": 100,
+  "studyDate": "2024-01-27"
+}
+
+###
+
+### 10. 학습 로그 생성 - 최소 학습 시간 (1분)
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Quick Note",
+  "content": "빠른 메모",
+  "category": "ETC",
+  "understanding": "NORMAL",
+  "studyTime": 1,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### ============ 유효성 검사 테스트 ============
+
+### 11. 에러 테스트 - 제목 없음
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "content": "제목이 없는 요청입니다.",
+  "category": "JAVA",
+  "understanding": "GOOD",
+  "studyTime": 60,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 12. 에러 테스트 - 제목이 너무 긴 경우 (100자 초과)
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "이 제목은 100자를 초과하는 매우 긴 제목입니다. 이렇게 긴 제목을 사용하면 유효성 검사에서 에러가 발생해야 합니다. 100자를 초과하면 IllegalArgumentException이 발생합니다!!!!!!",
+  "content": "내용",
+  "category": "JAVA",
+  "understanding": "GOOD",
+  "studyTime": 60,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 13. 에러 테스트 - 내용 없음
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "내용이 없는 학습 로그",
+  "category": "SPRING",
+  "understanding": "NORMAL",
+  "studyTime": 30,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 14. 에러 테스트 - 내용이 너무 긴 경우 (1000자 초과)
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "내용이 너무 긴 학습 로그",
+  "content": "이 내용은 1000자를 초과하는 매우 긴 내용입니다. 이렇게 긴 내용을 사용하면 유효성 검사에서 에러가 발생해야 합니다. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 이제 1000자를 초과했습니다!!!",
+  "category": "JAVA",
+  "understanding": "GOOD",
+  "studyTime": 60,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 15. 에러 테스트 - 학습 시간이 0분
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "학습 시간 0분",
+  "content": "학습 시간이 0분인 경우 에러가 발생해야 합니다.",
+  "category": "JAVA",
+  "understanding": "GOOD",
+  "studyTime": 0,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 16. 에러 테스트 - 학습 시간이 음수
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "학습 시간 음수",
+  "content": "학습 시간이 음수인 경우 에러가 발생해야 합니다.",
+  "category": "SPRING",
+  "understanding": "NORMAL",
+  "studyTime": -30,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 17. 에러 테스트 - 잘못된 카테고리
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "잘못된 카테고리",
+  "content": "존재하지 않는 카테고리를 사용한 경우",
+  "category": "INVALID_CATEGORY",
+  "understanding": "GOOD",
+  "studyTime": 60,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 18. 에러 테스트 - 잘못된 이해도
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "잘못된 이해도",
+  "content": "존재하지 않는 이해도 레벨을 사용한 경우",
+  "category": "JAVA",
+  "understanding": "INVALID_LEVEL",
+  "studyTime": 60,
+  "studyDate": "2024-02-03"
+}
+
+###
+
+### 19. 에러 테스트 - 빈 JSON
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{}
+
+###
+
+### 20. 에러 테스트 - 모든 필드 누락
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "unknownField": "unknown value"
+}

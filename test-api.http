@@ -1,0 +1,16 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+###
+POST http://localhost:7777/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Spring Boot REST API 학습",
+  "content": "오늘은 Spring Boot로 REST API를 만드는 방법을 학습했습니다.",
+  "category": "SPRING",
+  "understanding": "GOOD",
+  "studyTime": 120,
+  "studyDate": "2024-02-03"
+}

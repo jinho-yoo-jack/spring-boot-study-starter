@@ -44,15 +44,10 @@ public class StudyLogController {
      * POST /api/v1/logs
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
+    public StudyLogResponse createStudyLog(
             @RequestBody StudyLogCreateRequest request) {
 
         // Service 호출하여 학습 일지 생성
-        StudyLogResponse response = studyLogService.createStudyLog(request);
-
-        // 201 Created 상태 코드와 함께 응답
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
+        return studyLogService.createStudyLog(request);
     }
 }
