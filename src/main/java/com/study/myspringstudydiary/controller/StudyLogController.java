@@ -1,6 +1,8 @@
 package com.study.myspringstudydiary.controller;
 
+import com.study.myspringstudydiary.dto.request.PageRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
+import com.study.myspringstudydiary.dto.response.PageResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -115,5 +117,28 @@ public class StudyLogController {
 
         // Service 호출하여 카테고리로 학습 일지 조회
         return studyLogService.getStudyLogsByCategory(category);
+    }
+
+    /**
+     * 페이징 처리된 학습 일지 목록 조회
+     * GET /api/v1/logs/page?page=0&size=10&sortBy=createdAt&sortDirection=DESC
+     */
+    @GetMapping("/page")
+    public PageResponse<StudyLogResponse> getStudyLogsWithPaging(
+            @ModelAttribute PageRequest pageRequest) {
+
+        return studyLogService.getStudyLogsWithPaging(pageRequest);
+    }
+
+    /**
+     * 카테고리별 페이징 조회
+     * GET /api/v1/logs/category/{category}/page?page=0&size=5
+     */
+    @GetMapping("/category/{category}/page")
+    public PageResponse<StudyLogResponse> getStudyLogsByCategoryWithPaging(
+            @PathVariable String category,
+            @ModelAttribute PageRequest pageRequest) {
+
+        return studyLogService.getStudyLogsByCategoryWithPaging(category, pageRequest);
     }
 }

@@ -1,6 +1,8 @@
 package com.study.myspringstudydiary.service;
 
+import com.study.myspringstudydiary.dto.request.PageRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
+import com.study.myspringstudydiary.dto.response.PageResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
@@ -127,6 +129,56 @@ public class StudyLogService {
                 .map(StudyLogResponse::from)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 페이징 처리된 학습 일지 목록 조회
+     */
+    public PageResponse<StudyLogResponse> getStudyLogsWithPaging(PageRequest pageRequest) {
+        // Repository에서 페이징 처리된 데이터 조회
+        PageResponse<StudyLog> pageResult = studyLogRepository.findAllWithPaging(pageRequest);
+
+        // Entity를 Response DTO로 변환
+        List<StudyLogResponse> responses = pageResult.getContent().stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+
+        // 페이징 정보를 유지하면서 DTO로 변환
+        return PageResponse.of(
+                responses,
+                pageResult.getPageNumber(),
+                pageResult.getPageSize(),
+                pageResult.getTotalElements()
+        );
+    }
+
+    /**
+     * 카테고리별 페이징 조회
+     */
+    public PageResponse<StudyLogResponse> getStudyLogsByCategoryWithPaging(
+            String categoryName, PageRequest pageRequest) {
+
+        Category category;
+        try {
+            category = Category.valueOf(categoryName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("유효하지 않은 카테고리: " + categoryName);
+        }
+
+        PageResponse<StudyLog> pageResult =
+                studyLogRepository.findByCategoryWithPaging(category, pageRequest);
+
+        List<StudyLogResponse> responses = pageResult.getContent().stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+
+        return PageResponse.of(
+                responses,
+                pageResult.getPageNumber(),
+                pageResult.getPageSize(),
+                pageResult.getTotalElements()
+        );
+    }
+
 
     /**
      * 생성 요청 유효성 검증
