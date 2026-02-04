@@ -3,11 +3,13 @@ package com.study.myspringstudydiary.repository;
 import com.study.myspringstudydiary.entity.StudyLog;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 /**
  * 학습 일지 저장소
@@ -45,6 +47,7 @@ public class StudyLogRepository {
 
         return studyLog;
     }
+    /* ====================================================================== */
 
     /**
      * 모든 학습 일지 조회
@@ -63,6 +66,13 @@ public class StudyLogRepository {
     public StudyLog findById(Long id) {
         // Map에서 ID로 조회
         return database.get(id);
+    }
+
+    public List<StudyLog> findByStudyDate(LocalDate date) {
+        return database.values().stream()
+                .filter(log -> log.getStudyDate().equals(date))
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .collect(Collectors.toList());
     }
 
     /**

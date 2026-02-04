@@ -29,7 +29,7 @@ public class StudyLogService {
 
     /**
      * 생성자 주입 (Constructor Injection)
-     *
+     * <p>
      * Spring이 StudyLogRepository Bean을 찾아서 자동으로 주입해줍니다.
      * 생성자가 1개만 있으면 @Autowired 생략 가능!
      */
@@ -39,6 +39,7 @@ public class StudyLogService {
 
     /**
      * 학습 일지 생성
+     *
      * @param request 생성 요청 DTO
      * @return 생성된 학습 일지 응답 DTO
      */
@@ -49,13 +50,13 @@ public class StudyLogService {
 
         // 2. DTO → Entity 변환
         StudyLog studyLog = new StudyLog(
-            null,  // ID는 Repository에서 자동 생성
-            request.getTitle(),
-            request.getContent(),
-            Category.valueOf(request.getCategory()),
-            Understanding.valueOf(request.getUnderstanding()),
-            request.getStudyTime(),
-            request.getStudyDate() != null ? request.getStudyDate() : LocalDate.now()
+                null,  // ID는 Repository에서 자동 생성
+                request.getTitle(),
+                request.getContent(),
+                Category.valueOf(request.getCategory()),
+                Understanding.valueOf(request.getUnderstanding()),
+                request.getStudyTime(),
+                request.getStudyDate() != null ? request.getStudyDate() : LocalDate.now()
         );
 
         // 3. 저장
@@ -67,6 +68,7 @@ public class StudyLogService {
 
     /**
      * 모든 학습 일지 조회
+     *
      * @return 모든 학습 일지 응답 DTO 리스트
      */
     public List<StudyLogResponse> getAllStudyLogs() {
@@ -81,6 +83,7 @@ public class StudyLogService {
 
     /**
      * ID로 학습 일지 조회
+     *
      * @param id 조회할 학습 일지 ID
      * @return 학습 일지 응답 DTO
      */
@@ -97,10 +100,16 @@ public class StudyLogService {
         return StudyLogResponse.from(studyLog);
     }
 
+    public List<StudyLogResponse> getStudyLogsByDate(LocalDate date) {
+        return studyLogRepository.findByStudyDate(date).stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+    }
+
     /**
      * 학습 일지 수정
      *
-     * @param id 수정할 학습 일지 ID
+     * @param id      수정할 학습 일지 ID
      * @param request 수정 요청 데이터
      * @return 수정된 학습 일지 응답
      */
@@ -110,7 +119,7 @@ public class StudyLogService {
         StudyLog studyLog = studyLogRepository.findById(id);
         if (studyLog == null) {
             throw new IllegalArgumentException(
-                "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")");
+                    "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")");
         }
 
         // 2. 수정할 내용이 있는지 확인
@@ -128,7 +137,7 @@ public class StudyLogService {
                 category = Category.valueOf(request.getCategory().toUpperCase());
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(
-                    "유효하지 않은 카테고리입니다: " + request.getCategory());
+                        "유효하지 않은 카테고리입니다: " + request.getCategory());
             }
         }
 
@@ -138,18 +147,18 @@ public class StudyLogService {
                 understanding = Understanding.valueOf(request.getUnderstanding().toUpperCase());
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(
-                    "유효하지 않은 이해도입니다: " + request.getUnderstanding());
+                        "유효하지 않은 이해도입니다: " + request.getUnderstanding());
             }
         }
 
         // 5. Entity 업데이트 (null이 아닌 값만 반영)
         studyLog.update(
-            request.getTitle(),
-            request.getContent(),
-            category,
-            understanding,
-            request.getStudyTime(),
-            request.getStudyDate()
+                request.getTitle(),
+                request.getContent(),
+                category,
+                understanding,
+                request.getStudyTime(),
+                request.getStudyDate()
         );
 
         // 6. 저장 및 응답 반환
