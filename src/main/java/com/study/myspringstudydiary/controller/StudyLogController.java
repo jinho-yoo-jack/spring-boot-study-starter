@@ -34,7 +34,8 @@ public class StudyLogController {
 
     /**
      * 학습 일지 생성 (CREATE)
-     *
+     * 1. HTTP Method를 기준으로 판단을 한다.
+     * 2. 추가 PATH
      * @PostMapping: POST 요청을 처리
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
      *
@@ -46,5 +47,10 @@ public class StudyLogController {
 
         // Service 호출하여 학습 일지 생성
         return studyLogService.createStudyLog(request);
+    }
+
+    @GetMapping
+    public String test() {
+        return "test";
     }
 }

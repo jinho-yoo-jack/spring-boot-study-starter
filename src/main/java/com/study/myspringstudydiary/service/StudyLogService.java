@@ -6,6 +6,8 @@ import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;
 import com.study.myspringstudydiary.repository.StudyLogRepository;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,6 +34,25 @@ public class StudyLogService {
      */
     public StudyLogService(StudyLogRepository studyLogRepository) {
         this.studyLogRepository = studyLogRepository;
+    }
+
+    /**
+     *  생성자 함수를 통해서 객체를 초기화 하고 생성한 후에,
+     *  특정한 설정해야 하는 경우가 종종 있습니다.
+     *  @PostConstruct
+     *  Post' 이후에
+     *  Constructor 호출된 이후에
+     *  */
+    @PostConstruct
+    public void init() {
+        System.out.println("StudyLogService init");
+        System.out.println(studyLogRepository);
+        System.out.println(studyLogRepository == null);
+    }
+
+    @PreDestroy
+    public void destroy() {
+        System.out.println("StudyLogService destroy");
     }
 
     /**
