@@ -97,24 +97,8 @@ public class StudyLogService {
         return StudyLogResponse.from(studyLog);
     }
 
-    /**
-     * 날짜별 학습 일지 조회
-     * @param dateString 조회할 날짜 문자열 (yyyy-MM-dd 형식)
-     * @return 해당 날짜의 학습 일지 응답 DTO 리스트
-     */
-    public List<StudyLogResponse> getStudyLogsByDate(String dateString) {
-        // 1. 문자열을 LocalDate로 변환
-        LocalDate date;
-        try {
-            date = LocalDate.parse(dateString);
-        } catch (Exception e) {
-            throw new IllegalArgumentException("잘못된 날짜 형식입니다. yyyy-MM-dd 형식으로 입력해주세요.");
-        }
-
-        // 2. Repository에서 날짜로 조회
+    public List<StudyLogResponse> getStudyLogsByDate(LocalDate date) {
         List<StudyLog> studyLogs = studyLogRepository.findByDate(date);
-
-        // 3. Entity 리스트 → Response DTO 리스트 변환
         return studyLogs.stream()
                 .map(StudyLogResponse::from)
                 .collect(Collectors.toList());

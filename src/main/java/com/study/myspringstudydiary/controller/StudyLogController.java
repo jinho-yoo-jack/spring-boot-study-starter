@@ -3,8 +3,10 @@ package com.study.myspringstudydiary.controller;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -14,7 +16,6 @@ import java.util.List;
  * - @Controller + @ResponseBody 의 조합
  * - 이 클래스의 모든 메서드 반환값을 JSON으로 변환하여 응답
  * - REST API 개발 시 사용
- *
  * @RequestMapping 어노테이션 설명:
  * - 이 컨트롤러의 기본 URL 경로를 설정
  * - 모든 메서드의 URL 앞에 "/api/v1/logs"가 붙음
@@ -39,7 +40,7 @@ public class StudyLogController {
      *
      * @PostMapping: POST 요청을 처리
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
-     *
+     * <p>
      * POST /api/v1/logs
      */
     @PostMapping
@@ -54,7 +55,7 @@ public class StudyLogController {
      * 모든 학습 일지 조회 (READ - All)
      *
      * @GetMapping: GET 요청을 처리
-     *
+     * <p>
      * GET /api/v1/logs
      */
     @GetMapping
@@ -69,7 +70,7 @@ public class StudyLogController {
      *
      * @GetMapping("/{id}"): GET 요청을 처리 (경로 변수 포함)
      * @PathVariable: URL 경로의 {id} 값을 매개변수로 받음
-     *
+     * <p>
      * GET /api/v1/logs/{id}
      */
     @GetMapping("/{id}")
@@ -86,13 +87,13 @@ public class StudyLogController {
      *
      * @GetMapping("/date/{date}"): GET 요청을 처리 (날짜 경로 변수 포함)
      * @PathVariable: URL 경로의 {date} 값을 매개변수로 받음
-     *
+     * <p>
      * GET /api/v1/logs/date/{date}
      * 예시: GET /api/v1/logs/date/2025-01-15
      */
     @GetMapping("/date/{date}")
     public List<StudyLogResponse> getStudyLogsByDate(
-            @PathVariable String date) {
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         // Service 호출하여 날짜로 학습 일지 조회
         return studyLogService.getStudyLogsByDate(date);
@@ -103,10 +104,10 @@ public class StudyLogController {
      *
      * @GetMapping("/category/{category}"): GET 요청을 처리 (카테고리 경로 변수 포함)
      * @PathVariable: URL 경로의 {category} 값을 매개변수로 받음
-     *
+     * <p>
      * GET /api/v1/logs/category/{category}
      * 예시: GET /api/v1/logs/category/SPRING
-     *      GET /api/v1/logs/category/JAVA
+     * GET /api/v1/logs/category/JAVA
      */
     @GetMapping("/category/{category}")
     public List<StudyLogResponse> getStudyLogsByCategory(
