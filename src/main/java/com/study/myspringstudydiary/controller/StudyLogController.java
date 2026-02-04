@@ -1,13 +1,11 @@
 package com.study.myspringstudydiary.controller;
 
+import com.study.myspringstudydiary.dto.request.PageRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
-import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
+import com.study.myspringstudydiary.dto.response.PageResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
-import com.study.myspringstudydiary.global.common.ApiResponse;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -28,71 +26,119 @@ import java.util.List;
 @RequestMapping("/api/v1/logs")  // 기본 URL 경로 설정
 public class StudyLogController {
 
+    // ⭐ 의존성 주입: Service를 주입받음
     private final StudyLogService studyLogService;
 
+    /**
+     * 생성자 주입
+     * Spring이 StudyLogService Bean을 찾아서 자동으로 주입해줍니다.
+     */
     public StudyLogController(StudyLogService studyLogService) {
         this.studyLogService = studyLogService;
     }
 
-    // ==================== CREATE (Day 1) ====================
-
+    /**
+     * 학습 일지 생성 (CREATE)
+     *
+     * @PostMapping: POST 요청을 처리
+     * @RequestBody: HTTP Body의 JSON을 객체로 변환
+     * <p>
+     * POST /api/v1/logs
+     */
     @PostMapping
     public StudyLogResponse createStudyLog(
             @RequestBody StudyLogCreateRequest request) {
-        StudyLogResponse response = studyLogService.createStudyLog(request);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
+
+        // Service 호출하여 학습 일지 생성
+        return studyLogService.createStudyLog(request);
     }
 
-    // ==================== READ (Day 2) ====================
-
+    /**
+     * 모든 학습 일지 조회 (READ - All)
+     *
+     * @GetMapping: GET 요청을 처리
+     * <p>
+     * GET /api/v1/logs
+     */
     @GetMapping
     public List<StudyLogResponse> getAllStudyLogs() {
-        List<StudyLogResponse> responses = studyLogService.getAllStudyLogs();
-        return ResponseEntity.ok(ApiResponse.success(responses));
+
+        // Service 호출하여 모든 학습 일지 조회
+        return studyLogService.getAllStudyLogs();
     }
 
+    /**
+     * 특정 학습 일지 조회 (READ - Single)
+     *
+     * @GetMapping("/{id}"): GET 요청을 처리 (경로 변수 포함)
+     * @PathVariable: URL 경로의 {id} 값을 매개변수로 받음
+     * <p>
+     * GET /api/v1/logs/{id}
+     */
     @GetMapping("/{id}")
     public StudyLogResponse getStudyLogById(
             @PathVariable Long id) {
-        StudyLogResponse response = studyLogService.getStudyLogById(id);
-        return ResponseEntity.ok(ApiResponse.success(response));
+
+        // Service 호출하여 ID로 학습 일지 조회
+        return studyLogService.getStudyLogById(id);
+
     }
 
+    /**
+     * 날짜별 학습 일지 조회 (READ - By Date)
+     *
+     * @GetMapping("/date/{date}"): GET 요청을 처리 (날짜 경로 변수 포함)
+     * @PathVariable: URL 경로의 {date} 값을 매개변수로 받음
+     * <p>
+     * GET /api/v1/logs/date/{date}
+     * 예시: GET /api/v1/logs/date/2025-01-15
+     */
     @GetMapping("/date/{date}")
-    public ResponseEntity<ApiResponse<List<StudyLogResponse>>> getStudyLogsByDate(
-            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-        List<StudyLogResponse> responses = studyLogService.getStudyLogsByDate(date);
-        return ResponseEntity.ok(ApiResponse.success(responses));
+    public List<StudyLogResponse> getStudyLogsByDate(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+
+        // Service 호출하여 날짜로 학습 일지 조회
+        return studyLogService.getStudyLogsByDate(date);
     }
 
+    /**
+     * 카테고리별 학습 일지 조회 (READ - By Category)
+     *
+     * @GetMapping("/category/{category}"): GET 요청을 처리 (카테고리 경로 변수 포함)
+     * @PathVariable: URL 경로의 {category} 값을 매개변수로 받음
+     * <p>
+     * GET /api/v1/logs/category/{category}
+     * 예시: GET /api/v1/logs/category/SPRING
+     * GET /api/v1/logs/category/JAVA
+     */
     @GetMapping("/category/{category}")
     public List<StudyLogResponse> getStudyLogsByCategory(
             @PathVariable String category) {
-        List<StudyLogResponse> responses = studyLogService.getStudyLogsByCategory(category);
-        return ResponseEntity.ok(ApiResponse.success(responses));
-    }
 
-    // ==================== UPDATE (Day 3 - 오늘!) ====================
+        // Service 호출하여 카테고리로 학습 일지 조회
+        return studyLogService.getStudyLogsByCategory(category);
+    }
 
     /**
-     * 학습 일지 수정
-     * PUT /api/v1/logs/{id}
-     *
-     * @PutMapping: PUT 요청을 처리하는 어노테이션
-     * 리소스의 전체 또는 일부를 수정할 때 사용
-     * @PathVariable: URL의 {id} 부분을 파라미터로 받음
-     * @RequestBody: HTTP Body의 JSON을 객체로 변환
+     * 페이징 처리된 학습 일지 목록 조회
+     * GET /api/v1/logs/page?page=0&size=10&sortBy=createdAt&sortDirection=DESC
      */
-    @PutMapping("/{id}")
-    public StudyLogResponse updateStudyLog(
-            @PathVariable Long id,
-            @RequestBody StudyLogUpdateRequest request) {
+    @GetMapping("/page")
+    public PageResponse<StudyLogResponse> getStudyLogsWithPaging(
+            @ModelAttribute PageRequest pageRequest) {
 
-        StudyLogResponse response = studyLogService.updateStudyLog(id, request);
-
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return studyLogService.getStudyLogsWithPaging(pageRequest);
     }
 
+    /**
+     * 카테고리별 페이징 조회
+     * GET /api/v1/logs/category/{category}/page?page=0&size=5
+     */
+    @GetMapping("/category/{category}/page")
+    public PageResponse<StudyLogResponse> getStudyLogsByCategoryWithPaging(
+            @PathVariable String category,
+            @ModelAttribute PageRequest pageRequest) {
+
+        return studyLogService.getStudyLogsByCategoryWithPaging(category, pageRequest);
+    }
 }
