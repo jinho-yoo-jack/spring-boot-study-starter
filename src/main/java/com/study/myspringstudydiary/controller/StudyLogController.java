@@ -3,9 +3,6 @@ package com.study.myspringstudydiary.controller;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
-import com.study.myspringstudydiary.global.common.ApiResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,16 +43,11 @@ public class StudyLogController {
      * POST /api/v1/logs
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
+    public StudyLogResponse createStudyLog(
             @RequestBody StudyLogCreateRequest request) {
 
         // Service 호출하여 학습 일지 생성
-        StudyLogResponse response = studyLogService.createStudyLog(request);
-
-        // 201 Created 상태 코드와 함께 응답
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
+        return studyLogService.createStudyLog(request);
     }
 
     /**
@@ -66,15 +58,10 @@ public class StudyLogController {
      * GET /api/v1/logs
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<StudyLogResponse>>> getAllStudyLogs() {
+    public List<StudyLogResponse> getAllStudyLogs() {
 
         // Service 호출하여 모든 학습 일지 조회
-        List<StudyLogResponse> responses = studyLogService.getAllStudyLogs();
-
-        // 200 OK 상태 코드와 함께 응답
-        return ResponseEntity
-                .ok()
-                .body(ApiResponse.success(responses));
+        return studyLogService.getAllStudyLogs();
     }
 
     /**
@@ -86,15 +73,46 @@ public class StudyLogController {
      * GET /api/v1/logs/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogResponse>> getStudyLogById(
+    public StudyLogResponse getStudyLogById(
             @PathVariable Long id) {
 
         // Service 호출하여 ID로 학습 일지 조회
-        StudyLogResponse response = studyLogService.getStudyLogById(id);
+        return studyLogService.getStudyLogById(id);
 
-        // 200 OK 상태 코드와 함께 응답
-        return ResponseEntity
-                .ok()
-                .body(ApiResponse.success(response));
+    }
+
+    /**
+     * 날짜별 학습 일지 조회 (READ - By Date)
+     *
+     * @GetMapping("/date/{date}"): GET 요청을 처리 (날짜 경로 변수 포함)
+     * @PathVariable: URL 경로의 {date} 값을 매개변수로 받음
+     *
+     * GET /api/v1/logs/date/{date}
+     * 예시: GET /api/v1/logs/date/2025-01-15
+     */
+    @GetMapping("/date/{date}")
+    public List<StudyLogResponse> getStudyLogsByDate(
+            @PathVariable String date) {
+
+        // Service 호출하여 날짜로 학습 일지 조회
+        return studyLogService.getStudyLogsByDate(date);
+    }
+
+    /**
+     * 카테고리별 학습 일지 조회 (READ - By Category)
+     *
+     * @GetMapping("/category/{category}"): GET 요청을 처리 (카테고리 경로 변수 포함)
+     * @PathVariable: URL 경로의 {category} 값을 매개변수로 받음
+     *
+     * GET /api/v1/logs/category/{category}
+     * 예시: GET /api/v1/logs/category/SPRING
+     *      GET /api/v1/logs/category/JAVA
+     */
+    @GetMapping("/category/{category}")
+    public List<StudyLogResponse> getStudyLogsByCategory(
+            @PathVariable String category) {
+
+        // Service 호출하여 카테고리로 학습 일지 조회
+        return studyLogService.getStudyLogsByCategory(category);
     }
 }

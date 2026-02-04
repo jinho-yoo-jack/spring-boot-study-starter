@@ -1,13 +1,13 @@
 package com.study.myspringstudydiary.repository;
 
+import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 /**
  * 학습 일지 저장소
@@ -52,7 +52,10 @@ public class StudyLogRepository {
      */
     public List<StudyLog> findAll() {
         // Map의 모든 값을 리스트로 변환하여 반환
-        return new ArrayList<>(database.values());
+        return database.values().stream()
+                .sorted((a,b) -> b.getId().compareTo(a.getId()))
+                .sorted(Comparator.comparing(StudyLog::getCreatedAt))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -63,5 +66,29 @@ public class StudyLogRepository {
     public StudyLog findById(Long id) {
         // Map에서 ID로 조회
         return database.get(id);
+    }
+
+    /**
+     * 날짜별 학습 일지 조회
+     * @param date 조회할 날짜
+     * @return 해당 날짜의 학습 일지 리스트
+     */
+    public List<StudyLog> findByDate(LocalDate date) {
+        return database.values().stream()
+                .filter(log -> log.getStudyDate().equals(date))
+                .sorted((a, b) -> b.getId().compareTo(a.getId()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 카테고리별 학습 일지 조회
+     * @param category 조회할 카테고리
+     * @return 해당 카테고리의 학습 일지 리스트
+     */
+    public List<StudyLog> findByCategory(Category category) {
+        return database.values().stream()
+                .filter(log -> log.getCategory().equals(category))
+                .sorted((a, b) -> b.getId().compareTo(a.getId()))
+                .collect(Collectors.toList());
     }
 }
