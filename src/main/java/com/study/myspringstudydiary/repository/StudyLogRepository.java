@@ -83,7 +83,7 @@ public class StudyLogRepository {
         return database.values().stream()
                 .filter(log -> log.getStudyDate().equals(date))
                 .sorted((a, b) -> b.getId().compareTo(a.getId()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
