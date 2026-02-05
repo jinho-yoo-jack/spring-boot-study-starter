@@ -2,6 +2,7 @@ package com.study.myspringstudydiary.service;
 
 import com.study.myspringstudydiary.dto.request.PageRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
+import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.PageResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.entity.Category;
@@ -67,6 +68,8 @@ public class StudyLogService {
         return StudyLogResponse.from(savedStudyLog);
     }
 
+    // ==================== READ (Day 2) ====================
+
     /**
      * 모든 학습 일지 조회
      * @return 모든 학습 일지 응답 DTO 리스트
@@ -88,14 +91,11 @@ public class StudyLogService {
      */
     public StudyLogResponse getStudyLogById(Long id) {
         // 1. Repository에서 ID로 조회
-        StudyLog studyLog = studyLogRepository.findById(id);
+        StudyLog studyLog = studyLogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")"));
 
-        // 2. 존재하지 않으면 예외 처리
-        if (studyLog == null) {
-            throw new IllegalArgumentException("ID " + id + "에 해당하는 학습 일지를 찾을 수 없습니다.");
-        }
-
-        // 3. Entity → Response DTO 변환 후 반환
+        // 2. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(studyLog);
     }
 
@@ -179,6 +179,65 @@ public class StudyLogService {
         );
     }
 
+    // ==================== UPDATE (Day 3 - 오늘!) ====================
+    /**
+     * 학습 일지 수정
+     *
+     * @param id 수정할 학습 일지 ID
+     * @param request 수정 요청 데이터
+     * @return 수정된 학습 일지 응답
+     */
+    public StudyLogResponse updateStudyLog(Long id, StudyLogUpdateRequest request) {
+
+        // 1. 기존 학습 일지 조회
+        StudyLog studyLog = studyLogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")"));
+
+        // 2. 수정할 내용이 있는지 확인
+        if (request.hasNoUpdates()) {
+            throw new IllegalArgumentException("수정할 내용이 없습니다.");
+        }
+
+        // 3. 수정할 값들의 유효성 검증
+        validateUpdateRequest(request);
+
+        // 4. 카테고리와 이해도 변환 (null이 아닌 경우에만)
+        Category category = null;
+        if (request.getCategory() != null) {
+            try {
+                category = Category.valueOf(request.getCategory().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException(
+                        "유효하지 않은 카테고리입니다: " + request.getCategory());
+            }
+        }
+
+        Understanding understanding = null;
+        if (request.getUnderstanding() != null) {
+            try {
+                understanding = Understanding.valueOf(request.getUnderstanding().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException(
+                        "유효하지 않은 이해도입니다: " + request.getUnderstanding());
+            }
+        }
+
+        // 5. Entity 업데이트 (null이 아닌 값만 반영)
+        studyLog.update(
+                request.getTitle(),
+                request.getContent(),
+                category,
+                understanding,
+                request.getStudyTime(),
+                request.getStudyDate()
+        );
+
+        // 6. 저장 및 응답 반환
+        StudyLog updatedStudyLog = studyLogRepository.update(studyLog);
+        return StudyLogResponse.from(updatedStudyLog);
+    }
+
 
     /**
      * 생성 요청 유효성 검증
@@ -198,6 +257,38 @@ public class StudyLogService {
         }
         if (request.getStudyTime() == null || request.getStudyTime() < 1) {
             throw new IllegalArgumentException("학습 시간은 1분 이상이어야 합니다.");
+        }
+    }
+
+    /**
+     * 수정 요청 유효성 검증
+     * null이 아닌 값만 검증합니다.
+     */
+    private void validateUpdateRequest(StudyLogUpdateRequest request) {
+        if (request.getTitle() != null) {
+            if (request.getTitle().trim().isEmpty()) {
+                throw new IllegalArgumentException("학습 주제는 빈 값일 수 없습니다.");
+            }
+            if (request.getTitle().length() > 100) {
+                throw new IllegalArgumentException("학습 주제는 100자를 초과할 수 없습니다.");
+            }
+        }
+
+        if (request.getContent() != null) {
+            if (request.getContent().trim().isEmpty()) {
+                throw new IllegalArgumentException("학습 내용은 빈 값일 수 없습니다.");
+            }
+            if (request.getContent().length() > 1000) {
+                throw new IllegalArgumentException("학습 내용은 1000자를 초과할 수 없습니다.");
+            }
+        }
+
+        if (request.getStudyTime() != null && request.getStudyTime() < 1) {
+            throw new IllegalArgumentException("학습 시간은 1분 이상이어야 합니다.");
+        }
+
+        if (request.getStudyDate() != null && request.getStudyDate().isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("학습 날짜는 미래일 수 없습니다.");
         }
     }
 }

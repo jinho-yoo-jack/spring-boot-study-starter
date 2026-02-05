@@ -2,6 +2,7 @@ package com.study.myspringstudydiary.controller;
 
 import com.study.myspringstudydiary.dto.request.PageRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
+import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.PageResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
@@ -140,5 +141,23 @@ public class StudyLogController {
             @ModelAttribute PageRequest pageRequest) {
 
         return studyLogService.getStudyLogsByCategoryWithPaging(category, pageRequest);
+    }
+
+    /**
+     * 학습 일지 수정
+     * PUT /api/v1/logs/{id}
+     *
+     * @PutMapping: PUT 요청을 처리하는 어노테이션
+     *              리소스의 전체 또는 일부를 수정할 때 사용
+     *
+     * @PathVariable: URL의 {id} 부분을 파라미터로 받음
+     * @RequestBody: HTTP Body의 JSON을 객체로 변환
+     */
+    @PutMapping("/{id}")
+    public StudyLogResponse updateStudyLog(
+            @PathVariable Long id,
+            @RequestBody StudyLogUpdateRequest request) {
+
+        return studyLogService.updateStudyLog(id, request);
     }
 }

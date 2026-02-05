@@ -69,9 +69,8 @@ public class StudyLogRepository {
      * @param id 조회할 학습 일지 ID
      * @return 학습 일지 (없으면 null)
      */
-    public StudyLog findById(Long id) {
-        // Map에서 ID로 조회
-        return database.get(id);
+    public Optional<StudyLog> findById(Long id) {
+        return Optional.ofNullable(database.get(id));
     }
 
     /**
@@ -202,6 +201,30 @@ public class StudyLogRepository {
                 pageRequest.getSize(),
                 totalElements
         );
+    }
+
+    /**
+     * 학습 일지 수정 (Update)
+     * Map은 같은 키로 put하면 덮어쓰므로 save와 동일하게 동작
+     * 하지만 의미를 명확히 하기 위해 별도 메서드로 분리
+     */
+    public StudyLog update(StudyLog studyLog) {
+        if (studyLog.getId() == null) {
+            throw new IllegalArgumentException("수정할 학습 일지의 ID가 없습니다.");
+        }
+        if (!database.containsKey(studyLog.getId())) {
+            throw new IllegalArgumentException(
+                    "해당 학습 일지를 찾을 수 없습니다. (id: " + studyLog.getId() + ")");
+        }
+        database.put(studyLog.getId(), studyLog);
+        return studyLog;
+    }
+
+    /**
+     * ID로 존재 여부 확인
+     */
+    public boolean existsById(Long id) {
+        return database.containsKey(id);
     }
 
     /**
