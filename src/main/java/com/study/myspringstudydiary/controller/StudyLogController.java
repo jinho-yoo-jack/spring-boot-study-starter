@@ -1,5 +1,6 @@
 package com.study.myspringstudydiary.controller;
 
+import com.study.myspringstudydiary.common.Page;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
@@ -126,6 +127,93 @@ public class StudyLogController {
     @GetMapping("/today")
     public List<StudyLogResponse> getTodayStudyLogs() {
         return studyLogService.getStudyLogsByDate(LocalDate.now());
+    }
+
+    // ========== PAGING ==========
+
+    /**
+     * 전체 학습 일지 페이징 조회
+     *
+     * GET /api/v1/logs/page?page=0&size=10
+     * GET /api/v1/logs/page (기본값: page=0, size=10)
+     *
+     * @param page 페이지 번호 (0-based, 기본값: 0)
+     * @param size 페이지 크기 (기본값: 10, 최대: 100)
+     * @return 페이징된 학습 일지
+     */
+    @GetMapping("/page")
+    public Page<StudyLogResponse> getStudyLogsPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return studyLogService.getStudyLogsWithPaging(page, size);
+    }
+
+    /**
+     * 카테고리별 학습 일지 페이징 조회
+     *
+     * GET /api/v1/logs/category/{category}/page?page=0&size=10
+     *
+     * @param category 카테고리
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이징된 학습 일지
+     */
+    @GetMapping("/category/{category}/page")
+    public Page<StudyLogResponse> getStudyLogsByCategoryPage(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Category categoryEnum = Category.valueOf(category.toUpperCase());
+        return studyLogService.getStudyLogsByCategoryWithPaging(categoryEnum, page, size);
+    }
+
+    /**
+     * 날짜별 학습 일지 페이징 조회
+     *
+     * GET /api/v1/logs/date/{date}/page?page=0&size=10
+     *
+     * @param date 조회할 날짜
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이징된 학습 일지
+     */
+    @GetMapping("/date/{date}/page")
+    public Page<StudyLogResponse> getStudyLogsByDatePage(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return studyLogService.getStudyLogsByDateWithPaging(date, page, size);
+    }
+
+    /**
+     * 검색 + 페이징 조회
+     *
+     * GET /api/v1/logs/search?title=Spring&category=SPRING
+     *     &startDate=2026-01-01&endDate=2026-12-31
+     *     &page=0&size=10
+     *
+     * @param title 제목 키워드 (선택)
+     * @param category 카테고리 (선택)
+     * @param startDate 시작 날짜 (선택)
+     * @param endDate 종료 날짜 (선택)
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이징된 검색 결과
+     */
+    @GetMapping("/search")
+    public Page<StudyLogResponse> searchStudyLogs(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return studyLogService.searchStudyLogsWithPaging(
+                title, category, startDate, endDate, page, size);
     }
 
     // ========== UPDATE ==========

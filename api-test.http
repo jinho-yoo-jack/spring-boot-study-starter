@@ -356,3 +356,105 @@ Content-Type: application/json
   "studyTime": 75,
   "studyDate": "2026-02-06"
 }
+
+### ============================================
+### PAGING - 페이징 조회
+### ============================================
+
+### 44. 전체 학습 일지 페이징 조회 - 첫 페이지
+GET http://localhost:8081/api/v1/logs/page?page=0&size=10
+
+### 45. 전체 학습 일지 페이징 조회 - 두 번째 페이지
+GET http://localhost:8081/api/v1/logs/page?page=1&size=10
+
+### 46. 전체 학습 일지 페이징 조회 - 페이지 크기 5
+GET http://localhost:8081/api/v1/logs/page?page=0&size=5
+
+### 47. 전체 학습 일지 페이징 조회 - 기본값 사용
+GET http://localhost:8081/api/v1/logs/page
+
+### 48. 카테고리별 페이징 조회 - SPRING 첫 페이지
+GET http://localhost:8081/api/v1/logs/category/SPRING/page?page=0&size=5
+
+### 49. 카테고리별 페이징 조회 - DATABASE
+GET http://localhost:8081/api/v1/logs/category/DATABASE/page?page=0&size=10
+
+### 50. 날짜별 페이징 조회 - 2026-02-06
+GET http://localhost:8081/api/v1/logs/date/2026-02-06/page?page=0&size=5
+
+### 51. 날짜별 페이징 조회 - 2026-01-26
+GET http://localhost:8081/api/v1/logs/date/2026-01-26/page?page=0&size=10
+
+### ============================================
+### PAGING SEARCH - 검색 + 페이징
+### ============================================
+
+### 52. 검색 + 페이징: 제목으로 검색
+GET http://localhost:8081/api/v1/logs/search?title=Spring&page=0&size=10
+
+### 53. 검색 + 페이징: 카테고리로 필터링
+GET http://localhost:8081/api/v1/logs/search?category=SPRING&page=0&size=5
+
+### 54. 검색 + 페이징: 날짜 범위 검색
+GET http://localhost:8081/api/v1/logs/search?startDate=2026-02-01&endDate=2026-02-28&page=0&size=10
+
+### 55. 검색 + 페이징: 복합 검색 (제목 + 카테고리)
+GET http://localhost:8081/api/v1/logs/search?title=학습&category=JAVA&page=0&size=10
+
+### 56. 검색 + 페이징: 복합 검색 (제목 + 날짜 범위)
+GET http://localhost:8081/api/v1/logs/search?title=패턴&startDate=2026-01-01&endDate=2026-02-28&page=0&size=10
+
+### 57. 검색 + 페이징: 모든 조건 포함
+GET http://localhost:8081/api/v1/logs/search?title=Spring&category=SPRING&startDate=2026-01-01&endDate=2026-12-31&page=0&size=5
+
+### 58. 검색 + 페이징: 두 번째 페이지
+GET http://localhost:8081/api/v1/logs/search?title=학습&page=1&size=5
+
+### ============================================
+### PAGING EDGE CASES - 경계 케이스 테스트
+### ============================================
+
+### 59. 페이징: 음수 페이지 번호 (0으로 처리됨)
+GET http://localhost:8081/api/v1/logs/page?page=-1&size=10
+
+### 60. 페이징: 매우 큰 페이지 번호 (빈 결과)
+GET http://localhost:8081/api/v1/logs/page?page=999&size=10
+
+### 61. 페이징: 너무 큰 페이지 크기 (100으로 제한됨)
+GET http://localhost:8081/api/v1/logs/page?page=0&size=500
+
+### 62. 페이징: 페이지 크기 0 (1로 처리됨)
+GET http://localhost:8081/api/v1/logs/page?page=0&size=0
+
+### 63. 검색 + 페이징: 결과 없는 검색
+GET http://localhost:8081/api/v1/logs/search?title=존재하지않는제목&page=0&size=10
+
+### ============================================
+### PAGING PERFORMANCE TEST - 성능 테스트용
+### ============================================
+
+### 64. 대량 데이터 생성을 위한 반복 요청 - 1
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "페이징 테스트 데이터 1",
+  "content": "페이징 기능 테스트를 위한 대량 데이터입니다.",
+  "category": "ETC",
+  "understanding": "NORMAL",
+  "studyTime": 30,
+  "studyDate": "2026-02-06"
+}
+
+### 65. 대량 데이터 생성을 위한 반복 요청 - 2
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "페이징 테스트 데이터 2",
+  "content": "페이징 기능 테스트를 위한 대량 데이터입니다.",
+  "category": "ETC",
+  "understanding": "NORMAL",
+  "studyTime": 30,
+  "studyDate": "2026-02-06"
+}

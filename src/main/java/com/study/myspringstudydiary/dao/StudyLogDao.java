@@ -1,5 +1,6 @@
 package com.study.myspringstudydiary.dao;
 
+import com.study.myspringstudydiary.common.Page;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Category;
 import java.time.LocalDate;
@@ -98,4 +99,50 @@ public interface StudyLogDao {
      * WARNING: Use only for testing
      */
     void deleteAll();
+
+    // ========== PAGING ==========
+
+    /**
+     * 전체 학습 일지를 페이징하여 조회
+     * @param page 페이지 번호 (0-based)
+     * @param size 페이지당 데이터 개수
+     * @return 페이징된 결과
+     */
+    Page<StudyLog> findAllWithPaging(int page, int size);
+
+    /**
+     * 카테고리별 학습 일지를 페이징하여 조회
+     * @param category 카테고리
+     * @param page 페이지 번호 (0-based)
+     * @param size 페이지당 데이터 개수
+     * @return 페이징된 결과
+     */
+    Page<StudyLog> findByCategoryWithPaging(Category category, int page, int size);
+
+    /**
+     * 날짜별 학습 일지를 페이징하여 조회
+     * @param date 조회할 날짜
+     * @param page 페이지 번호 (0-based)
+     * @param size 페이지당 데이터 개수
+     * @return 페이징된 결과
+     */
+    Page<StudyLog> findByDateWithPaging(LocalDate date, int page, int size);
+
+    /**
+     * 검색 조건과 함께 페이징하여 조회
+     * @param titleKeyword 제목 키워드 (null 가능)
+     * @param category 카테고리 (null 가능)
+     * @param startDate 시작 날짜 (null 가능)
+     * @param endDate 종료 날짜 (null 가능)
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이징된 결과
+     */
+    Page<StudyLog> searchWithPaging(
+            String titleKeyword,
+            Category category,
+            LocalDate startDate,
+            LocalDate endDate,
+            int page,
+            int size);
 }

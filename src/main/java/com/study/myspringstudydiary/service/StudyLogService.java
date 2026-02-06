@@ -1,5 +1,6 @@
 package com.study.myspringstudydiary.service;
 
+import com.study.myspringstudydiary.common.Page;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
@@ -29,6 +30,10 @@ public class StudyLogService {
 
     // ⭐ 의존성 주입: DAO를 주입받음 (Repository 대신 DAO 사용)
     private final StudyLogDao studyLogDao;
+
+    // 페이징 관련 상수
+    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int MAX_PAGE_SIZE = 100;
 
     /**
      * 생성자 주입 (Constructor Injection)
@@ -151,6 +156,110 @@ public class StudyLogService {
      */
     public long getStudyLogCount() {
         return studyLogDao.count();
+    }
+
+    // ========== PAGING ==========
+
+    /**
+     * 전체 학습 일지 페이징 조회
+     * @param page 페이지 번호 (0-based)
+     * @param size 페이지 크기
+     * @return 페이징된 학습 일지 응답
+     */
+    public Page<StudyLogResponse> getStudyLogsWithPaging(int page, int size) {
+        // 파라미터 유효성 검증
+        page = Math.max(0, page);  // 음수 방지
+        size = Math.min(Math.max(1, size), MAX_PAGE_SIZE);  // 1~100 범위
+
+        Page<StudyLog> studyLogPage = studyLogDao.findAllWithPaging(page, size);
+
+        // Entity -> DTO 변환
+        List<StudyLogResponse> content = studyLogPage.getContent().stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+
+        return new Page<>(content, page, size, studyLogPage.getTotalElements());
+    }
+
+    /**
+     * 카테고리별 학습 일지 페이징 조회
+     * @param category 카테고리
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이징된 학습 일지 응답
+     */
+    public Page<StudyLogResponse> getStudyLogsByCategoryWithPaging(Category category, int page, int size) {
+        page = Math.max(0, page);
+        size = Math.min(Math.max(1, size), MAX_PAGE_SIZE);
+
+        Page<StudyLog> studyLogPage = studyLogDao.findByCategoryWithPaging(category, page, size);
+
+        List<StudyLogResponse> content = studyLogPage.getContent().stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+
+        return new Page<>(content, page, size, studyLogPage.getTotalElements());
+    }
+
+    /**
+     * 날짜별 학습 일지 페이징 조회
+     * @param date 조회할 날짜
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이징된 학습 일지 응답
+     */
+    public Page<StudyLogResponse> getStudyLogsByDateWithPaging(LocalDate date, int page, int size) {
+        page = Math.max(0, page);
+        size = Math.min(Math.max(1, size), MAX_PAGE_SIZE);
+
+        Page<StudyLog> studyLogPage = studyLogDao.findByDateWithPaging(date, page, size);
+
+        List<StudyLogResponse> content = studyLogPage.getContent().stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+
+        return new Page<>(content, page, size, studyLogPage.getTotalElements());
+    }
+
+    /**
+     * 검색 + 페이징 조회
+     * @param titleKeyword 제목 키워드
+     * @param categoryStr 카테고리 문자열
+     * @param startDate 시작 날짜
+     * @param endDate 종료 날짜
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이징된 학습 일지 응답
+     */
+    public Page<StudyLogResponse> searchStudyLogsWithPaging(
+            String titleKeyword,
+            String categoryStr,
+            LocalDate startDate,
+            LocalDate endDate,
+            int page,
+            int size) {
+
+        page = Math.max(0, page);
+        size = Math.min(Math.max(1, size), MAX_PAGE_SIZE);
+
+        // 카테고리 문자열을 enum으로 변환
+        Category category = null;
+        if (categoryStr != null && !categoryStr.isBlank()) {
+            try {
+                category = Category.valueOf(categoryStr.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                // 잘못된 카테고리는 무시하고 null로 처리
+            }
+        }
+
+        Page<StudyLog> studyLogPage = studyLogDao.searchWithPaging(
+                titleKeyword, category, startDate, endDate, page, size);
+
+        List<StudyLogResponse> content = studyLogPage.getContent().stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+
+        return new Page<>(content, page, size, studyLogPage.getTotalElements());
     }
 
     // ========== UPDATE ==========
