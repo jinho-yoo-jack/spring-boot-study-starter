@@ -1,33 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Read(//Users/jinho/**)",
-      "Skill(commit-helper)",
-
-      "// Build & Development",
-      "Bash(./gradlew*)",
-      "Bash(docker*)",
-      "Bash(claude skill:*)",
-
-      "// Git",
-      "Bash(git*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-
-      "// System & Utilities",
-      "Bash(tree*)",
-      "Bash(cat*)",
-      "Bash(curl*)",
-      "Bash(lsof*)",
-      "Bash(kill*)",
-      "Bash(xargs kill*)",
-      "Bash(python3*)",
-
-      "// Claude MCP",
-      "Bash(claude*)",
-
-      "// Obsidian MCP - All Tools",
-      "mcp__mcp-obsidian__*"
+      "Bash(./gradlew clean:*)",
+      "Bash(./gradlew:*)"
     ],
     "deny": [],
     "ask": []
