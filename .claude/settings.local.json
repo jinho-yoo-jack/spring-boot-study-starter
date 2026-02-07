@@ -24,7 +24,16 @@
       "Bash(./gradlew bootRun)",
       "mcp__mcp-obsidian__obsidian_list_files_in_vault",
       "mcp__mcp-obsidian__obsidian_list_files_in_dir",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git merge:*)",
+      "Bash(git stash:*)",
+      "Read(//private/tmp/**)",
+      "Bash(./gradlew test:*)",
+      "Bash(awk:*)",
+      "mcp__mcp-obsidian__obsidian_batch_get_file_contents",
+      "Skill(course-creation-skill)",
+      "mcp__mcp-obsidian__obsidian_append_content",
+      "Read(//Users/black/Library/Mobile Documents/com~apple~CloudDocs/claude-sync/skills/**)"
     ],
     "deny": [],
     "ask": []

@@ -1,16 +1,17 @@
 package com.study.myspringstudydiary.controller;
 
+import com.study.myspringstudydiary.dto.request.PageRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
+import com.study.myspringstudydiary.dto.response.PageResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
-import com.study.myspringstudydiary.dto.response.StudyLogDeleteResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
-import com.study.myspringstudydiary.global.common.ApiResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 학습 일지 컨트롤러
@@ -19,7 +20,6 @@ import java.util.List;
  * - @Controller + @ResponseBody 의 조합
  * - 이 클래스의 모든 메서드 반환값을 JSON으로 변환하여 응답
  * - REST API 개발 시 사용
- *
  * @RequestMapping 어노테이션 설명:
  * - 이 컨트롤러의 기본 URL 경로를 설정
  * - 모든 메서드의 URL 앞에 "/api/v1/logs"가 붙음
@@ -44,39 +44,29 @@ public class StudyLogController {
      *
      * @PostMapping: POST 요청을 처리
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
-     *
+     * <p>
      * POST /api/v1/logs
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
+    public StudyLogResponse createStudyLog(
             @RequestBody StudyLogCreateRequest request) {
 
         // Service 호출하여 학습 일지 생성
-        StudyLogResponse response = studyLogService.createStudyLog(request);
-
-        // 201 Created 상태 코드와 함께 응답
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
+        return studyLogService.createStudyLog(request);
     }
 
     /**
      * 모든 학습 일지 조회 (READ - All)
      *
      * @GetMapping: GET 요청을 처리
-     *
+     * <p>
      * GET /api/v1/logs
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<StudyLogResponse>>> getAllStudyLogs() {
+    public List<StudyLogResponse> getAllStudyLogs() {
 
         // Service 호출하여 모든 학습 일지 조회
-        List<StudyLogResponse> responses = studyLogService.getAllStudyLogs();
-
-        // 200 OK 상태 코드와 함께 응답
-        return ResponseEntity
-                .ok()
-                .body(ApiResponse.success(responses));
+        return studyLogService.getAllStudyLogs();
     }
 
     /**
@@ -84,20 +74,74 @@ public class StudyLogController {
      *
      * @GetMapping("/{id}"): GET 요청을 처리 (경로 변수 포함)
      * @PathVariable: URL 경로의 {id} 값을 매개변수로 받음
-     *
+     * <p>
      * GET /api/v1/logs/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogResponse>> getStudyLogById(
+    public StudyLogResponse getStudyLogById(
             @PathVariable Long id) {
 
         // Service 호출하여 ID로 학습 일지 조회
-        StudyLogResponse response = studyLogService.getStudyLogById(id);
+        return studyLogService.getStudyLogById(id);
 
-        // 200 OK 상태 코드와 함께 응답
-        return ResponseEntity
-                .ok()
-                .body(ApiResponse.success(response));
+    }
+
+    /**
+     * 날짜별 학습 일지 조회 (READ - By Date)
+     *
+     * @GetMapping("/date/{date}"): GET 요청을 처리 (날짜 경로 변수 포함)
+     * @PathVariable: URL 경로의 {date} 값을 매개변수로 받음
+     * <p>
+     * GET /api/v1/logs/date/{date}
+     * 예시: GET /api/v1/logs/date/2025-01-15
+     */
+    @GetMapping("/date/{date}")
+    public List<StudyLogResponse> getStudyLogsByDate(
+            @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+
+        // Service 호출하여 날짜로 학습 일지 조회
+        return studyLogService.getStudyLogsByDate(date);
+    }
+
+    /**
+     * 카테고리별 학습 일지 조회 (READ - By Category)
+     *
+     * @GetMapping("/category/{category}"): GET 요청을 처리 (카테고리 경로 변수 포함)
+     * @PathVariable: URL 경로의 {category} 값을 매개변수로 받음
+     * <p>
+     * GET /api/v1/logs/category/{category}
+     * 예시: GET /api/v1/logs/category/SPRING
+     * GET /api/v1/logs/category/JAVA
+     */
+    @GetMapping("/category/{category}")
+    public List<StudyLogResponse> getStudyLogsByCategory(
+            @PathVariable String category) {
+
+        // Service 호출하여 카테고리로 학습 일지 조회
+        return studyLogService.getStudyLogsByCategory(category);
+    }
+
+    /**
+     * 페이징 처리된 학습 일지 목록 조회
+     * GET /api/v1/logs/page?page=0&size=10&sortBy=createdAt&sortDirection=DESC
+     */
+    @GetMapping("/page")
+    public PageResponse<StudyLogResponse> getStudyLogsWithPaging(
+            @ModelAttribute PageRequest pageRequest) {
+
+        return studyLogService.getStudyLogsWithPaging(pageRequest);
+    }
+
+    /**
+     * 카테고리별 페이징 조회
+     * GET /api/v1/logs/category/{category}/page?page=0&size=5
+     */
+    @GetMapping("/category/{category}/page")
+    public PageResponse<StudyLogResponse> getStudyLogsByCategoryWithPaging(
+            @PathVariable String category,
+            @ModelAttribute PageRequest pageRequest) {
+
+        return studyLogService.getStudyLogsByCategoryWithPaging(category, pageRequest);
     }
 
     /**
@@ -111,30 +155,18 @@ public class StudyLogController {
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogResponse>> updateStudyLog(
+    public StudyLogResponse updateStudyLog(
             @PathVariable Long id,
             @RequestBody StudyLogUpdateRequest request) {
 
-        StudyLogResponse response = studyLogService.updateStudyLog(id, request);
-
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return studyLogService.updateStudyLog(id, request);
     }
 
-    // ========== DELETE ==========
+    @PutMapping("/map/{id}")
+    public StudyLogResponse updateV2StudyLog(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> request) throws NoSuchFieldException, IllegalAccessException {
 
-    /**
-     * 학습 일지 삭제 API
-     *
-     * DELETE /api/v1/logs/{id}
-     *
-     * @param id 삭제할 학습 일지 ID
-     * @return 삭제 결과
-     */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogDeleteResponse>> deleteStudyLog(
-            @PathVariable Long id) {
-
-        StudyLogDeleteResponse response = studyLogService.deleteStudyLog(id);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return studyLogService.updateV2StudyLog(id, request);
     }
 }

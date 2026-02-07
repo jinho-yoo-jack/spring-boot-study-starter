@@ -1,15 +1,16 @@
 package com.study.myspringstudydiary.repository;
 
+import com.study.myspringstudydiary.dto.request.PageRequest;
+import com.study.myspringstudydiary.dto.response.PageResponse;
+import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
+import com.study.myspringstudydiary.exception.InvalidPageRequestException;
 import org.springframework.stereotype.Repository;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 /**
  * 학습 일지 저장소
@@ -18,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * - 이 클래스를 Spring Bean으로 등록합니다
  * - 데이터 접근 계층임을 명시합니다
  * - 데이터 접근 관련 예외를 Spring의 DataAccessException으로 변환해줍니다
- *
+ * <p>
  * 실제 프로젝트에서는 JPA, MyBatis 등을 사용하지만,
  * 이번 강의에서는 Map을 사용하여 데이터를 저장합니다.
  */
@@ -33,6 +34,7 @@ public class StudyLogRepository {
 
     /**
      * 학습 일지 저장
+     *
      * @param studyLog 저장할 학습 일지
      * @return 저장된 학습 일지 (ID 포함)
      */
@@ -50,21 +52,155 @@ public class StudyLogRepository {
 
     /**
      * 모든 학습 일지 조회
+     *
      * @return 모든 학습 일지 리스트
      */
     public List<StudyLog> findAll() {
         // Map의 모든 값을 리스트로 변환하여 반환
-        return new ArrayList<>(database.values());
+        return database.values().stream()
+                .sorted((a, b) -> b.getId().compareTo(a.getId()))
+                .sorted(Comparator.comparing(StudyLog::getCreatedAt))
+                .collect(Collectors.toList());
     }
 
     /**
      * ID로 학습 일지 조회
+     *
      * @param id 조회할 학습 일지 ID
      * @return 학습 일지 (없으면 null)
      */
-    public StudyLog findById(Long id) {
-        // Map에서 ID로 조회
-        return database.get(id);
+    public Optional<StudyLog> findById(Long id) {
+        return Optional.ofNullable(database.get(id));
+    }
+
+    /**
+     * 날짜별 학습 일지 조회
+     *
+     * @param date 조회할 날짜
+     * @return 해당 날짜의 학습 일지 리스트
+     */
+    public List<StudyLog> findByDate(LocalDate date) {
+        return database.values().stream()
+                .filter(log -> log.getStudyDate().equals(date))
+                .sorted((a, b) -> b.getId().compareTo(a.getId()))
+                .toList();
+    }
+
+    /**
+     * 카테고리별 학습 일지 조회
+     *
+     * @param category 조회할 카테고리
+     * @return 해당 카테고리의 학습 일지 리스트
+     */
+    public List<StudyLog> findByCategory(Category category) {
+        return database.values().stream()
+                .filter(log -> log.getCategory().equals(category))
+                .sorted((a, b) -> b.getId().compareTo(a.getId()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 페이징 처리된 학습 일지 조회
+     *
+     * @param pageRequest 페이징 요청 정보
+     * @return 페이징 처리된 결과
+     */
+    public PageResponse<StudyLog> findAllWithPaging(PageRequest pageRequest) {
+
+        // 1. 전체 데이터를 정렬
+        List<StudyLog> allLogs = database.values().stream()
+                .sorted((a, b) -> {
+                    // 정렬 기준에 따라 정렬
+                    int result = switch (pageRequest.getSortBy()) {
+                        case "title" -> a.getTitle().compareTo(b.getTitle());
+                        case "studyTime" -> a.getStudyTime().compareTo(b.getStudyTime());
+                        case "studyDate" -> a.getStudyDate().compareTo(b.getStudyDate());
+                        default -> a.getCreatedAt().compareTo(b.getCreatedAt());
+                    };
+
+                    // 정렬 방향 적용
+                    return "ASC".equals(pageRequest.getSortDirection()) ? result : -result;
+                })
+                .collect(Collectors.toList());
+
+        // 2. 전체 개수
+        long totalElements = allLogs.size();
+
+        // 3. 총 페이지 수 계산
+        int totalPages = calculateTotalPages(totalElements, pageRequest.getSize());
+
+        // 4. 요청한 페이지 번호 유효성 검증
+        int requestedPage = pageRequest.getPage();
+
+        if (requestedPage < 0) {
+            throw new InvalidPageRequestException(requestedPage, totalPages);
+        }
+
+        if (totalElements > 0 && requestedPage >= totalPages) {
+            throw new InvalidPageRequestException(requestedPage, totalPages);
+        }
+
+        // 5. 페이징 적용
+        int start = pageRequest.getOffset();
+        int end = Math.min(start + pageRequest.getSize(), allLogs.size());
+
+        List<StudyLog> pagedLogs = allLogs.subList(start, end);
+
+        // 6. PageResponse 생성
+        return PageResponse.of(
+                pagedLogs,
+                pageRequest.getPage(),
+                pageRequest.getSize(),
+                totalElements
+        );
+    }
+
+    /**
+     * 카테고리별 페이징 조회
+     *
+     * @param category    카테고리
+     * @param pageRequest 페이징 요청 정보
+     * @return 페이징 처리된 결과
+     */
+    public PageResponse<StudyLog> findByCategoryWithPaging(Category category,
+                                                           PageRequest pageRequest) {
+
+        // 1. 카테고리로 필터링 및 정렬
+        List<StudyLog> filteredLogs = database.values().stream()
+                .filter(log -> log.getCategory() == category)
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .collect(Collectors.toList());
+
+        // 2. 전체 개수
+        long totalElements = filteredLogs.size();
+
+        // 3. 총 페이지 수 계산
+        int totalPages = calculateTotalPages(totalElements, pageRequest.getSize());
+
+        // 4. 요청한 페이지 번호 유효성 검증
+        int requestedPage = pageRequest.getPage();
+
+        if (requestedPage < 0) {
+            throw new InvalidPageRequestException(requestedPage, totalPages);
+        }
+
+        if (totalElements > 0 && requestedPage >= totalPages) {
+            throw new InvalidPageRequestException(requestedPage, totalPages);
+        }
+
+        // 5. 페이징 적용
+        int start = pageRequest.getOffset();
+        int end = Math.min(start + pageRequest.getSize(), filteredLogs.size());
+
+        List<StudyLog> pagedLogs = filteredLogs.subList(start, end);
+
+        // 6. PageResponse 생성
+        return PageResponse.of(
+                pagedLogs,
+                pageRequest.getPage(),
+                pageRequest.getSize(),
+                totalElements
+        );
     }
 
     /**
@@ -73,77 +209,32 @@ public class StudyLogRepository {
      * 하지만 의미를 명확히 하기 위해 별도 메서드로 분리
      */
     public StudyLog update(StudyLog studyLog) {
-        if (studyLog.getId() == null) {
+        if(isNotValidStudyLogId(studyLog.getId())){
             throw new IllegalArgumentException("수정할 학습 일지의 ID가 없습니다.");
-        }
-        if (!database.containsKey(studyLog.getId())) {
-            throw new IllegalArgumentException(
-                "해당 학습 일지를 찾을 수 없습니다. (id: " + studyLog.getId() + ")");
         }
         database.put(studyLog.getId(), studyLog);
         return studyLog;
     }
 
-    // ========== DELETE ==========
-
     /**
-     * ID로 학습 일지를 삭제합니다.
-     *
-     * @param id 삭제할 학습 일지 ID
-     * @return 삭제 성공 여부 (true: 삭제됨, false: 해당 ID 없음)
-     */
-    public boolean deleteById(Long id) {
-        // Map.remove()는 삭제된 값을 반환, 없으면 null 반환
-        StudyLog removed = database.remove(id);
-        return removed != null;
-    }
-
-    /**
-     * ID에 해당하는 학습 일지가 존재하는지 확인합니다.
-     *
-     * @param id 확인할 학습 일지 ID
-     * @return 존재 여부
+     * ID로 존재 여부 확인
      */
     public boolean existsById(Long id) {
         return database.containsKey(id);
     }
 
     /**
-     * 저장된 전체 학습 일지 수를 반환합니다.
+     * 총 페이지 수 계산
      *
-     * @return 학습 일지 총 개수
+     * @param totalElements 전체 데이터 개수
+     * @param pageSize      페이지 크기
+     * @return 총 페이지 수
      */
-    public long count() {
-        return database.size();
+    private int calculateTotalPages(long totalElements, int pageSize) {
+        return (int) Math.ceil((double) totalElements / pageSize);
     }
 
-    /**
-     * 모든 학습 일지를 삭제합니다.
-     * (테스트용)
-     */
-    public void deleteAll() {
-        database.clear();
-    }
-
-    // ========== 생명주기 콜백 ==========
-
-    @PostConstruct
-    public void init() {
-        System.out.println("========================================");
-        System.out.println("📦 StudyLogRepository 초기화 완료!");
-        System.out.println("   - 데이터 저장소(Map) 준비됨");
-        System.out.println("   - ID 생성기 준비됨");
-        System.out.println("========================================");
-    }
-
-    @PreDestroy
-    public void cleanup() {
-        System.out.println("========================================");
-        System.out.println("🧹 StudyLogRepository 정리 중...");
-        System.out.println("   - 저장된 데이터 수: " + database.size());
-        System.out.println("   - 마지막 ID: " + (sequence.get() - 1));
-        database.clear();  // 데이터 정리
-        System.out.println("   - 데이터 정리 완료!");
-        System.out.println("========================================");
+    private boolean isNotValidStudyLogId(Long id){
+        return id == null || !database.containsKey(id);
     }
 }

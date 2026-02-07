@@ -1,10 +1,10 @@
 package com.study.myspringstudydiary.service;
 
+import com.study.myspringstudydiary.dto.request.PageRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
+import com.study.myspringstudydiary.dto.response.PageResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
-import com.study.myspringstudydiary.dto.response.StudyLogDeleteResponse;
-import com.study.myspringstudydiary.exception.StudyLogNotFoundException;
 import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;
@@ -12,7 +12,10 @@ import com.study.myspringstudydiary.repository.StudyLogRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +34,7 @@ public class StudyLogService {
 
     /**
      * 생성자 주입 (Constructor Injection)
-     *
+     * <p>
      * Spring이 StudyLogRepository Bean을 찾아서 자동으로 주입해줍니다.
      * 생성자가 1개만 있으면 @Autowired 생략 가능!
      */
@@ -41,6 +44,7 @@ public class StudyLogService {
 
     /**
      * 학습 일지 생성
+     *
      * @param request 생성 요청 DTO
      * @return 생성된 학습 일지 응답 DTO
      */
@@ -51,13 +55,13 @@ public class StudyLogService {
 
         // 2. DTO → Entity 변환
         StudyLog studyLog = new StudyLog(
-            null,  // ID는 Repository에서 자동 생성
-            request.getTitle(),
-            request.getContent(),
-            Category.valueOf(request.getCategory()),
-            Understanding.valueOf(request.getUnderstanding()),
-            request.getStudyTime(),
-            request.getStudyDate() != null ? request.getStudyDate() : LocalDate.now()
+                null,  // ID는 Repository에서 자동 생성
+                request.getTitle(),
+                request.getContent(),
+                Category.valueOf(request.getCategory()),
+                Understanding.valueOf(request.getUnderstanding()),
+                request.getStudyTime(),
+                request.getStudyDate() != null ? request.getStudyDate() : LocalDate.now()
         );
 
         // 3. 저장
@@ -67,8 +71,11 @@ public class StudyLogService {
         return StudyLogResponse.from(savedStudyLog);
     }
 
+    // ==================== READ (Day 2) ====================
+
     /**
      * 모든 학습 일지 조회
+     *
      * @return 모든 학습 일지 응답 DTO 리스트
      */
     public List<StudyLogResponse> getAllStudyLogs() {
@@ -83,37 +90,118 @@ public class StudyLogService {
 
     /**
      * ID로 학습 일지 조회
+     *
      * @param id 조회할 학습 일지 ID
      * @return 학습 일지 응답 DTO
      */
     public StudyLogResponse getStudyLogById(Long id) {
         // 1. Repository에서 ID로 조회
-        StudyLog studyLog = studyLogRepository.findById(id);
+        StudyLog studyLog = studyLogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")"));
 
-        // 2. 존재하지 않으면 예외 처리
-        if (studyLog == null) {
-            throw new IllegalArgumentException("ID " + id + "에 해당하는 학습 일지를 찾을 수 없습니다.");
-        }
-
-        // 3. Entity → Response DTO 변환 후 반환
+        // 2. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(studyLog);
     }
+
+    public List<StudyLogResponse> getStudyLogsByDate(LocalDate date) {
+        List<StudyLog> studyLogs = studyLogRepository.findByDate(date);
+        return studyLogs.stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 카테고리별 학습 일지 조회
+     *
+     * @param categoryString 조회할 카테고리 문자열
+     * @return 해당 카테고리의 학습 일지 응답 DTO 리스트
+     */
+    public List<StudyLogResponse> getStudyLogsByCategory(String categoryString) {
+        // 1. 문자열을 Category Enum으로 변환
+        Category category;
+        try {
+            category = Category.valueOf(categoryString.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("잘못된 카테고리입니다. 사용 가능한 카테고리: " +
+                    Arrays.toString(Category.values()));
+        }
+
+        // 2. Repository에서 카테고리로 조회
+        List<StudyLog> studyLogs = studyLogRepository.findByCategory(category);
+
+        // 3. Entity 리스트 → Response DTO 리스트 변환
+        return studyLogs.stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 페이징 처리된 학습 일지 목록 조회
+     */
+    public PageResponse<StudyLogResponse> getStudyLogsWithPaging(PageRequest pageRequest) {
+        // Repository에서 페이징 처리된 데이터 조회
+        PageResponse<StudyLog> pageResult = studyLogRepository.findAllWithPaging(pageRequest);
+
+        // Entity를 Response DTO로 변환
+        List<StudyLogResponse> responses = pageResult.getContent().stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+
+        // 페이징 정보를 유지하면서 DTO로 변환
+        return PageResponse.of(
+                responses,
+                pageResult.getPageNumber(),
+                pageResult.getPageSize(),
+                pageResult.getTotalElements()
+        );
+    }
+
+    /**
+     * 카테고리별 페이징 조회
+     */
+    public PageResponse<StudyLogResponse> getStudyLogsByCategoryWithPaging(
+            String categoryName, PageRequest pageRequest) {
+
+        Category category;
+        try {
+            category = Category.valueOf(categoryName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("유효하지 않은 카테고리: " + categoryName);
+        }
+
+        PageResponse<StudyLog> pageResult =
+                studyLogRepository.findByCategoryWithPaging(category, pageRequest);
+
+        List<StudyLogResponse> responses = pageResult.getContent().stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+
+        return PageResponse.of(
+                responses,
+                pageResult.getPageNumber(),
+                pageResult.getPageSize(),
+                pageResult.getTotalElements()
+        );
+    }
+
+    // ==================== UPDATE (Day 3 - 오늘!) ====================
 
     /**
      * 학습 일지 수정
      *
-     * @param id 수정할 학습 일지 ID
+     * @param id      수정할 학습 일지 ID
      * @param request 수정 요청 데이터
      * @return 수정된 학습 일지 응답
      */
     public StudyLogResponse updateStudyLog(Long id, StudyLogUpdateRequest request) {
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(request);
 
         // 1. 기존 학습 일지 조회
-        StudyLog studyLog = studyLogRepository.findById(id);
-        if (studyLog == null) {
-            throw new IllegalArgumentException(
-                "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")");
-        }
+        StudyLog studyLog = studyLogRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")"));
 
         // 2. 수정할 내용이 있는지 확인
         if (request.hasNoUpdates()) {
@@ -130,7 +218,7 @@ public class StudyLogService {
                 category = Category.valueOf(request.getCategory().toUpperCase());
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(
-                    "유효하지 않은 카테고리입니다: " + request.getCategory());
+                        "유효하지 않은 카테고리입니다: " + request.getCategory());
             }
         }
 
@@ -140,24 +228,45 @@ public class StudyLogService {
                 understanding = Understanding.valueOf(request.getUnderstanding().toUpperCase());
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException(
-                    "유효하지 않은 이해도입니다: " + request.getUnderstanding());
+                        "유효하지 않은 이해도입니다: " + request.getUnderstanding());
             }
         }
 
         // 5. Entity 업데이트 (null이 아닌 값만 반영)
         studyLog.update(
-            request.getTitle(),
-            request.getContent(),
-            category,
-            understanding,
-            request.getStudyTime(),
-            request.getStudyDate()
+                request.getTitle(),
+                request.getContent(),
+                category,
+                understanding,
+                request.getStudyTime(),
+                request.getStudyDate()
         );
 
         // 6. 저장 및 응답 반환
         StudyLog updatedStudyLog = studyLogRepository.update(studyLog);
         return StudyLogResponse.from(updatedStudyLog);
     }
+
+    public StudyLogResponse updateV2StudyLog(Long id, Map<String, Object> request) throws NoSuchFieldException, IllegalAccessException {
+        StudyLog prevStudyLog = studyLogRepository.findById(id).orElseThrow();
+        System.out.println(request);
+        request.entrySet().forEach(System.out::println);
+        for(Map.Entry<String, Object> entry : request.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            // Reflection
+            // 1. 클래스의 정보를 읽어온다.
+            Class<?> studyLogClass = prevStudyLog.getClass();
+            if(value != null) {
+                // 2. 해당 하는 클래스의 필드를 읽고(getDeclaredField)
+                // 3. 해당 하는 필드의 값을 value로 set 한다.(set)
+                studyLogClass.getDeclaredField(key).set(prevStudyLog, value);
+            }
+        }
+        return StudyLogResponse.from(studyLogRepository.update(prevStudyLog));
+    }
+
 
     /**
      * 생성 요청 유효성 검증
@@ -210,36 +319,5 @@ public class StudyLogService {
         if (request.getStudyDate() != null && request.getStudyDate().isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("학습 날짜는 미래일 수 없습니다.");
         }
-    }
-
-    // ========== DELETE ==========
-
-    /**
-     * 학습 일지를 삭제합니다.
-     *
-     * @param id 삭제할 학습 일지 ID
-     * @return 삭제 결과 응답
-     * @throws StudyLogNotFoundException 해당 ID의 학습 일지가 없는 경우
-     */
-    public StudyLogDeleteResponse deleteStudyLog(Long id) {
-        // 1. 존재 여부 확인
-        if (!studyLogRepository.existsById(id)) {
-            throw new StudyLogNotFoundException(id);
-        }
-
-        // 2. 삭제 수행
-        studyLogRepository.deleteById(id);
-
-        // 3. 삭제 결과 반환
-        return StudyLogDeleteResponse.of(id);
-    }
-
-    /**
-     * 학습 일지 총 개수를 반환합니다.
-     *
-     * @return 학습 일지 총 개수
-     */
-    public long getStudyLogCount() {
-        return studyLogRepository.count();
     }
 }
