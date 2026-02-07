@@ -284,6 +284,7 @@ public class StudyLogService {
 
     /**
      * Map을 사용한 동적 업데이트 (Reflection 활용)
+     * Enum 타입 변환 로직 추가
      */
     public StudyLogResponse updateV2StudyLog(Long id, Map<String, Object> request)
             throws NoSuchFieldException, IllegalAccessException {
@@ -298,8 +299,34 @@ public class StudyLogService {
             Class<?> studyLogClass = prevStudyLog.getClass();
             if(value != null) {
                 // 2. 해당 하는 클래스의 필드를 읽고(getDeclaredField)
-                // 3. 해당 하는 필드의 값을 value로 set 한다.(set)
-                studyLogClass.getDeclaredField(key).set(prevStudyLog, value);
+                java.lang.reflect.Field field = studyLogClass.getDeclaredField(key);
+                // 3. private 필드에 접근 가능하도록 설정
+                field.setAccessible(true);
+
+                // 4. 필드 타입 확인 및 변환
+                Object convertedValue = value;
+                Class<?> fieldType = field.getType();
+
+                // Enum 타입인지 확인하고 변환
+                if (fieldType.isEnum() && value instanceof String) {
+                    String stringValue = (String) value;
+                    // Enum.valueOf를 사용하여 String을 Enum으로 변환
+                    @SuppressWarnings("unchecked")
+                    Class<? extends Enum> enumType = (Class<? extends Enum>) fieldType;
+                    try {
+                        convertedValue = Enum.valueOf(enumType, stringValue.toUpperCase());
+                    } catch (IllegalArgumentException e) {
+                        throw new IllegalArgumentException(
+                            "유효하지 않은 " + fieldType.getSimpleName() + " 값: " + stringValue);
+                    }
+                }
+                // LocalDate 타입 변환 (필요한 경우)
+                else if (fieldType == LocalDate.class && value instanceof String) {
+                    convertedValue = LocalDate.parse((String) value);
+                }
+
+                // 5. 해당 하는 필드의 값을 변환된 value로 set 한다.(set)
+                field.set(prevStudyLog, convertedValue);
             }
         }
         return StudyLogResponse.from(studyLogDao.update(prevStudyLog));
