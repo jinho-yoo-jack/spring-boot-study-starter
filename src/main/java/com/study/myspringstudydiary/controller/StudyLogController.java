@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 학습 일지 컨트롤러
@@ -159,5 +160,13 @@ public class StudyLogController {
             @RequestBody StudyLogUpdateRequest request) {
 
         return studyLogService.updateStudyLog(id, request);
+    }
+
+    @PutMapping("/map/{id}")
+    public StudyLogResponse updateV2StudyLog(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> request) throws NoSuchFieldException, IllegalAccessException {
+
+        return studyLogService.updateV2StudyLog(id, request);
     }
 }

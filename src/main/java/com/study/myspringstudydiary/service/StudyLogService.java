@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -32,7 +34,7 @@ public class StudyLogService {
 
     /**
      * 생성자 주입 (Constructor Injection)
-     *
+     * <p>
      * Spring이 StudyLogRepository Bean을 찾아서 자동으로 주입해줍니다.
      * 생성자가 1개만 있으면 @Autowired 생략 가능!
      */
@@ -42,6 +44,7 @@ public class StudyLogService {
 
     /**
      * 학습 일지 생성
+     *
      * @param request 생성 요청 DTO
      * @return 생성된 학습 일지 응답 DTO
      */
@@ -52,13 +55,13 @@ public class StudyLogService {
 
         // 2. DTO → Entity 변환
         StudyLog studyLog = new StudyLog(
-            null,  // ID는 Repository에서 자동 생성
-            request.getTitle(),
-            request.getContent(),
-            Category.valueOf(request.getCategory()),
-            Understanding.valueOf(request.getUnderstanding()),
-            request.getStudyTime(),
-            request.getStudyDate() != null ? request.getStudyDate() : LocalDate.now()
+                null,  // ID는 Repository에서 자동 생성
+                request.getTitle(),
+                request.getContent(),
+                Category.valueOf(request.getCategory()),
+                Understanding.valueOf(request.getUnderstanding()),
+                request.getStudyTime(),
+                request.getStudyDate() != null ? request.getStudyDate() : LocalDate.now()
         );
 
         // 3. 저장
@@ -72,6 +75,7 @@ public class StudyLogService {
 
     /**
      * 모든 학습 일지 조회
+     *
      * @return 모든 학습 일지 응답 DTO 리스트
      */
     public List<StudyLogResponse> getAllStudyLogs() {
@@ -86,6 +90,7 @@ public class StudyLogService {
 
     /**
      * ID로 학습 일지 조회
+     *
      * @param id 조회할 학습 일지 ID
      * @return 학습 일지 응답 DTO
      */
@@ -93,7 +98,7 @@ public class StudyLogService {
         // 1. Repository에서 ID로 조회
         StudyLog studyLog = studyLogRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
-                "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")"));
+                        "해당 학습 일지를 찾을 수 없습니다. (id: " + id + ")"));
 
         // 2. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(studyLog);
@@ -108,6 +113,7 @@ public class StudyLogService {
 
     /**
      * 카테고리별 학습 일지 조회
+     *
      * @param categoryString 조회할 카테고리 문자열
      * @return 해당 카테고리의 학습 일지 응답 DTO 리스트
      */
@@ -180,14 +186,17 @@ public class StudyLogService {
     }
 
     // ==================== UPDATE (Day 3 - 오늘!) ====================
+
     /**
      * 학습 일지 수정
      *
-     * @param id 수정할 학습 일지 ID
+     * @param id      수정할 학습 일지 ID
      * @param request 수정 요청 데이터
      * @return 수정된 학습 일지 응답
      */
     public StudyLogResponse updateStudyLog(Long id, StudyLogUpdateRequest request) {
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(request);
 
         // 1. 기존 학습 일지 조회
         StudyLog studyLog = studyLogRepository.findById(id)
@@ -236,6 +245,26 @@ public class StudyLogService {
         // 6. 저장 및 응답 반환
         StudyLog updatedStudyLog = studyLogRepository.update(studyLog);
         return StudyLogResponse.from(updatedStudyLog);
+    }
+
+    public StudyLogResponse updateV2StudyLog(Long id, Map<String, Object> request) throws NoSuchFieldException, IllegalAccessException {
+        StudyLog prevStudyLog = studyLogRepository.findById(id).orElseThrow();
+        System.out.println(request);
+        request.entrySet().forEach(System.out::println);
+        for(Map.Entry<String, Object> entry : request.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            // Reflection
+            // 1. 클래스의 정보를 읽어온다.
+            Class<?> studyLogClass = prevStudyLog.getClass();
+            if(value != null) {
+                // 2. 해당 하는 클래스의 필드를 읽고(getDeclaredField)
+                // 3. 해당 하는 필드의 값을 value로 set 한다.(set)
+                studyLogClass.getDeclaredField(key).set(prevStudyLog, value);
+            }
+        }
+        return StudyLogResponse.from(studyLogRepository.update(prevStudyLog));
     }
 
 

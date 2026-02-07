@@ -1,7 +1,7 @@
 ### Spring Boot Study Diary - API 테스트 모음
 ### IntelliJ IDEA의 HTTP Client 또는 VS Code의 REST Client 확장을 사용하여 실행할 수 있습니다.
 
-@baseUrl = http://localhost:8081
+@baseUrl = http://localhost:8080
 @contentType = application/json
 
 ### ================================
@@ -152,7 +152,7 @@ Content-Type: {{contentType}}
 }
 
 ### 4-4. 학습 일지 수정 - 전체 필드 변경
-PUT {{baseUrl}}/api/v1/logs/4
+PUT {{baseUrl}}/api/v1/logs/map/1
 Content-Type: {{contentType}}
 
 {
