@@ -165,19 +165,35 @@ Content-Type: {{contentType}}
 }
 
 ### ================================
-### 5. ERROR TEST - 에러 케이스
+### 5. DELETE - 삭제 기능
 ### ================================
 
-### 5-1. 존재하지 않는 ID 조회
+### 5-1. 학습 일지 삭제 - ID 1 삭제
+DELETE {{baseUrl}}/api/v1/logs/1
+
+### 5-2. 학습 일지 삭제 - ID 2 삭제
+DELETE {{baseUrl}}/api/v1/logs/2
+
+### 5-3. 존재하지 않는 학습 일지 삭제 시도
+DELETE {{baseUrl}}/api/v1/logs/9999
+
+### 5-4. 삭제 후 확인 - 삭제된 ID로 조회 시도
+GET {{baseUrl}}/api/v1/logs/1
+
+### ================================
+### 6. ERROR TEST - 에러 케이스
+### ================================
+
+### 6-1. 존재하지 않는 ID 조회
 GET {{baseUrl}}/api/v1/logs/9999
 
-### 5-2. 잘못된 카테고리 조회
+### 6-2. 잘못된 카테고리 조회
 GET {{baseUrl}}/api/v1/logs/category/INVALID
 
-### 5-3. 잘못된 날짜 형식
+### 6-3. 잘못된 날짜 형식
 GET {{baseUrl}}/api/v1/logs/date/2026-13-45
 
-### 5-4. 필수 값 누락 (title 없음)
+### 6-4. 필수 값 누락 (title 없음)
 POST {{baseUrl}}/api/v1/logs
 Content-Type: {{contentType}}
 
@@ -188,7 +204,7 @@ Content-Type: {{contentType}}
   "studyTime": 30
 }
 
-### 5-5. 잘못된 enum 값 (understanding)
+### 6-5. 잘못된 enum 값 (understanding)
 POST {{baseUrl}}/api/v1/logs
 Content-Type: {{contentType}}
 
@@ -200,13 +216,13 @@ Content-Type: {{contentType}}
   "studyTime": 60
 }
 
-### 5-6. 잘못된 페이지 번호 (음수)
+### 6-6. 잘못된 페이지 번호 (음수)
 GET {{baseUrl}}/api/v1/logs/page?page=-1&size=10
 
-### 5-7. 너무 큰 페이지 크기 (최대값 초과)
+### 6-7. 너무 큰 페이지 크기 (최대값 초과)
 GET {{baseUrl}}/api/v1/logs/page?page=0&size=200
 
-### 5-8. 존재하지 않는 ID 수정
+### 6-8. 존재하지 않는 ID 수정
 PUT {{baseUrl}}/api/v1/logs/9999
 Content-Type: {{contentType}}
 
@@ -214,7 +230,7 @@ Content-Type: {{contentType}}
   "title": "존재하지 않는 학습 일지 수정"
 }
 
-### 5-9. 수정 내용 없음 (모든 필드 null)
+### 6-9. 수정 내용 없음 (모든 필드 null)
 PUT {{baseUrl}}/api/v1/logs/1
 Content-Type: {{contentType}}
 
@@ -222,10 +238,10 @@ Content-Type: {{contentType}}
 }
 
 ### ================================
-### 6. BULK TEST - 대량 데이터 생성
+### 7. BULK TEST - 대량 데이터 생성
 ### ================================
 
-### 6-1. 대량 데이터 생성용 - 반복 실행
+### 7-1. 대량 데이터 생성용 - 반복 실행
 POST {{baseUrl}}/api/v1/logs
 Content-Type: {{contentType}}
 
@@ -239,27 +255,27 @@ Content-Type: {{contentType}}
 }
 
 ### ================================
-### 7. 성능 테스트
+### 8. 성능 테스트
 ### ================================
 
-### 7-1. 큰 페이지 조회
+### 8-1. 큰 페이지 조회
 GET {{baseUrl}}/api/v1/logs/page?page=0&size=100
 
-### 7-2. 마지막 페이지 조회 (데이터가 많을 때)
+### 8-2. 마지막 페이지 조회 (데이터가 많을 때)
 GET {{baseUrl}}/api/v1/logs/page?page=10&size=10
 
 ### ================================
-### 8. 정렬 테스트
+### 9. 정렬 테스트
 ### ================================
 
-### 8-1. 생성일시 오름차순
+### 9-1. 생성일시 오름차순
 GET {{baseUrl}}/api/v1/logs/page?sortBy=createdAt&sortDirection=ASC
 
-### 8-2. 생성일시 내림차순 (기본값)
+### 9-2. 생성일시 내림차순 (기본값)
 GET {{baseUrl}}/api/v1/logs/page?sortBy=createdAt&sortDirection=DESC
 
-### 8-3. 학습날짜 오름차순
+### 9-3. 학습날짜 오름차순
 GET {{baseUrl}}/api/v1/logs/page?sortBy=studyDate&sortDirection=ASC
 
-### 8-4. 학습시간 내림차순
+### 9-4. 학습시간 내림차순
 GET {{baseUrl}}/api/v1/logs/page?sortBy=studyTime&sortDirection=DESC
