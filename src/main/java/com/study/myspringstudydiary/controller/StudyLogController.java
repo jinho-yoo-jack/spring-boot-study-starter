@@ -5,6 +5,7 @@ import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.PageResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
+import com.study.myspringstudydiary.dto.response.StudyLogDeleteResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -168,5 +169,20 @@ public class StudyLogController {
             @RequestBody Map<String, Object> request) throws NoSuchFieldException, IllegalAccessException {
 
         return studyLogService.updateV2StudyLog(id, request);
+    }
+
+    // ========== DELETE ==========
+
+    /**
+     * 학습 일지 삭제 API
+     *
+     * DELETE /api/v1/logs/{id}
+     *
+     * @param id 삭제할 학습 일지 ID
+     * @return 삭제 결과
+     */
+    @DeleteMapping("/{id}")
+    public StudyLogDeleteResponse deleteStudyLog(@PathVariable Long id) {
+        return studyLogService.deleteStudyLog(id);
     }
 }

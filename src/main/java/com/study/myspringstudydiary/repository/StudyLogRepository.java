@@ -223,6 +223,37 @@ public class StudyLogRepository {
         return database.containsKey(id);
     }
 
+    // ========== DELETE ==========
+
+    /**
+     * ID로 학습 일지를 삭제합니다.
+     *
+     * @param id 삭제할 학습 일지 ID
+     * @return 삭제 성공 여부 (true: 삭제됨, false: 해당 ID 없음)
+     */
+    public boolean deleteById(Long id) {
+        // Map.remove()는 삭제된 값을 반환, 없으면 null 반환
+        StudyLog removed = database.remove(id);
+        return removed != null;
+    }
+
+    /**
+     * 저장된 전체 학습 일지 수를 반환합니다.
+     *
+     * @return 학습 일지 총 개수
+     */
+    public long count() {
+        return database.size();
+    }
+
+    /**
+     * 모든 학습 일지를 삭제합니다.
+     * (테스트용)
+     */
+    public void deleteAll() {
+        database.clear();
+    }
+
     /**
      * 총 페이지 수 계산
      *
