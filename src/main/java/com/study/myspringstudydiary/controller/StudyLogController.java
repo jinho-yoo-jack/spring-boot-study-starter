@@ -5,11 +5,11 @@ import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogDeleteResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
-import com.study.myspringstudydiary.global.common.ApiResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.study.myspringstudydiary.entity.Category;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -39,6 +39,8 @@ public class StudyLogController {
         this.studyLogService = studyLogService;
     }
 
+    // ========== CREATE ==========
+
     /**
      * 학습 일지 생성 (CREATE)
      *
@@ -48,17 +50,14 @@ public class StudyLogController {
      * POST /api/v1/logs
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
+    public StudyLogResponse createStudyLog(
             @RequestBody StudyLogCreateRequest request) {
 
         // Service 호출하여 학습 일지 생성
-        StudyLogResponse response = studyLogService.createStudyLog(request);
-
-        // 201 Created 상태 코드와 함께 응답
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
+        return studyLogService.createStudyLog(request);
     }
+
+    // ========== READ ==========
 
     /**
      * 모든 학습 일지 조회 (READ - All)
@@ -68,15 +67,8 @@ public class StudyLogController {
      * GET /api/v1/logs
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<StudyLogResponse>>> getAllStudyLogs() {
-
-        // Service 호출하여 모든 학습 일지 조회
-        List<StudyLogResponse> responses = studyLogService.getAllStudyLogs();
-
-        // 200 OK 상태 코드와 함께 응답
-        return ResponseEntity
-                .ok()
-                .body(ApiResponse.success(responses));
+    public List<StudyLogResponse> getAllStudyLogs() {
+        return studyLogService.getAllStudyLogs();
     }
 
     /**
@@ -88,17 +80,55 @@ public class StudyLogController {
      * GET /api/v1/logs/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogResponse>> getStudyLogById(
+    public StudyLogResponse getStudyLogById(
             @PathVariable Long id) {
 
-        // Service 호출하여 ID로 학습 일지 조회
-        StudyLogResponse response = studyLogService.getStudyLogById(id);
-
-        // 200 OK 상태 코드와 함께 응답
-        return ResponseEntity
-                .ok()
-                .body(ApiResponse.success(response));
+        return studyLogService.getStudyLogById(id);
     }
+
+    /**
+     * 날짜로 학습 일지 조회
+     *
+     * GET /api/v1/logs/date/{date}
+     *
+     * @param date 조회할 날짜 (yyyy-MM-dd 형식)
+     * @return 해당 날짜의 학습 일지 리스트
+     */
+    @GetMapping("/date/{date}")
+    public List<StudyLogResponse> getStudyLogsByDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        return studyLogService.getStudyLogsByDate(date);
+    }
+
+    /**
+     * 카테고리로 학습 일지 조회
+     *
+     * GET /api/v1/logs/category/{category}
+     *
+     * @param category 조회할 카테고리 (SPRING, DATABASE, JAVA, WEB, ALGORITHM, ETC)
+     * @return 해당 카테고리의 학습 일지 리스트
+     */
+    @GetMapping("/category/{category}")
+    public List<StudyLogResponse> getStudyLogsByCategory(
+            @PathVariable String category) {
+
+        return studyLogService.getStudyLogsByCategoryString(category);
+    }
+
+    /**
+     * 오늘의 학습 일지 조회
+     *
+     * GET /api/v1/logs/today
+     *
+     * @return 오늘 작성된 학습 일지 리스트
+     */
+    @GetMapping("/today")
+    public List<StudyLogResponse> getTodayStudyLogs() {
+        return studyLogService.getStudyLogsByDate(LocalDate.now());
+    }
+
+    // ========== UPDATE ==========
 
     /**
      * 학습 일지 수정
@@ -111,13 +141,11 @@ public class StudyLogController {
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogResponse>> updateStudyLog(
+    public StudyLogResponse updateStudyLog(
             @PathVariable Long id,
             @RequestBody StudyLogUpdateRequest request) {
 
-        StudyLogResponse response = studyLogService.updateStudyLog(id, request);
-
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return studyLogService.updateStudyLog(id, request);
     }
 
     // ========== DELETE ==========
@@ -131,10 +159,9 @@ public class StudyLogController {
      * @return 삭제 결과
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogDeleteResponse>> deleteStudyLog(
+    public StudyLogDeleteResponse deleteStudyLog(
             @PathVariable Long id) {
 
-        StudyLogDeleteResponse response = studyLogService.deleteStudyLog(id);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return studyLogService.deleteStudyLog(id);
     }
 }

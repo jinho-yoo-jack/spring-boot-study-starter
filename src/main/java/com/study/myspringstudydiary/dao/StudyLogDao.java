@@ -1,6 +1,8 @@
 package com.study.myspringstudydiary.dao;
 
 import com.study.myspringstudydiary.entity.StudyLog;
+import com.study.myspringstudydiary.entity.Category;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,12 +17,16 @@ import java.util.Optional;
  */
 public interface StudyLogDao {
 
+    // ========== CREATE ==========
+
     /**
      * Create study log
      * @param studyLog Study log to save
      * @return Saved study log (with ID)
      */
     StudyLog save(StudyLog studyLog);
+
+    // ========== READ ==========
 
     /**
      * Find study log by ID
@@ -36,25 +42,25 @@ public interface StudyLogDao {
     List<StudyLog> findAll();
 
     /**
-     * Find study logs by category
-     * @param category Category
+     * Find study logs by category (String version for backward compatibility)
+     * @param category Category as string
      * @return List of study logs in the category
      */
     List<StudyLog> findByCategory(String category);
 
     /**
-     * Update study log
-     * @param studyLog Study log to update
-     * @return Updated study log
+     * Find study logs by category
+     * @param category Category enum
+     * @return List of study logs in the category
      */
-    StudyLog update(StudyLog studyLog);
+    List<StudyLog> findByCategory(Category category);
 
     /**
-     * Delete study log by ID
-     * @param id Study log ID to delete
-     * @return Success/failure of deletion
+     * Find study logs by study date
+     * @param date Study date
+     * @return List of study logs for the date
      */
-    boolean deleteById(Long id);
+    List<StudyLog> findByStudyDate(LocalDate date);
 
     /**
      * Check if ID exists
@@ -68,6 +74,24 @@ public interface StudyLogDao {
      * @return Total count of study logs
      */
     long count();
+
+    // ========== UPDATE ==========
+
+    /**
+     * Update study log
+     * @param studyLog Study log to update
+     * @return Updated study log
+     */
+    StudyLog update(StudyLog studyLog);
+
+    // ========== DELETE ==========
+
+    /**
+     * Delete study log by ID
+     * @param id Study log ID to delete
+     * @return Success/failure of deletion
+     */
+    boolean deleteById(Long id);
 
     /**
      * Delete all study logs

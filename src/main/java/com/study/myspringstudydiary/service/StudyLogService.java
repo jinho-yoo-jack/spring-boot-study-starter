@@ -40,6 +40,8 @@ public class StudyLogService {
         this.studyLogDao = studyLogDao;
     }
 
+    // ========== CREATE ==========
+
     /**
      * 학습 일지 생성
      * @param request 생성 요청 DTO
@@ -67,6 +69,8 @@ public class StudyLogService {
         // 4. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(savedStudyLog);
     }
+
+    // ========== READ ==========
 
     /**
      * 모든 학습 일지 조회
@@ -99,6 +103,57 @@ public class StudyLogService {
         // 3. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(studyLog);
     }
+
+    /**
+     * 날짜로 학습 일지 조회
+     * @param date 조회할 날짜
+     * @return 해당 날짜의 학습 일지 리스트
+     */
+    public List<StudyLogResponse> getStudyLogsByDate(LocalDate date) {
+        List<StudyLog> studyLogs = studyLogDao.findByStudyDate(date);
+        return studyLogs.stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 카테고리로 학습 일지 조회
+     * @param category 조회할 카테고리
+     * @return 해당 카테고리의 학습 일지 리스트
+     */
+    public List<StudyLogResponse> getStudyLogsByCategory(Category category) {
+        List<StudyLog> studyLogs = studyLogDao.findByCategory(category);
+        return studyLogs.stream()
+                .map(StudyLogResponse::from)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 카테고리로 학습 일지 조회 (String 버전)
+     * @param categoryStr 조회할 카테고리 문자열
+     * @return 해당 카테고리의 학습 일지 리스트
+     */
+    public List<StudyLogResponse> getStudyLogsByCategoryString(String categoryStr) {
+        // 유효한 카테고리인지 확인
+        Category category;
+        try {
+            category = Category.valueOf(categoryStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("유효하지 않은 카테고리입니다: " + categoryStr);
+        }
+        return getStudyLogsByCategory(category);
+    }
+
+    /**
+     * 학습 일지 총 개수를 반환합니다.
+     *
+     * @return 학습 일지 총 개수
+     */
+    public long getStudyLogCount() {
+        return studyLogDao.count();
+    }
+
+    // ========== UPDATE ==========
 
     /**
      * 학습 일지 수정
@@ -159,6 +214,30 @@ public class StudyLogService {
         return StudyLogResponse.from(updatedStudyLog);
     }
 
+    // ========== DELETE ==========
+
+    /**
+     * 학습 일지를 삭제합니다.
+     *
+     * @param id 삭제할 학습 일지 ID
+     * @return 삭제 결과 응답
+     * @throws StudyLogNotFoundException 해당 ID의 학습 일지가 없는 경우
+     */
+    public StudyLogDeleteResponse deleteStudyLog(Long id) {
+        // 1. 존재 여부 확인 (DAO 사용)
+        if (!studyLogDao.existsById(id)) {
+            throw new StudyLogNotFoundException(id);
+        }
+
+        // 2. 삭제 수행 (DAO 사용)
+        studyLogDao.deleteById(id);
+
+        // 3. 삭제 결과 반환
+        return StudyLogDeleteResponse.of(id);
+    }
+
+    // ========== PRIVATE METHODS ==========
+
     /**
      * 생성 요청 유효성 검증
      */
@@ -210,36 +289,5 @@ public class StudyLogService {
         if (request.getStudyDate() != null && request.getStudyDate().isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("학습 날짜는 미래일 수 없습니다.");
         }
-    }
-
-    // ========== DELETE ==========
-
-    /**
-     * 학습 일지를 삭제합니다.
-     *
-     * @param id 삭제할 학습 일지 ID
-     * @return 삭제 결과 응답
-     * @throws StudyLogNotFoundException 해당 ID의 학습 일지가 없는 경우
-     */
-    public StudyLogDeleteResponse deleteStudyLog(Long id) {
-        // 1. 존재 여부 확인 (DAO 사용)
-        if (!studyLogDao.existsById(id)) {
-            throw new StudyLogNotFoundException(id);
-        }
-
-        // 2. 삭제 수행 (DAO 사용)
-        studyLogDao.deleteById(id);
-
-        // 3. 삭제 결과 반환
-        return StudyLogDeleteResponse.of(id);
-    }
-
-    /**
-     * 학습 일지 총 개수를 반환합니다.
-     *
-     * @return 학습 일지 총 개수
-     */
-    public long getStudyLogCount() {
-        return studyLogDao.count();
     }
 }

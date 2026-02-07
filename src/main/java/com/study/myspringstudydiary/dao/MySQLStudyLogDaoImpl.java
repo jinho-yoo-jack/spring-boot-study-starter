@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,21 +36,7 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    /**
-     * RowMapper: Converts each row of ResultSet to StudyLog object
-     * Can be simply implemented with lambda expression
-     */
-    private final RowMapper<StudyLog> studyLogRowMapper = (rs, rowNum) -> {
-        StudyLog studyLog = new StudyLog();
-        studyLog.setId(rs.getLong("id"));
-        studyLog.setTitle(rs.getString("title"));
-        studyLog.setContent(rs.getString("content"));
-        studyLog.setCategory(Category.valueOf(rs.getString("category")));
-        studyLog.setUnderstanding(Understanding.valueOf(rs.getString("understanding")));
-        studyLog.setStudyTime(rs.getInt("study_time"));
-        studyLog.setStudyDate(rs.getDate("study_date").toLocalDate());
-        return studyLog;
-    };
+    // ========== CREATE ==========
 
     @Override
     public StudyLog save(StudyLog studyLog) {
@@ -81,6 +68,8 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
         return studyLog;
     }
 
+    // ========== READ ==========
+
     @Override
     public Optional<StudyLog> findById(Long id) {
         String sql = "SELECT * FROM study_logs WHERE id = ?";
@@ -102,9 +91,37 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
 
     @Override
     public List<StudyLog> findByCategory(String category) {
-        String sql = "SELECT * FROM study_logs WHERE category = ? ORDER BY study_date DESC";
+        String sql = "SELECT * FROM study_logs WHERE category = ? ORDER BY study_date DESC, id DESC";
         return jdbcTemplate.query(sql, studyLogRowMapper, category);
     }
+
+    @Override
+    public List<StudyLog> findByCategory(Category category) {
+        String sql = "SELECT * FROM study_logs WHERE category = ? ORDER BY study_date DESC, id DESC";
+        return jdbcTemplate.query(sql, studyLogRowMapper, category.name());
+    }
+
+    @Override
+    public List<StudyLog> findByStudyDate(LocalDate date) {
+        String sql = "SELECT * FROM study_logs WHERE study_date = ? ORDER BY id DESC";
+        return jdbcTemplate.query(sql, studyLogRowMapper, Date.valueOf(date));
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        String sql = "SELECT COUNT(*) FROM study_logs WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return count != null && count > 0;
+    }
+
+    @Override
+    public long count() {
+        String sql = "SELECT COUNT(*) FROM study_logs";
+        Long count = jdbcTemplate.queryForObject(sql, Long.class);
+        return count != null ? count : 0;
+    }
+
+    // ========== UPDATE ==========
 
     @Override
     public StudyLog update(StudyLog studyLog) {
@@ -131,6 +148,8 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
         return studyLog;
     }
 
+    // ========== DELETE ==========
+
     @Override
     public boolean deleteById(Long id) {
         String sql = "DELETE FROM study_logs WHERE id = ?";
@@ -139,22 +158,26 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
     }
 
     @Override
-    public boolean existsById(Long id) {
-        String sql = "SELECT COUNT(*) FROM study_logs WHERE id = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
-        return count != null && count > 0;
-    }
-
-    @Override
-    public long count() {
-        String sql = "SELECT COUNT(*) FROM study_logs";
-        Long count = jdbcTemplate.queryForObject(sql, Long.class);
-        return count != null ? count : 0;
-    }
-
-    @Override
     public void deleteAll() {
         String sql = "DELETE FROM study_logs";
         jdbcTemplate.update(sql);
     }
+
+    // ========== PRIVATE METHODS ==========
+
+    /**
+     * RowMapper: Converts each row of ResultSet to StudyLog object
+     * Can be simply implemented with lambda expression
+     */
+    private final RowMapper<StudyLog> studyLogRowMapper = (rs, rowNum) -> {
+        StudyLog studyLog = new StudyLog();
+        studyLog.setId(rs.getLong("id"));
+        studyLog.setTitle(rs.getString("title"));
+        studyLog.setContent(rs.getString("content"));
+        studyLog.setCategory(Category.valueOf(rs.getString("category")));
+        studyLog.setUnderstanding(Understanding.valueOf(rs.getString("understanding")));
+        studyLog.setStudyTime(rs.getInt("study_time"));
+        studyLog.setStudyDate(rs.getDate("study_date").toLocalDate());
+        return studyLog;
+    };
 }
