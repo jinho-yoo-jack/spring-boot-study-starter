@@ -38,6 +38,7 @@ out/
 
 ### Claude ###
 .CLAUDE.md
+.claude/
 
 ### Environment Variables ###
 .env

@@ -1,0 +1,281 @@
+### Spring Boot Study Diary - API 테스트 모음
+### IntelliJ IDEA의 HTTP Client 또는 VS Code의 REST Client 확장을 사용하여 실행할 수 있습니다.
+
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### ================================
+### 1. CREATE - 학습 일지 생성
+### ================================
+
+### 1-1. Spring Boot 학습 일지 생성
+POST {{baseUrl}}/api/v1/logs
+Content-Type: {{contentType}}
+
+{
+  "title": "Spring Boot 기초 학습",
+  "content": "Spring Boot의 기본 구조와 어노테이션에 대해 학습했습니다.",
+  "category": "SPRING",
+  "understanding": "VERY_GOOD",
+  "studyTime": 120,
+  "studyDate": "2026-02-05"
+}
+
+### 1-2. Java 학습 일지 생성
+POST {{baseUrl}}/api/v1/logs
+Content-Type: {{contentType}}
+
+{
+  "title": "Java Stream API 심화",
+  "content": "Stream API의 고급 기능과 성능 최적화에 대해 학습했습니다.",
+  "category": "JAVA",
+  "understanding": "GOOD",
+  "studyTime": 90,
+  "studyDate": "2026-02-04"
+}
+
+### 1-3. Database 학습 일지 생성
+POST {{baseUrl}}/api/v1/logs
+Content-Type: {{contentType}}
+
+{
+  "title": "SQL 쿼리 최적화",
+  "content": "인덱스 설계와 쿼리 튜닝 방법을 학습했습니다.",
+  "category": "DATABASE",
+  "understanding": "NORMAL",
+  "studyTime": 60,
+  "studyDate": "2026-02-03"
+}
+
+### 1-4. Web 학습 일지 생성
+POST {{baseUrl}}/api/v1/logs
+Content-Type: {{contentType}}
+
+{
+  "title": "RESTful API 설계",
+  "content": "REST 원칙과 HTTP 메소드 활용법을 학습했습니다.",
+  "category": "WEB",
+  "understanding": "BAD",
+  "studyTime": 45,
+  "studyDate": "2026-02-02"
+}
+
+### 1-5. 알고리즘 학습 일지 생성
+POST {{baseUrl}}/api/v1/logs
+Content-Type: {{contentType}}
+
+{
+  "title": "동적 프로그래밍 기초",
+  "content": "DP의 기본 개념과 메모이제이션을 학습했습니다.",
+  "category": "ALGORITHM",
+  "understanding": "VERY_BAD",
+  "studyTime": 180,
+  "studyDate": "2026-02-01"
+}
+
+### ================================
+### 2. READ - 조회 기능
+### ================================
+
+### 2-1. 모든 학습 일지 조회
+GET {{baseUrl}}/api/v1/logs
+
+### 2-2. ID로 특정 학습 일지 조회
+GET {{baseUrl}}/api/v1/logs/1
+
+### 2-3. 날짜별 학습 일지 조회
+GET {{baseUrl}}/api/v1/logs/date/2026-02-05
+
+### 2-4. 카테고리별 학습 일지 조회 - SPRING
+GET {{baseUrl}}/api/v1/logs/category/SPRING
+
+### 2-5. 카테고리별 학습 일지 조회 - JAVA
+GET {{baseUrl}}/api/v1/logs/category/JAVA
+
+### 2-6. 카테고리별 학습 일지 조회 - DATABASE
+GET {{baseUrl}}/api/v1/logs/category/DATABASE
+
+### ================================
+### 3. PAGING - 페이징 기능
+### ================================
+
+### 3-1. 페이징 조회 - 첫 페이지 (기본값)
+GET {{baseUrl}}/api/v1/logs/page
+
+### 3-2. 페이징 조회 - 페이지 지정 (page=0, size=5)
+GET {{baseUrl}}/api/v1/logs/page?page=1&size=2
+
+### 3-3. 페이징 조회 - 두 번째 페이지 (page=1, size=5)
+GET {{baseUrl}}/api/v1/logs/page?page=1&size=5
+
+### 3-4. 페이징 조회 - 정렬 기준 변경 (제목으로 정렬)
+GET {{baseUrl}}/api/v1/logs/page?page=0&size=5&sortBy=title&sortDirection=ASC
+
+### 3-5. 페이징 조회 - 학습 시간순 정렬
+GET {{baseUrl}}/api/v1/logs/page?page=0&size=5&sortBy=studyTime&sortDirection=DESC
+
+### 3-6. 카테고리별 페이징 조회 - SPRING
+GET {{baseUrl}}/api/v1/logs/category/SPRING/page?page=0&size=3
+
+### 3-7. 카테고리별 페이징 조회 - JAVA
+GET {{baseUrl}}/api/v1/logs/category/JAVA/page?page=0&size=3
+
+### ================================
+### 4. UPDATE - 수정 기능
+### ================================
+
+### 4-1. 학습 일지 수정 - 제목과 학습 시간만 변경
+PUT {{baseUrl}}/api/v1/logs/1
+Content-Type: {{contentType}}
+
+{
+  "title": "Spring Boot 심화 학습 (수정됨)",
+  "studyTime": 180
+}
+
+### 4-2. 학습 일지 수정 - 내용과 이해도 변경
+PUT {{baseUrl}}/api/v1/logs/2
+Content-Type: {{contentType}}
+
+{
+  "content": "Stream API의 병렬 처리와 성능 최적화 기법을 심도있게 학습했습니다. (수정됨)",
+  "understanding": "VERY_GOOD"
+}
+
+### 4-3. 학습 일지 수정 - 카테고리와 날짜 변경
+PUT {{baseUrl}}/api/v1/logs/3
+Content-Type: {{contentType}}
+
+{
+  "category": "JAVA",
+  "studyDate": "2026-02-06"
+}
+
+### 4-4. 학습 일지 수정 - 전체 필드 변경
+PUT {{baseUrl}}/api/v1/logs/map/1
+Content-Type: {{contentType}}
+
+{
+  "title": "NoSQL 데이터베이스 심화 (완전 수정)",
+  "content": "MongoDB와 Redis의 활용법을 학습했습니다.",
+  "category": "DATABASE",
+  "understanding": "GOOD",
+  "studyTime": 150,
+  "studyDate": "2026-02-07"
+}
+
+### ================================
+### 5. DELETE - 삭제 기능
+### ================================
+
+### 5-1. 학습 일지 삭제 - ID 1 삭제
+DELETE {{baseUrl}}/api/v1/logs/1
+
+### 5-2. 학습 일지 삭제 - ID 2 삭제
+DELETE {{baseUrl}}/api/v1/logs/2
+
+### 5-3. 존재하지 않는 학습 일지 삭제 시도
+DELETE {{baseUrl}}/api/v1/logs/9999
+
+### 5-4. 삭제 후 확인 - 삭제된 ID로 조회 시도
+GET {{baseUrl}}/api/v1/logs/1
+
+### ================================
+### 6. ERROR TEST - 에러 케이스
+### ================================
+
+### 6-1. 존재하지 않는 ID 조회
+GET {{baseUrl}}/api/v1/logs/9999
+
+### 6-2. 잘못된 카테고리 조회
+GET {{baseUrl}}/api/v1/logs/category/INVALID
+
+### 6-3. 잘못된 날짜 형식
+GET {{baseUrl}}/api/v1/logs/date/2026-13-45
+
+### 6-4. 필수 값 누락 (title 없음)
+POST {{baseUrl}}/api/v1/logs
+Content-Type: {{contentType}}
+
+{
+  "content": "제목 없는 학습 일지",
+  "category": "JAVA",
+  "understanding": "NORMAL",
+  "studyTime": 30
+}
+
+### 6-5. 잘못된 enum 값 (understanding)
+POST {{baseUrl}}/api/v1/logs
+Content-Type: {{contentType}}
+
+{
+  "title": "잘못된 이해도 테스트",
+  "content": "INVALID_UNDERSTANDING 값 테스트",
+  "category": "SPRING",
+  "understanding": "INVALID",
+  "studyTime": 60
+}
+
+### 6-6. 잘못된 페이지 번호 (음수)
+GET {{baseUrl}}/api/v1/logs/page?page=-1&size=10
+
+### 6-7. 너무 큰 페이지 크기 (최대값 초과)
+GET {{baseUrl}}/api/v1/logs/page?page=0&size=200
+
+### 6-8. 존재하지 않는 ID 수정
+PUT {{baseUrl}}/api/v1/logs/9999
+Content-Type: {{contentType}}
+
+{
+  "title": "존재하지 않는 학습 일지 수정"
+}
+
+### 6-9. 수정 내용 없음 (모든 필드 null)
+PUT {{baseUrl}}/api/v1/logs/1
+Content-Type: {{contentType}}
+
+{
+}
+
+### ================================
+### 7. BULK TEST - 대량 데이터 생성
+### ================================
+
+### 7-1. 대량 데이터 생성용 - 반복 실행
+POST {{baseUrl}}/api/v1/logs
+Content-Type: {{contentType}}
+
+{
+  "title": "테스트 학습 일지 {{$randomInt}}",
+  "content": "자동 생성된 테스트 내용입니다. 랜덤 번호: {{$randomInt}}",
+  "category": "SPRING",
+  "understanding": "NORMAL",
+  "studyTime": {{$randomInt}},
+  "studyDate": "2026-02-{{$randomInt}}"
+}
+
+### ================================
+### 8. 성능 테스트
+### ================================
+
+### 8-1. 큰 페이지 조회
+GET {{baseUrl}}/api/v1/logs/page?page=0&size=100
+
+### 8-2. 마지막 페이지 조회 (데이터가 많을 때)
+GET {{baseUrl}}/api/v1/logs/page?page=10&size=10
+
+### ================================
+### 9. 정렬 테스트
+### ================================
+
+### 9-1. 생성일시 오름차순
+GET {{baseUrl}}/api/v1/logs/page?sortBy=createdAt&sortDirection=ASC
+
+### 9-2. 생성일시 내림차순 (기본값)
+GET {{baseUrl}}/api/v1/logs/page?sortBy=createdAt&sortDirection=DESC
+
+### 9-3. 학습날짜 오름차순
+GET {{baseUrl}}/api/v1/logs/page?sortBy=studyDate&sortDirection=ASC
+
+### 9-4. 학습시간 내림차순
+GET {{baseUrl}}/api/v1/logs/page?sortBy=studyTime&sortDirection=DESC
