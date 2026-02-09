@@ -10,7 +10,6 @@ import com.study.myspringstudydiary.exception.StudyLogNotFoundException;
 import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;
-import com.study.myspringstudydiary.repository.StudyLogRepository;
 import com.study.myspringstudydiary.dao.StudyLogDao;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +20,11 @@ import java.util.stream.Collectors;
 /**
  * 학습 일지 서비스
  *
+ * DIP(Dependency Inversion Principle) 적용:
+ * - Service(고수준)가 구체적인 Repository(저수준)에 의존하지 않음
+ * - StudyLogDao 인터페이스(추상화)에만 의존
+ * - 구현체(MapStudyLogRepository, MySQLStudyLogDaoImpl 등)는 언제든 교체 가능
+ *
  * @Service 어노테이션 설명:
  * - 이 클래스를 Spring Bean으로 등록합니다
  * - 비즈니스 로직을 담당하는 서비스 계층임을 명시합니다
@@ -29,19 +33,17 @@ import java.util.stream.Collectors;
 @Service  // ⭐ Spring Bean으로 등록!
 public class StudyLogService {
 
-    // ⭐ 의존성 주입: Repository와 DAO를 주입받음
-    private final StudyLogRepository studyLogRepository;
-    private final StudyLogDao studyLogDao;  // 카테고리/날짜별 조회를 위해 DAO도 유지
+    // ⭐ DIP 준수: 인터페이스에만 의존
+    private final StudyLogDao studyLogDao;
 
     /**
      * 생성자 주입 (Constructor Injection)
      *
-     * Spring이 StudyLogRepository와 StudyLogDao Bean을 찾아서 자동으로 주입해줍니다.
-     * Repository 패턴을 통해 영속성 계층을 추상화하고,
-     * 특별한 조회 기능을 위해 DAO도 함께 사용합니다.
+     * Spring이 StudyLogDao 인터페이스의 구현체를 찾아서 자동으로 주입
+     * 현재는 MapStudyLogRepository가 주입됨
+     * 향후 MySQLStudyLogDaoImpl 등으로 쉽게 교체 가능
      */
-    public StudyLogService(StudyLogRepository studyLogRepository, StudyLogDao studyLogDao) {
-        this.studyLogRepository = studyLogRepository;
+    public StudyLogService(StudyLogDao studyLogDao) {
         this.studyLogDao = studyLogDao;
     }
 
@@ -69,8 +71,8 @@ public class StudyLogService {
                 request.getStudyDate() != null ? request.getStudyDate() : LocalDate.now()
         );
 
-        // 3. 저장 (Repository 사용)
-        StudyLog savedStudyLog = studyLogRepository.save(studyLog);
+        // 3. 저장 (DAO 사용 - DIP 준수)
+        StudyLog savedStudyLog = studyLogDao.save(studyLog);
 
         // 4. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(savedStudyLog);
@@ -84,8 +86,8 @@ public class StudyLogService {
      * @return 모든 학습 일지 응답 DTO 리스트
      */
     public List<StudyLogResponse> getAllStudyLogs() {
-        // 1. Repository에서 모든 학습 일지 조회
-        List<StudyLog> studyLogs = studyLogRepository.findAll();
+        // 1. DAO에서 모든 학습 일지 조회
+        List<StudyLog> studyLogs = studyLogDao.findAll();
 
         // 2. Entity 리스트 → Response DTO 리스트 변환
         return studyLogs.stream()
@@ -100,15 +102,11 @@ public class StudyLogService {
      * @return 학습 일지 응답 DTO
      */
     public StudyLogResponse getStudyLogById(Long id) {
-        // 1. Repository에서 ID로 조회
-        StudyLog studyLog = studyLogRepository.findById(id);
+        // 1. DAO에서 ID로 조회 (Optional 반환)
+        StudyLog studyLog = studyLogDao.findById(id)
+                .orElseThrow(() -> new StudyLogNotFoundException(id));
 
-        // 2. 존재하지 않으면 예외 처리
-        if (studyLog == null) {
-            throw new StudyLogNotFoundException(id);
-        }
-
-        // 3. Entity → Response DTO 변환 후 반환
+        // 2. Entity → Response DTO 변환 후 반환
         return StudyLogResponse.from(studyLog);
     }
 
@@ -236,7 +234,7 @@ public class StudyLogService {
      * @return 학습 일지 총 개수
      */
     public long getStudyLogCount() {
-        return studyLogRepository.count();
+        return studyLogDao.count();
     }
 
     // ==================== UPDATE ====================
@@ -252,11 +250,9 @@ public class StudyLogService {
         Objects.requireNonNull(id);
         Objects.requireNonNull(request);
 
-        // 1. 기존 학습 일지 조회 (Repository 사용)
-        StudyLog studyLog = studyLogRepository.findById(id);
-        if (studyLog == null) {
-            throw new StudyLogNotFoundException(id);
-        }
+        // 1. 기존 학습 일지 조회 (DAO 사용)
+        StudyLog studyLog = studyLogDao.findById(id)
+                .orElseThrow(() -> new StudyLogNotFoundException(id));
 
         // 2. 수정할 내용이 있는지 확인
         if (request.hasNoUpdates()) {
@@ -297,8 +293,8 @@ public class StudyLogService {
                 request.getStudyDate()
         );
 
-        // 6. 저장 및 응답 반환 (Repository 사용)
-        StudyLog updatedStudyLog = studyLogRepository.update(studyLog);
+        // 6. 저장 및 응답 반환 (DAO 사용)
+        StudyLog updatedStudyLog = studyLogDao.update(studyLog);
         return StudyLogResponse.from(updatedStudyLog);
     }
 
@@ -362,13 +358,13 @@ public class StudyLogService {
      * @throws StudyLogNotFoundException 해당 ID의 학습 일지가 없는 경우
      */
     public StudyLogDeleteResponse deleteStudyLog(Long id) {
-        // 1. 존재 여부 확인 (Repository 사용)
-        if (!studyLogRepository.existsById(id)) {
+        // 1. 존재 여부 확인 (DAO 사용)
+        if (!studyLogDao.existsById(id)) {
             throw new StudyLogNotFoundException(id);
         }
 
-        // 2. 삭제 수행 (Repository 사용)
-        studyLogRepository.deleteById(id);
+        // 2. 삭제 수행 (DAO 사용)
+        studyLogDao.deleteById(id);
 
         // 3. 삭제 결과 반환
         return StudyLogDeleteResponse.of(id);
