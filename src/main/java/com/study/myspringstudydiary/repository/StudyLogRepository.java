@@ -1,35 +1,27 @@
 package com.study.myspringstudydiary.repository;
 
+import com.study.myspringstudydiary.dao.StudyLogDao;
 import com.study.myspringstudydiary.entity.StudyLog;
 import org.springframework.stereotype.Repository;
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * 학습 일지 저장소
+ * StudyLog Repository
  *
- * @Repository 어노테이션 설명:
- * - 이 클래스를 Spring Bean으로 등록합니다
- * - 데이터 접근 계층임을 명시합니다
- * - 데이터 접근 관련 예외를 Spring의 DataAccessException으로 변환해줍니다
- *
- * 실제 프로젝트에서는 JPA, MyBatis 등을 사용하지만,
- * 이번 강의에서는 Map을 사용하여 데이터를 저장합니다.
+ * DAO를 호출하여 영속성을 처리하는 Repository 계층
+ * Service와 DAO 사이의 추가적인 추상화 계층 역할
  */
-@Repository  // ⭐ Spring Bean으로 등록!
+@Repository
 public class StudyLogRepository {
 
-    // 데이터 저장소 (실제 DB 대신 Map 사용)
-    private final Map<Long, StudyLog> database = new HashMap<>();
+    private final StudyLogDao studyLogDao;
 
-    // ID 자동 증가를 위한 시퀀스
-    private final AtomicLong sequence = new AtomicLong(1);
+    public StudyLogRepository(StudyLogDao studyLogDao) {
+        this.studyLogDao = studyLogDao;
+    }
+
+    // ========== CREATE ==========
 
     /**
      * 학습 일지 저장
@@ -37,25 +29,10 @@ public class StudyLogRepository {
      * @return 저장된 학습 일지 (ID 포함)
      */
     public StudyLog save(StudyLog studyLog) {
-        // ID가 없으면 새로운 ID 부여
-        if (studyLog.getId() == null) {
-            studyLog.setId(sequence.getAndIncrement());
-        }
-
-        // Map에 저장
-        database.put(studyLog.getId(), studyLog);
-
-        return studyLog;
+        return studyLogDao.save(studyLog);
     }
 
-    /**
-     * 모든 학습 일지 조회
-     * @return 모든 학습 일지 리스트
-     */
-    public List<StudyLog> findAll() {
-        // Map의 모든 값을 리스트로 변환하여 반환
-        return new ArrayList<>(database.values());
-    }
+    // ========== READ ==========
 
     /**
      * ID로 학습 일지 조회
@@ -63,87 +40,73 @@ public class StudyLogRepository {
      * @return 학습 일지 (없으면 null)
      */
     public StudyLog findById(Long id) {
-        // Map에서 ID로 조회
-        return database.get(id);
+        return studyLogDao.findById(id).orElse(null);
     }
 
     /**
-     * 학습 일지 수정 (Update)
-     * Map은 같은 키로 put하면 덮어쓰므로 save와 동일하게 동작
-     * 하지만 의미를 명확히 하기 위해 별도 메서드로 분리
+     * 모든 학습 일지 조회
+     * @return 모든 학습 일지 리스트
+     */
+    public List<StudyLog> findAll() {
+        return studyLogDao.findAll();
+    }
+
+    // ========== UPDATE ==========
+
+    /**
+     * 학습 일지 수정
+     * @param studyLog 수정할 학습 일지
+     * @return 수정된 학습 일지
+     * @throws IllegalArgumentException 해당 ID의 학습 일지가 없는 경우
+     * @throws RuntimeException 업데이트 실패 시
      */
     public StudyLog update(StudyLog studyLog) {
-        if (studyLog.getId() == null) {
-            throw new IllegalArgumentException("수정할 학습 일지의 ID가 없습니다.");
-        }
-        if (!database.containsKey(studyLog.getId())) {
+        if (!existsById(studyLog.getId())) {
             throw new IllegalArgumentException(
                 "해당 학습 일지를 찾을 수 없습니다. (id: " + studyLog.getId() + ")");
         }
-        database.put(studyLog.getId(), studyLog);
-        return studyLog;
+
+        StudyLog updatedStudyLog = studyLogDao.update(studyLog);
+        if (updatedStudyLog == null) {
+            throw new RuntimeException("업데이트 실패");
+        }
+
+        return updatedStudyLog;
     }
 
     // ========== DELETE ==========
 
     /**
-     * ID로 학습 일지를 삭제합니다.
-     *
+     * ID로 학습 일지 삭제
      * @param id 삭제할 학습 일지 ID
-     * @return 삭제 성공 여부 (true: 삭제됨, false: 해당 ID 없음)
+     * @return 삭제 성공 여부
      */
     public boolean deleteById(Long id) {
-        // Map.remove()는 삭제된 값을 반환, 없으면 null 반환
-        StudyLog removed = database.remove(id);
-        return removed != null;
+        return studyLogDao.deleteById(id);
     }
 
     /**
-     * ID에 해당하는 학습 일지가 존재하는지 확인합니다.
-     *
+     * ID 존재 여부 확인
      * @param id 확인할 학습 일지 ID
      * @return 존재 여부
      */
     public boolean existsById(Long id) {
-        return database.containsKey(id);
+        return studyLogDao.existsById(id);
     }
 
     /**
-     * 저장된 전체 학습 일지 수를 반환합니다.
-     *
+     * 학습 일지 총 개수 조회
      * @return 학습 일지 총 개수
      */
     public long count() {
-        return database.size();
+        return studyLogDao.count();
     }
 
     /**
-     * 모든 학습 일지를 삭제합니다.
-     * (테스트용)
+     * 모든 학습 일지 삭제
+     * 주의: 테스트 용도로만 사용
      */
     public void deleteAll() {
-        database.clear();
-    }
-
-    // ========== 생명주기 콜백 ==========
-
-    @PostConstruct
-    public void init() {
-        System.out.println("========================================");
-        System.out.println("📦 StudyLogRepository 초기화 완료!");
-        System.out.println("   - 데이터 저장소(Map) 준비됨");
-        System.out.println("   - ID 생성기 준비됨");
-        System.out.println("========================================");
-    }
-
-    @PreDestroy
-    public void cleanup() {
-        System.out.println("========================================");
-        System.out.println("🧹 StudyLogRepository 정리 중...");
-        System.out.println("   - 저장된 데이터 수: " + database.size());
-        System.out.println("   - 마지막 ID: " + (sequence.get() - 1));
-        database.clear();  // 데이터 정리
-        System.out.println("   - 데이터 정리 완료!");
-        System.out.println("========================================");
+        studyLogDao.deleteAll();
     }
 }
