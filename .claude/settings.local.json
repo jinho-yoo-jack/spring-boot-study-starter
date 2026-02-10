@@ -5,7 +5,9 @@
       "Bash(./gradlew:*)",
       "Bash(docker-compose down:*)",
       "Bash(docker-compose up:*)",
-      "Bash(docker exec:*)"
+      "Bash(docker exec:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(xargs -I {} sh -c 'echo \"\"\"\"=== {} ===\"\"\"\"; git ls-tree -r {} --name-only 2>/dev/null | grep -i studylogrepository')"
     ],
     "deny": [],
     "ask": []
