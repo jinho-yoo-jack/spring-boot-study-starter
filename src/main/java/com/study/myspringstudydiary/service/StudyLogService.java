@@ -140,7 +140,7 @@ public class StudyLogService {
         }
 
         // 2. DAO에서 카테고리로 조회
-        List<StudyLog> studyLogs = studyLogDao.findByCategory(category);
+        List<StudyLog> studyLogs = studyLogDao.findByCategory(category.toString());
 
         // 3. Entity 리스트 → Response DTO 리스트 변환
         return studyLogs.stream()
@@ -203,7 +203,7 @@ public class StudyLogService {
         }
 
         // 카테고리로 필터링
-        List<StudyLog> filteredLogs = studyLogDao.findByCategory(category);
+        List<StudyLog> filteredLogs = studyLogDao.findByCategory(category.toString());
 
         // 정렬
         filteredLogs.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
