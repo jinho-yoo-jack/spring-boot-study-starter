@@ -1,4 +1,4 @@
-package com.study.myspringstudydiary.common;
+package com.study.myspringstudydiary.global.common;
 
 import java.util.List;
 
