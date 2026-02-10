@@ -164,27 +164,9 @@ public class StudyLogController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Category categoryEnum = Category.valueOf(category.toUpperCase());
-        return studyLogService.getStudyLogsByCategoryWithPaging(categoryEnum, page, size);
+        return studyLogService.getStudyLogsByCategoryWithPaging(category, page, size);
     }
 
-    /**
-     * 날짜별 학습 일지 페이징 조회
-     *
-     * GET /api/v1/logs/date/{date}/page?page=0&size=10
-     *
-     * @param date 조회할 날짜
-     * @param page 페이지 번호
-     * @param size 페이지 크기
-     * @return 페이징된 학습 일지
-     */
-    @GetMapping("/date/{date}/page")
-    public Page<StudyLogResponse> getStudyLogsByDatePage(
-            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return studyLogService.getStudyLogsByDateWithPaging(date, page, size);
-    }
 
     /**
      * 검색 + 페이징 조회

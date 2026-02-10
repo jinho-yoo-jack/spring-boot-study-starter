@@ -4,8 +4,6 @@ import com.study.myspringstudydiary.common.Page;
 import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;
-import jakarta.annotation.PostConstruct;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -28,7 +26,6 @@ import java.util.Optional;
  * - Reduces boilerplate code
  */
 @Repository
-@Primary  // MySQL을 기본 DAO 구현체로 사용
 public class MySQLStudyLogDaoImpl implements StudyLogDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -39,38 +36,6 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
      */
     public MySQLStudyLogDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-    }
-
-    @PostConstruct
-    public void init() {
-        System.out.println("========================================");
-        System.out.println("🔗 MySQLStudyLogDaoImpl 초기화 시작");
-        System.out.println("DataSource: " + jdbcTemplate.getDataSource());
-
-        // 실제 DB 연결 테스트
-        try {
-            Integer result = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
-            System.out.println("✅ DB Connection Test 성공! Result: " + result);
-
-            // 테이블 존재 여부 확인
-            String tableCheckSql = """
-                SELECT COUNT(*)
-                FROM information_schema.tables
-                WHERE table_schema = 'diary_db'
-                AND table_name = 'study_logs'
-                """;
-            Integer tableExists = jdbcTemplate.queryForObject(tableCheckSql, Integer.class);
-            System.out.println("📊 study_logs 테이블 존재: " + (tableExists > 0 ? "YES" : "NO"));
-
-            // 현재 레코드 수 확인
-            Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM study_logs", Long.class);
-            System.out.println("📝 현재 저장된 StudyLog 개수: " + count);
-        } catch (Exception e) {
-            System.err.println("❌ DB Connection Test 실패!");
-            System.err.println("Error: " + e.getMessage());
-            e.printStackTrace();
-        }
-        System.out.println("========================================");
     }
 
     // ========== CREATE ==========
@@ -130,12 +95,6 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
     public List<StudyLog> findByCategory(String category) {
         String sql = "SELECT * FROM study_logs WHERE category = ? ORDER BY study_date DESC, id DESC";
         return jdbcTemplate.query(sql, studyLogRowMapper, category);
-    }
-
-    @Override
-    public List<StudyLog> findByCategory(Category category) {
-        String sql = "SELECT * FROM study_logs WHERE category = ? ORDER BY study_date DESC, id DESC";
-        return jdbcTemplate.query(sql, studyLogRowMapper, category.name());
     }
 
     @Override
@@ -228,10 +187,10 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
     }
 
     @Override
-    public Page<StudyLog> findByCategoryWithPaging(Category category, int page, int size) {
+    public Page<StudyLog> findByCategoryWithPaging(String category, int page, int size) {
         // COUNT 쿼리에도 동일한 WHERE 조건 적용
         String countSql = "SELECT COUNT(*) FROM study_logs WHERE category = ?";
-        Long totalElements = jdbcTemplate.queryForObject(countSql, Long.class, category.name());
+        Long totalElements = jdbcTemplate.queryForObject(countSql, Long.class, category);
 
         if (totalElements == null || totalElements == 0) {
             return new Page<>(List.of(), page, size, 0);
@@ -246,30 +205,7 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
 
         int offset = page * size;
         List<StudyLog> content = jdbcTemplate.query(
-                dataSql, studyLogRowMapper, category.name(), size, offset);
-
-        return new Page<>(content, page, size, totalElements);
-    }
-
-    @Override
-    public Page<StudyLog> findByDateWithPaging(LocalDate date, int page, int size) {
-        String countSql = "SELECT COUNT(*) FROM study_logs WHERE study_date = ?";
-        Long totalElements = jdbcTemplate.queryForObject(countSql, Long.class, Date.valueOf(date));
-
-        if (totalElements == null || totalElements == 0) {
-            return new Page<>(List.of(), page, size, 0);
-        }
-
-        String dataSql = """
-            SELECT * FROM study_logs
-            WHERE study_date = ?
-            ORDER BY id DESC
-            LIMIT ? OFFSET ?
-            """;
-
-        int offset = page * size;
-        List<StudyLog> content = jdbcTemplate.query(
-                dataSql, studyLogRowMapper, Date.valueOf(date), size, offset);
+                dataSql, studyLogRowMapper, category, size, offset);
 
         return new Page<>(content, page, size, totalElements);
     }
@@ -277,7 +213,7 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
     @Override
     public Page<StudyLog> searchWithPaging(
             String titleKeyword,
-            Category category,
+            String category,
             LocalDate startDate,
             LocalDate endDate,
             int page,
@@ -292,9 +228,9 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
             params.add("%" + titleKeyword + "%");
         }
 
-        if (category != null) {
+        if (category != null && !category.isBlank()) {
             whereClause.append(" AND category = ?");
-            params.add(category.name());
+            params.add(category);
         }
 
         if (startDate != null) {
@@ -330,6 +266,13 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
                 dataSql, studyLogRowMapper, dataParams.toArray());
 
         return new Page<>(content, page, size, totalElements);
+    }
+
+    @Override
+    public long countByCategory(String category) {
+        String sql = "SELECT COUNT(*) FROM study_logs WHERE category = ?";
+        Long count = jdbcTemplate.queryForObject(sql, Long.class, category);
+        return count != null ? count : 0;
     }
 
     // ========== PRIVATE METHODS ==========

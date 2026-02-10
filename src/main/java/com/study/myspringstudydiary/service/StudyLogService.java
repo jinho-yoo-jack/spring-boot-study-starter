@@ -127,7 +127,7 @@ public class StudyLogService {
      * @return 해당 카테고리의 학습 일지 리스트
      */
     public List<StudyLogResponse> getStudyLogsByCategory(Category category) {
-        List<StudyLog> studyLogs = studyLogDao.findByCategory(category);
+        List<StudyLog> studyLogs = studyLogDao.findByCategory(category.toString());
         return studyLogs.stream()
                 .map(StudyLogResponse::from)
                 .collect(Collectors.toList());
@@ -183,36 +183,21 @@ public class StudyLogService {
 
     /**
      * 카테고리별 학습 일지 페이징 조회
-     * @param category 카테고리
+     * @param categoryStr 카테고리 문자열
      * @param page 페이지 번호
      * @param size 페이지 크기
      * @return 페이징된 학습 일지 응답
      */
-    public Page<StudyLogResponse> getStudyLogsByCategoryWithPaging(Category category, int page, int size) {
+    public Page<StudyLogResponse> getStudyLogsByCategoryWithPaging(String categoryStr, int page, int size) {
         page = Math.max(0, page);
         size = Math.min(Math.max(1, size), MAX_PAGE_SIZE);
 
-        Page<StudyLog> studyLogPage = studyLogDao.findByCategoryWithPaging(category, page, size);
+        // 카테고리 유효성 검증
+        if (categoryStr == null || categoryStr.isBlank()) {
+            return new Page<>(List.of(), page, size, 0);
+        }
 
-        List<StudyLogResponse> content = studyLogPage.getContent().stream()
-                .map(StudyLogResponse::from)
-                .collect(Collectors.toList());
-
-        return new Page<>(content, page, size, studyLogPage.getTotalElements());
-    }
-
-    /**
-     * 날짜별 학습 일지 페이징 조회
-     * @param date 조회할 날짜
-     * @param page 페이지 번호
-     * @param size 페이지 크기
-     * @return 페이징된 학습 일지 응답
-     */
-    public Page<StudyLogResponse> getStudyLogsByDateWithPaging(LocalDate date, int page, int size) {
-        page = Math.max(0, page);
-        size = Math.min(Math.max(1, size), MAX_PAGE_SIZE);
-
-        Page<StudyLog> studyLogPage = studyLogDao.findByDateWithPaging(date, page, size);
+        Page<StudyLog> studyLogPage = studyLogDao.findByCategoryWithPaging(categoryStr.toUpperCase(), page, size);
 
         List<StudyLogResponse> content = studyLogPage.getContent().stream()
                 .map(StudyLogResponse::from)
@@ -242,14 +227,10 @@ public class StudyLogService {
         page = Math.max(0, page);
         size = Math.min(Math.max(1, size), MAX_PAGE_SIZE);
 
-        // 카테고리 문자열을 enum으로 변환
-        Category category = null;
+        // 카테고리 문자열을 대문자로 변환 (유효성 검증은 DAO에서 처리)
+        String category = null;
         if (categoryStr != null && !categoryStr.isBlank()) {
-            try {
-                category = Category.valueOf(categoryStr.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                // 잘못된 카테고리는 무시하고 null로 처리
-            }
+            category = categoryStr.toUpperCase();
         }
 
         Page<StudyLog> studyLogPage = studyLogDao.searchWithPaging(
@@ -260,6 +241,18 @@ public class StudyLogService {
                 .collect(Collectors.toList());
 
         return new Page<>(content, page, size, studyLogPage.getTotalElements());
+    }
+
+    /**
+     * 카테고리별 학습 일지 개수 조회
+     * @param categoryStr 카테고리 문자열
+     * @return 해당 카테고리의 학습 일지 개수
+     */
+    public long getStudyLogCountByCategory(String categoryStr) {
+        if (categoryStr == null || categoryStr.isBlank()) {
+            return 0;
+        }
+        return studyLogDao.countByCategory(categoryStr.toUpperCase());
     }
 
     // ========== UPDATE ==========

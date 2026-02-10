@@ -79,21 +79,12 @@ public class InMemoryStudyLogDao implements StudyLogDao {
 
     @Override
     public List<StudyLog> findByCategory(String category) {
-        try {
-            Category categoryEnum = Category.valueOf(category.toUpperCase());
-            return findByCategory(categoryEnum);
-        } catch (IllegalArgumentException e) {
-            return new ArrayList<>();
-        }
-    }
-
-    @Override
-    public List<StudyLog> findByCategory(Category category) {
         return database.values().stream()
-                .filter(log -> log.getCategory() == category)
+                .filter(log -> log.getCategory().name().equals(category))
                 .sorted((a, b) -> b.getId().compareTo(a.getId()))
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public List<StudyLog> findByStudyDate(LocalDate date) {
@@ -111,6 +102,13 @@ public class InMemoryStudyLogDao implements StudyLogDao {
     @Override
     public long count() {
         return database.size();
+    }
+
+    @Override
+    public long countByCategory(String category) {
+        return database.values().stream()
+                .filter(log -> log.getCategory().name().equals(category))
+                .count();
     }
 
     // ========== PAGING ==========
@@ -133,9 +131,9 @@ public class InMemoryStudyLogDao implements StudyLogDao {
     }
 
     @Override
-    public Page<StudyLog> findByCategoryWithPaging(Category category, int page, int size) {
+    public Page<StudyLog> findByCategoryWithPaging(String category, int page, int size) {
         List<StudyLog> categoryLogs = database.values().stream()
-                .filter(log -> log.getCategory() == category)
+                .filter(log -> log.getCategory().name().equals(category))
                 .sorted((a, b) -> b.getId().compareTo(a.getId()))
                 .collect(Collectors.toList());
 
@@ -152,26 +150,7 @@ public class InMemoryStudyLogDao implements StudyLogDao {
     }
 
     @Override
-    public Page<StudyLog> findByDateWithPaging(LocalDate date, int page, int size) {
-        List<StudyLog> dateLogs = database.values().stream()
-                .filter(log -> log.getStudyDate().equals(date))
-                .sorted((a, b) -> b.getId().compareTo(a.getId()))
-                .collect(Collectors.toList());
-
-        int totalElements = dateLogs.size();
-        int fromIndex = page * size;
-        int toIndex = Math.min(fromIndex + size, totalElements);
-
-        if (fromIndex >= totalElements) {
-            return new Page<>(new ArrayList<>(), page, size, totalElements);
-        }
-
-        List<StudyLog> content = dateLogs.subList(fromIndex, toIndex);
-        return new Page<>(content, page, size, totalElements);
-    }
-
-    @Override
-    public Page<StudyLog> searchWithPaging(String titleKeyword, Category category,
+    public Page<StudyLog> searchWithPaging(String titleKeyword, String category,
                                           LocalDate startDate, LocalDate endDate,
                                           int page, int size) {
         List<StudyLog> filteredLogs = database.values().stream()
@@ -184,8 +163,8 @@ public class InMemoryStudyLogDao implements StudyLogDao {
                     }
 
                     // 카테고리 필터
-                    if (matches && category != null) {
-                        matches = log.getCategory() == category;
+                    if (matches && category != null && !category.isBlank()) {
+                        matches = log.getCategory().name().equals(category);
                     }
 
                     // 시작 날짜 필터
@@ -249,6 +228,7 @@ public class InMemoryStudyLogDao implements StudyLogDao {
         // 테스트 용도로 시퀀스도 초기화
         sequence.set(1);
     }
+
 
     // ========== 생명주기 콜백 ==========
 
