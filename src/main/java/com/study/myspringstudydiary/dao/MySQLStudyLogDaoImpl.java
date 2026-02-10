@@ -3,6 +3,8 @@ package com.study.myspringstudydiary.dao;
 import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;
+import jakarta.annotation.PostConstruct;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -24,6 +26,7 @@ import java.util.Optional;
  * - Reduces boilerplate code
  */
 @Repository
+@Primary  // 이 구현체를 기본으로 사용
 public class MySQLStudyLogDaoImpl implements StudyLogDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -34,6 +37,38 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
      */
     public MySQLStudyLogDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @PostConstruct
+    public void init() {
+        System.out.println("========================================");
+        System.out.println("🔗 MySQLStudyLogDaoImpl 초기화 시작");
+        System.out.println("DataSource: " + jdbcTemplate.getDataSource());
+
+        // 실제 DB 연결 테스트
+        try {
+            Integer result = jdbcTemplate.queryForObject("SELECT 1", Integer.class);
+            System.out.println("✅ DB Connection Test 성공! Result: " + result);
+
+            // 테이블 존재 여부 확인
+            String tableCheckSql = """
+                SELECT COUNT(*)
+                FROM information_schema.tables
+                WHERE table_schema = 'diary_db'
+                AND table_name = 'study_logs'
+                """;
+            Integer tableExists = jdbcTemplate.queryForObject(tableCheckSql, Integer.class);
+            System.out.println("📊 study_logs 테이블 존재: " + (tableExists > 0 ? "YES" : "NO"));
+
+            // 현재 레코드 수 확인
+            Long count = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM study_logs", Long.class);
+            System.out.println("📝 현재 저장된 StudyLog 개수: " + count);
+        } catch (Exception e) {
+            System.err.println("❌ DB Connection Test 실패!");
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        System.out.println("========================================");
     }
 
     // ========== CREATE ==========

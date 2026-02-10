@@ -36,7 +36,6 @@ import java.util.stream.Collectors;
  * - Service에서 StudyLogDao 주입 시 이 클래스가 우선 주입됨
  */
 @Repository
-@Primary  // 이 구현체를 기본으로 사용
 public class InMemoryStudyLogDao implements StudyLogDao {
 
     // 데이터 저장소 (실제 DB 대신 Map 사용)
