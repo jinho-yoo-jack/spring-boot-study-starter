@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 학습 일지 컨트롤러
@@ -196,6 +198,27 @@ public class StudyLogController {
 
         return studyLogService.searchStudyLogsWithPaging(
                 title, category, startDate, endDate, page, size);
+    }
+
+    /**
+     * 카테고리별 학습 일지 개수 조회
+     *
+     * GET /api/v1/logs/category/{category}/count
+     *
+     * @param category 조회할 카테고리
+     * @return 카테고리명과 개수를 포함한 Map
+     */
+    @GetMapping("/category/{category}/count")
+    public Map<String, Object> getStudyLogCountByCategory(
+            @PathVariable String category) {
+
+        long count = studyLogService.getStudyLogCountByCategory(category);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("category", category);
+        response.put("count", count);
+
+        return response;
     }
 
     // ========== UPDATE ==========

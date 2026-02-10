@@ -4,6 +4,7 @@ import com.study.myspringstudydiary.common.Page;
 import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -26,6 +27,7 @@ import java.util.Optional;
  * - Reduces boilerplate code
  */
 @Repository
+@Primary
 public class MySQLStudyLogDaoImpl implements StudyLogDao {
 
     private final JdbcTemplate jdbcTemplate;
