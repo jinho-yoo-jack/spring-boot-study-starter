@@ -8,7 +8,8 @@
       "Bash(./gradlew bootRun)",
       "Bash(git merge:*)",
       "Bash(mvn clean compile:*)",
-      "Bash(.gitignore)"
+      "Bash(.gitignore)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

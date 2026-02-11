@@ -1,6 +1,6 @@
 package com.study.myspringstudydiary.dao;
 
-import com.study.myspringstudydiary.common.Page;
+import com.study.myspringstudydiary.global.common.Page;
 import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;

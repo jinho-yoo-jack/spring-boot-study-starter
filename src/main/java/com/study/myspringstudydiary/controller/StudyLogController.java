@@ -1,6 +1,6 @@
 package com.study.myspringstudydiary.controller;
 
-import com.study.myspringstudydiary.common.Page;
+import com.study.myspringstudydiary.global.common.Page;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
