@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -42,6 +45,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor  // Lombok이 생성자를 자동 생성
 @RequestMapping("/api/v1/logs")
+@Validated  // PathVariable, RequestParam 검증을 위해 추가
 public class StudyLogController {
 
     private final StudyLogService studyLogService;
@@ -59,7 +63,7 @@ public class StudyLogController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
-            @RequestBody StudyLogCreateRequest request) {
+            @Valid @RequestBody StudyLogCreateRequest request) {
 
         log.info("POST /api/v1/logs - Creating study log: {}", request.getTitle());
 
@@ -98,7 +102,7 @@ public class StudyLogController {
      */
     @GetMapping("/{id}")
     public StudyLogResponse getStudyLogById(
-            @PathVariable Long id) {
+            @PathVariable @Positive(message = "ID는 양수여야 합니다") Long id) {
 
         return studyLogService.getStudyLogById(id);
     }
@@ -159,8 +163,9 @@ public class StudyLogController {
      */
     @GetMapping("/page")
     public Page<StudyLogResponse> getStudyLogsPage(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "0") @Min(value = 0, message = "페이지 번호는 0 이상이어야 합니다") int page,
+            @RequestParam(defaultValue = "10") @Min(value = 1, message = "페이지 크기는 1 이상이어야 합니다")
+            @Max(value = 100, message = "페이지 크기는 100 이하여야 합니다") int size) {
         return studyLogService.getStudyLogsWithPaging(page, size);
     }
 
@@ -249,8 +254,8 @@ public class StudyLogController {
      */
     @PutMapping("/{id}")
     public StudyLogResponse updateStudyLog(
-            @PathVariable Long id,
-            @RequestBody StudyLogUpdateRequest request) {
+            @PathVariable @Positive(message = "ID는 양수여야 합니다") Long id,
+            @Valid @RequestBody StudyLogUpdateRequest request) {
 
         return studyLogService.updateStudyLog(id, request);
     }
@@ -267,7 +272,7 @@ public class StudyLogController {
      */
     @DeleteMapping("/{id}")
     public StudyLogDeleteResponse deleteStudyLog(
-            @PathVariable Long id) {
+            @PathVariable @Positive(message = "ID는 양수여야 합니다") Long id) {
 
         return studyLogService.deleteStudyLog(id);
     }

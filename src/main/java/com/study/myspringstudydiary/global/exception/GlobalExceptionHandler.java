@@ -8,6 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import jakarta.validation.ConstraintViolationException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Global exception handler for all controllers
@@ -42,18 +46,44 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Handle validation errors
+     * Handle validation errors from @Valid in @RequestBody
+     * @RequestBody 검증 실패 시 발생
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiResponse<Void>> handleValidation(
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(
             MethodArgumentNotValidException e) {
 
-        String message = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .reduce((a, b) -> a + ", " + b)
-                .orElse("Validation failed");
+        Map<String, String> errors = new HashMap<>();
+
+        e.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+
+        String message = errors.entrySet().stream()
+                .map(entry -> entry.getKey() + ": " + entry.getValue())
+                .collect(Collectors.joining(", "));
+
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.<Map<String, String>>builder()
+                        .success(false)
+                        .errorCode("VALIDATION_ERROR")
+                        .errorMessage(message)
+                        .data(errors)
+                        .build());
+    }
+
+    /**
+     * Handle validation errors from @PathVariable and @RequestParam
+     * @PathVariable, @RequestParam 검증 실패 시 발생
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleConstraintViolation(
+            ConstraintViolationException e) {
+
+        String message = e.getConstraintViolations().stream()
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                .collect(Collectors.joining(", "));
 
         return ResponseEntity
                 .badRequest()
