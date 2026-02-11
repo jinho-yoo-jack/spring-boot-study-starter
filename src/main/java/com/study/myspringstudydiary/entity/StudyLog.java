@@ -62,4 +62,35 @@ public class StudyLog {
         // Update modification time
         this.updatedAt = LocalDateTime.now();
     }
+
+    // Individual update methods for MapStruct
+    public void updateTitle(String title) {
+        this.title = title;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateCategory(Category category) {
+        this.category = category;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateUnderstanding(Understanding understanding) {
+        this.understanding = understanding;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateStudyTime(Integer studyTime) {
+        this.studyTime = studyTime;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateStudyDate(LocalDate studyDate) {
+        this.studyDate = studyDate;
+        this.updatedAt = LocalDateTime.now();
+    }
 }
