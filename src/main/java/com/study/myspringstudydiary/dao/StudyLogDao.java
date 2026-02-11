@@ -1,77 +1,80 @@
 package com.study.myspringstudydiary.dao;
 
+import com.study.myspringstudydiary.common.Page;
 import com.study.myspringstudydiary.entity.StudyLog;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Study Log DAO Interface
- *
- * DAO (Data Access Object) Pattern:
- * - Pattern that abstracts database access logic
- * - Separates business logic and data access logic
- * - Interface remains unchanged even when database type changes
- * - Only implementation needs to be replaced (MySQL, PostgreSQL, MongoDB, etc.)
+ * StudyLog DAO 인터페이스
+ * <p>
+ * DAO(Data Access Object) 패턴:
+ * - 데이터베이스 접근 로직을 캡슐화
+ * - 비즈니스 로직과 데이터 접근 로직을 분리
+ * - 데이터베이스 종류에 독립적인 인터페이스 제공
  */
 public interface StudyLogDao {
 
-    /**
-     * Create study log
-     * @param studyLog Study log to save
-     * @return Saved study log (with ID)
-     */
+    // ========== CREATE ==========
     StudyLog save(StudyLog studyLog);
 
-    /**
-     * Find study log by ID
-     * @param id Study log ID to find
-     * @return Study log (wrapped in Optional to prevent null)
-     */
+    // ========== READ ==========
     Optional<StudyLog> findById(Long id);
 
-    /**
-     * Find all study logs
-     * @return List of all study logs
-     */
+    List<StudyLog> findByStudyDate(LocalDate date);
+
     List<StudyLog> findAll();
 
-    /**
-     * Find study logs by category
-     * @param category Category
-     * @return List of study logs in the category
-     */
     List<StudyLog> findByCategory(String category);
 
-    /**
-     * Update study log
-     * @param studyLog Study log to update
-     * @return Updated study log
-     */
+    // ========== UPDATE ==========
     StudyLog update(StudyLog studyLog);
 
-    /**
-     * Delete study log by ID
-     * @param id Study log ID to delete
-     * @return Success/failure of deletion
-     */
+    // ========== DELETE ==========
     boolean deleteById(Long id);
 
-    /**
-     * Check if ID exists
-     * @param id Study log ID to check
-     * @return Existence
-     */
     boolean existsById(Long id);
 
+    void deleteAll();
+
+    // ========== PAGING ==========
+
     /**
-     * Get total count of study logs
-     * @return Total count of study logs
+     * 전체 학습 일지를 페이징하여 조회
+     *
+     * @param page 페이지 번호 (0-based)
+     * @param size 페이지당 데이터 개수
+     * @return 페이징된 결과
+     */
+    Page<StudyLog> findAllWithPaging(int page, int size);
+
+    /**
+     * 카테고리별 학습 일지를 페이징하여 조회
+     */
+    Page<StudyLog> findByCategoryWithPaging(String category, int page, int size);
+
+    /**
+     * 검색 조건과 함께 페이징하여 조회
+     * - 제목 키워드 검색
+     * - 카테고리 필터
+     * - 날짜 범위 필터
+     */
+    Page<StudyLog> searchWithPaging(
+            String titleKeyword,
+            String category,
+            LocalDate startDate,
+            LocalDate endDate,
+            int page, int size);
+
+    /**
+     * 전체 데이터 개수 조회
      */
     long count();
 
     /**
-     * Delete all study logs
-     * WARNING: Use only for testing
+     * 조건부 데이터 개수 조회
      */
-    void deleteAll();
+    long countByCategory(String category);
 }

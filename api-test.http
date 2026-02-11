@@ -1,0 +1,460 @@
+### Spring Boot Study Log API Tests
+### Base URL: http://localhost:8081/api/v1/logs
+
+### ============================================
+### CREATE - 학습 일지 생성
+### ============================================
+
+### 1. Spring 학습 일지 생성
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Spring Security 학습",
+  "content": "Spring Security의 인증과 인가 메커니즘을 학습했습니다.",
+  "category": "SPRING",
+  "understanding": "GOOD",
+  "studyTime": 180,
+  "studyDate": "2026-02-06"
+}
+
+### 2. Database 학습 일지 생성
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "MySQL 인덱스 최적화",
+  "content": "B-Tree 인덱스와 Hash 인덱스의 차이점을 학습했습니다.",
+  "category": "DATABASE",
+  "understanding": "VERY_GOOD",
+  "studyTime": 120,
+  "studyDate": "2026-02-06"
+}
+
+### 3. Java 학습 일지 생성
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Java Stream API 심화",
+  "content": "Stream의 중간 연산과 최종 연산을 깊이 있게 학습했습니다.",
+  "category": "JAVA",
+  "understanding": "GOOD",
+  "studyTime": 90,
+  "studyDate": "2026-02-05"
+}
+
+### 4. Web 학습 일지 생성
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "RESTful API 설계 원칙",
+  "content": "REST 아키텍처의 6가지 제약 조건을 학습했습니다.",
+  "category": "WEB",
+  "understanding": "NORMAL",
+  "studyTime": 60,
+  "studyDate": "2026-02-05"
+}
+
+### 5. Algorithm 학습 일지 생성
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "동적 계획법 (DP)",
+  "content": "피보나치 수열과 배낭 문제를 DP로 해결하는 방법을 학습했습니다.",
+  "category": "ALGORITHM",
+  "understanding": "BAD",
+  "studyTime": 150,
+  "studyDate": "2026-02-04"
+}
+
+### 6. 기타 학습 일지 생성 (날짜 미지정 - 오늘 날짜로 자동 설정)
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Git 고급 명령어",
+  "content": "Git rebase와 cherry-pick 명령어를 학습했습니다.",
+  "category": "ETC",
+  "understanding": "NORMAL",
+  "studyTime": 45
+}
+
+### ============================================
+### READ - 학습 일지 조회
+### ============================================
+
+### 7. 모든 학습 일지 조회
+GET http://localhost:8081/api/v1/logs
+
+### 8. ID로 특정 학습 일지 조회
+GET http://localhost:8081/api/v1/logs/1
+
+### 9. ID 2번 학습 일지 조회
+GET http://localhost:8081/api/v1/logs/2
+
+### 10. 존재하지 않는 ID 조회 (에러 테스트)
+GET http://localhost:8081/api/v1/logs/9999
+
+### ============================================
+### READ - 날짜별 조회
+### ============================================
+
+### 11. 오늘의 학습 일지 조회
+GET http://localhost:8081/api/v1/logs/today
+
+### 12. 특정 날짜의 학습 일지 조회 (2026-02-06)
+GET http://localhost:8081/api/v1/logs/date/2026-02-06
+
+### 13. 특정 날짜의 학습 일지 조회 (2026-02-05)
+GET http://localhost:8081/api/v1/logs/date/2026-02-05
+
+### 14. 특정 날짜의 학습 일지 조회 (2026-01-26)
+GET http://localhost:8081/api/v1/logs/date/2026-01-26
+
+### ============================================
+### READ - 카테고리별 조회
+### ============================================
+
+### 15. SPRING 카테고리 학습 일지 조회
+GET http://localhost:8081/api/v1/logs/category/SPRING
+
+### 16. DATABASE 카테고리 학습 일지 조회
+GET http://localhost:8081/api/v1/logs/category/DATABASE
+
+### 17. JAVA 카테고리 학습 일지 조회
+GET http://localhost:8081/api/v1/logs/category/JAVA
+
+### 18. WEB 카테고리 학습 일지 조회
+GET http://localhost:8081/api/v1/logs/category/WEB
+
+### 19. ALGORITHM 카테고리 학습 일지 조회
+GET http://localhost:8081/api/v1/logs/category/ALGORITHM
+
+### 20. ETC 카테고리 학습 일지 조회
+GET http://localhost:8081/api/v1/logs/category/ETC
+
+### 21. 소문자 카테고리로 조회 (대소문자 무관 테스트)
+GET http://localhost:8081/api/v1/logs/category/spring
+
+### 22. 잘못된 카테고리 조회 (에러 테스트)
+GET http://localhost:8081/api/v1/logs/category/INVALID
+
+### ============================================
+### UPDATE - 학습 일지 수정
+### ============================================
+
+### 23. 학습 일지 전체 수정
+PUT http://localhost:8081/api/v1/logs/1
+Content-Type: application/json
+
+{
+  "title": "Spring Boot 심화 학습 (수정됨)",
+  "content": "Spring Boot의 자동 설정과 스타터 의존성을 깊이 있게 학습했습니다.",
+  "category": "SPRING",
+  "understanding": "VERY_GOOD",
+  "studyTime": 240,
+  "studyDate": "2026-02-06"
+}
+
+### 24. 학습 일지 부분 수정 (제목과 내용만)
+PUT http://localhost:8081/api/v1/logs/2
+Content-Type: application/json
+
+{
+  "title": "JPA 연관관계 매핑 (수정)",
+  "content": "일대다, 다대일, 다대다 연관관계 매핑을 실습했습니다."
+}
+
+### 25. 학습 일지 부분 수정 (이해도와 학습시간만)
+PUT http://localhost:8081/api/v1/logs/3
+Content-Type: application/json
+
+{
+  "understanding": "VERY_GOOD",
+  "studyTime": 180
+}
+
+### 26. 학습 일지 부분 수정 (카테고리만)
+PUT http://localhost:8081/api/v1/logs/4
+Content-Type: application/json
+
+{
+  "category": "DATABASE"
+}
+
+### 27. 빈 수정 요청 (에러 테스트 - 수정할 내용 없음)
+PUT http://localhost:8081/api/v1/logs/1
+Content-Type: application/json
+
+{}
+
+### 28. 존재하지 않는 ID 수정 (에러 테스트)
+PUT http://localhost:8081/api/v1/logs/9999
+Content-Type: application/json
+
+{
+  "title": "수정 테스트"
+}
+
+### ============================================
+### UPDATE - 유효성 검증 테스트
+### ============================================
+
+### 29. 제목이 너무 긴 경우 (에러 테스트 - 100자 초과)
+PUT http://localhost:8081/api/v1/logs/1
+Content-Type: application/json
+
+{
+  "title": "이것은 매우 긴 제목입니다. 100자를 초과하는 제목은 허용되지 않습니다. 이렇게 긴 제목을 작성하면 유효성 검증에서 에러가 발생해야 합니다. 정말로 매우 매우 매우 긴 제목입니다."
+}
+
+### 30. 학습 시간이 0인 경우 (에러 테스트 - 1분 미만)
+PUT http://localhost:8081/api/v1/logs/2
+Content-Type: application/json
+
+{
+  "studyTime": 0
+}
+
+### 31. 미래 날짜로 수정 (에러 테스트)
+PUT http://localhost:8081/api/v1/logs/3
+Content-Type: application/json
+
+{
+  "studyDate": "2027-01-01"
+}
+
+### ============================================
+### DELETE - 학습 일지 삭제
+### ============================================
+
+### 32. 학습 일지 삭제
+DELETE http://localhost:8081/api/v1/logs/1
+
+### 33. 다른 학습 일지 삭제
+DELETE http://localhost:8081/api/v1/logs/2
+
+### 34. 존재하지 않는 ID 삭제 (에러 테스트)
+DELETE http://localhost:8081/api/v1/logs/9999
+
+### ============================================
+### 유효성 검증 - CREATE 에러 테스트
+### ============================================
+
+### 35. 필수 필드 누락 (제목 없음)
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "content": "제목이 없는 학습 일지",
+  "category": "SPRING",
+  "understanding": "GOOD",
+  "studyTime": 60
+}
+
+### 36. 필수 필드 누락 (내용 없음)
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "내용이 없는 학습 일지",
+  "category": "JAVA",
+  "understanding": "NORMAL",
+  "studyTime": 30
+}
+
+### 37. 유효하지 않은 카테고리
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "잘못된 카테고리 테스트",
+  "content": "INVALID는 유효한 카테고리가 아닙니다.",
+  "category": "INVALID",
+  "understanding": "GOOD",
+  "studyTime": 60
+}
+
+### 38. 유효하지 않은 이해도
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "잘못된 이해도 테스트",
+  "content": "HIGH는 유효한 이해도가 아닙니다.",
+  "category": "SPRING",
+  "understanding": "HIGH",
+  "studyTime": 60
+}
+
+### 39. 학습 시간이 음수인 경우
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "음수 학습 시간 테스트",
+  "content": "학습 시간은 1분 이상이어야 합니다.",
+  "category": "WEB",
+  "understanding": "NORMAL",
+  "studyTime": -30
+}
+
+### 40. 내용이 너무 긴 경우 (1000자 초과)
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "너무 긴 내용 테스트",
+  "content": "이것은 매우 긴 내용입니다. 1000자를 초과하는 내용은 허용되지 않습니다. 이렇게 긴 내용을 작성하면 유효성 검증에서 에러가 발생해야 합니다. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. 이제 1000자가 넘었을 것입니다.",
+  "category": "ETC",
+  "understanding": "NORMAL",
+  "studyTime": 60
+}
+
+### ============================================
+### 대량 데이터 테스트
+### ============================================
+
+### 41. 여러 개의 학습 일지 연속 생성 - 1
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Docker 컨테이너 학습",
+  "content": "Docker의 기본 개념과 컨테이너 실행 방법을 학습했습니다.",
+  "category": "WEB",
+  "understanding": "GOOD",
+  "studyTime": 90,
+  "studyDate": "2026-02-06"
+}
+
+### 42. 여러 개의 학습 일지 연속 생성 - 2
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Kubernetes 기초",
+  "content": "K8s의 Pod, Service, Deployment 개념을 학습했습니다.",
+  "category": "WEB",
+  "understanding": "NORMAL",
+  "studyTime": 120,
+  "studyDate": "2026-02-06"
+}
+
+### 43. 여러 개의 학습 일지 연속 생성 - 3
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "Redis 캐싱 전략",
+  "content": "Redis를 활용한 캐싱 전략과 TTL 설정을 학습했습니다.",
+  "category": "DATABASE",
+  "understanding": "VERY_GOOD",
+  "studyTime": 75,
+  "studyDate": "2026-02-06"
+}
+
+### ============================================
+### PAGING - 페이징 조회
+### ============================================
+
+### 44. 전체 학습 일지 페이징 조회 - 첫 페이지
+GET http://localhost:8081/api/v1/logs/page?page=0&size=10
+
+### 45. 전체 학습 일지 페이징 조회 - 두 번째 페이지
+GET http://localhost:8081/api/v1/logs/page?page=1&size=10
+
+### 46. 전체 학습 일지 페이징 조회 - 페이지 크기 5
+GET http://localhost:8081/api/v1/logs/page?page=0&size=5
+
+### 47. 전체 학습 일지 페이징 조회 - 기본값 사용
+GET http://localhost:8081/api/v1/logs/page
+
+### 48. 카테고리별 페이징 조회 - SPRING 첫 페이지
+GET http://localhost:8081/api/v1/logs/category/SPRING/page?page=0&size=5
+
+### 49. 카테고리별 페이징 조회 - DATABASE
+GET http://localhost:8081/api/v1/logs/category/DATABASE/page?page=0&size=10
+
+### 50. 날짜별 페이징 조회 - 2026-02-06
+GET http://localhost:8081/api/v1/logs/date/2026-02-06/page?page=0&size=5
+
+### 51. 날짜별 페이징 조회 - 2026-01-26
+GET http://localhost:8081/api/v1/logs/date/2026-01-26/page?page=0&size=10
+
+### ============================================
+### PAGING SEARCH - 검색 + 페이징
+### ============================================
+
+### 52. 검색 + 페이징: 제목으로 검색
+GET http://localhost:8081/api/v1/logs/search?title=Spring&page=0&size=10
+
+### 53. 검색 + 페이징: 카테고리로 필터링
+GET http://localhost:8081/api/v1/logs/search?category=SPRING&page=0&size=5
+
+### 54. 검색 + 페이징: 날짜 범위 검색
+GET http://localhost:8081/api/v1/logs/search?startDate=2026-02-01&endDate=2026-02-28&page=0&size=10
+
+### 55. 검색 + 페이징: 복합 검색 (제목 + 카테고리)
+GET http://localhost:8081/api/v1/logs/search?title=학습&category=JAVA&page=0&size=10
+
+### 56. 검색 + 페이징: 복합 검색 (제목 + 날짜 범위)
+GET http://localhost:8081/api/v1/logs/search?title=패턴&startDate=2026-01-01&endDate=2026-02-28&page=0&size=10
+
+### 57. 검색 + 페이징: 모든 조건 포함
+GET http://localhost:8081/api/v1/logs/search?title=Spring&category=SPRING&startDate=2026-01-01&endDate=2026-12-31&page=0&size=5
+
+### 58. 검색 + 페이징: 두 번째 페이지
+GET http://localhost:8081/api/v1/logs/search?title=학습&page=1&size=5
+
+### ============================================
+### PAGING EDGE CASES - 경계 케이스 테스트
+### ============================================
+
+### 59. 페이징: 음수 페이지 번호 (0으로 처리됨)
+GET http://localhost:8081/api/v1/logs/page?page=-1&size=10
+
+### 60. 페이징: 매우 큰 페이지 번호 (빈 결과)
+GET http://localhost:8081/api/v1/logs/page?page=999&size=10
+
+### 61. 페이징: 너무 큰 페이지 크기 (100으로 제한됨)
+GET http://localhost:8081/api/v1/logs/page?page=0&size=500
+
+### 62. 페이징: 페이지 크기 0 (1로 처리됨)
+GET http://localhost:8081/api/v1/logs/page?page=0&size=0
+
+### 63. 검색 + 페이징: 결과 없는 검색
+GET http://localhost:8081/api/v1/logs/search?title=존재하지않는제목&page=0&size=10
+
+### ============================================
+### PAGING PERFORMANCE TEST - 성능 테스트용
+### ============================================
+
+### 64. 대량 데이터 생성을 위한 반복 요청 - 1
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "페이징 테스트 데이터 1",
+  "content": "페이징 기능 테스트를 위한 대량 데이터입니다.",
+  "category": "ETC",
+  "understanding": "NORMAL",
+  "studyTime": 30,
+  "studyDate": "2026-02-06"
+}
+
+### 65. 대량 데이터 생성을 위한 반복 요청 - 2
+POST http://localhost:8081/api/v1/logs
+Content-Type: application/json
+
+{
+  "title": "페이징 테스트 데이터 2",
+  "content": "페이징 기능 테스트를 위한 대량 데이터입니다.",
+  "category": "ETC",
+  "understanding": "NORMAL",
+  "studyTime": 30,
+  "studyDate": "2026-02-06"
+}

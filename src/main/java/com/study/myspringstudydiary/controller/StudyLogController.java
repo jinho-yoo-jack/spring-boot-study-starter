@@ -1,5 +1,6 @@
 package com.study.myspringstudydiary.controller;
 
+import com.study.myspringstudydiary.common.Page;
 import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
@@ -11,8 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 학습 일지 컨트롤러 with Lombok
@@ -42,6 +47,8 @@ public class StudyLogController {
     private final StudyLogService studyLogService;
     // 생성자는 @RequiredArgsConstructor가 자동으로 생성
 
+    // ========== CREATE ==========
+
     /**
      * 학습 일지 생성 (CREATE)
      *
@@ -51,7 +58,7 @@ public class StudyLogController {
      * POST /api/v1/logs
      */
     @PostMapping
-    public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
+    public StudyLogResponse createStudyLog(
             @RequestBody StudyLogCreateRequest request) {
 
         log.info("POST /api/v1/logs - Creating study log: {}", request.getTitle());
@@ -67,6 +74,8 @@ public class StudyLogController {
                 .body(ApiResponse.success(response));
     }
 
+    // ========== READ ==========
+
     /**
      * 모든 학습 일지 조회 (READ - All)
      *
@@ -75,15 +84,8 @@ public class StudyLogController {
      * GET /api/v1/logs
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<StudyLogResponse>>> getAllStudyLogs() {
-
-        // Service 호출하여 모든 학습 일지 조회
-        List<StudyLogResponse> responses = studyLogService.getAllStudyLogs();
-
-        // 200 OK 상태 코드와 함께 응답
-        return ResponseEntity
-                .ok()
-                .body(ApiResponse.success(responses));
+    public List<StudyLogResponse> getAllStudyLogs() {
+        return studyLogService.getAllStudyLogs();
     }
 
     /**
@@ -95,17 +97,145 @@ public class StudyLogController {
      * GET /api/v1/logs/{id}
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogResponse>> getStudyLogById(
+    public StudyLogResponse getStudyLogById(
             @PathVariable Long id) {
 
-        // Service 호출하여 ID로 학습 일지 조회
-        StudyLogResponse response = studyLogService.getStudyLogById(id);
-
-        // 200 OK 상태 코드와 함께 응답
-        return ResponseEntity
-                .ok()
-                .body(ApiResponse.success(response));
+        return studyLogService.getStudyLogById(id);
     }
+
+    /**
+     * 날짜로 학습 일지 조회
+     *
+     * GET /api/v1/logs/date/{date}
+     *
+     * @param date 조회할 날짜 (yyyy-MM-dd 형식)
+     * @return 해당 날짜의 학습 일지 리스트
+     */
+    @GetMapping("/date/{date}")
+    public List<StudyLogResponse> getStudyLogsByDate(
+            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        return studyLogService.getStudyLogsByDate(date);
+    }
+
+    /**
+     * 카테고리로 학습 일지 조회
+     *
+     * GET /api/v1/logs/category/{category}
+     *
+     * @param category 조회할 카테고리 (SPRING, DATABASE, JAVA, WEB, ALGORITHM, ETC)
+     * @return 해당 카테고리의 학습 일지 리스트
+     */
+    @GetMapping("/category/{category}")
+    public List<StudyLogResponse> getStudyLogsByCategory(
+            @PathVariable String category) {
+
+        return studyLogService.getStudyLogsByCategoryString(category);
+    }
+
+    /**
+     * 오늘의 학습 일지 조회
+     *
+     * GET /api/v1/logs/today
+     *
+     * @return 오늘 작성된 학습 일지 리스트
+     */
+    @GetMapping("/today")
+    public List<StudyLogResponse> getTodayStudyLogs() {
+        return studyLogService.getStudyLogsByDate(LocalDate.now());
+    }
+
+    // ========== PAGING ==========
+
+    /**
+     * 전체 학습 일지 페이징 조회
+     *
+     * GET /api/v1/logs/page?page=0&size=10
+     * GET /api/v1/logs/page (기본값: page=0, size=10)
+     *
+     * @param page 페이지 번호 (0-based, 기본값: 0)
+     * @param size 페이지 크기 (기본값: 10, 최대: 100)
+     * @return 페이징된 학습 일지
+     */
+    @GetMapping("/page")
+    public Page<StudyLogResponse> getStudyLogsPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return studyLogService.getStudyLogsWithPaging(page, size);
+    }
+
+    /**
+     * 카테고리별 학습 일지 페이징 조회
+     *
+     * GET /api/v1/logs/category/{category}/page?page=0&size=10
+     *
+     * @param category 카테고리
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이징된 학습 일지
+     */
+    @GetMapping("/category/{category}/page")
+    public Page<StudyLogResponse> getStudyLogsByCategoryPage(
+            @PathVariable String category,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return studyLogService.getStudyLogsByCategoryWithPaging(category, page, size);
+    }
+
+
+    /**
+     * 검색 + 페이징 조회
+     *
+     * GET /api/v1/logs/search?title=Spring&category=SPRING
+     *     &startDate=2026-01-01&endDate=2026-12-31
+     *     &page=0&size=10
+     *
+     * @param title 제목 키워드 (선택)
+     * @param category 카테고리 (선택)
+     * @param startDate 시작 날짜 (선택)
+     * @param endDate 종료 날짜 (선택)
+     * @param page 페이지 번호
+     * @param size 페이지 크기
+     * @return 페이징된 검색 결과
+     */
+    @GetMapping("/search")
+    public Page<StudyLogResponse> searchStudyLogs(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return studyLogService.searchStudyLogsWithPaging(
+                title, category, startDate, endDate, page, size);
+    }
+
+    /**
+     * 카테고리별 학습 일지 개수 조회
+     *
+     * GET /api/v1/logs/category/{category}/count
+     *
+     * @param category 조회할 카테고리
+     * @return 카테고리명과 개수를 포함한 Map
+     */
+    @GetMapping("/category/{category}/count")
+    public Map<String, Object> getStudyLogCountByCategory(
+            @PathVariable String category) {
+
+        long count = studyLogService.getStudyLogCountByCategory(category);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("category", category);
+        response.put("count", count);
+
+        return response;
+    }
+
+    // ========== UPDATE ==========
 
     /**
      * 학습 일지 수정
@@ -118,13 +248,11 @@ public class StudyLogController {
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogResponse>> updateStudyLog(
+    public StudyLogResponse updateStudyLog(
             @PathVariable Long id,
             @RequestBody StudyLogUpdateRequest request) {
 
-        StudyLogResponse response = studyLogService.updateStudyLog(id, request);
-
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return studyLogService.updateStudyLog(id, request);
     }
 
     // ========== DELETE ==========
@@ -138,10 +266,9 @@ public class StudyLogController {
      * @return 삭제 결과
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<StudyLogDeleteResponse>> deleteStudyLog(
+    public StudyLogDeleteResponse deleteStudyLog(
             @PathVariable Long id) {
 
-        StudyLogDeleteResponse response = studyLogService.deleteStudyLog(id);
-        return ResponseEntity.ok(ApiResponse.success(response));
+        return studyLogService.deleteStudyLog(id);
     }
 }
