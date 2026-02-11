@@ -1,6 +1,36 @@
+# ========================================
+# 공통 설정 (모든 프로필에 적용)
+# ========================================
 spring:
   application:
     name: my-spring-study-diary
+  profiles:
+    active: dev
+
+  # SQL 초기화 설정 (공통)
+  sql:
+    init:
+      mode: always
+      platform: mysql
+      encoding: UTF-8
+
+# 서버 설정 (공통)
+server:
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+---
+# ========================================
+# default 프로필 (프로필 미지정 시 기본 사용)
+# ========================================
+spring:
+  config:
+    activate:
+      on-profile: default
 
   # MySQL 데이터베이스 설정
   datasource:
@@ -15,27 +45,170 @@ spring:
       idle-timeout: 600000
       pool-name: StudyDiaryHikariCP
 
-  # SQL 로깅 설정
-  sql:
-    init:
-      mode: always
-      platform: mysql
-      encoding: UTF-8
+# 기본 로깅 설정
+logging:
+  level:
+    root: INFO
+    com.study.myspringstudydiary: INFO
+    org.springframework.web: INFO
 
-# 로깅 설정
+server:
+  port: 8080
+
+---
+# ========================================
+# dev 프로필 (개발 환경 - 상세 로깅)
+# ========================================
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  # MySQL 데이터베이스 설정 (개발용)
+  datasource:
+    url: jdbc:mysql://localhost:3306/diary_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: rootpass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 600000
+      pool-name: StudyDiaryHikariCP-DEV
+      # 개발 환경용 추가 설정
+      register-mbeans: true
+      connection-test-query: SELECT 1
+      leak-detection-threshold: 60000
+      auto-commit: true
+      # MySQL 드라이버 상세 로깅
+      data-source-properties:
+        logger: com.mysql.cj.log.Slf4JLogger
+        profileSQL: true
+
+  # JPA 설정 (개발용)
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+# 개발 환경 상세 로깅
 logging:
   level:
     root: INFO
     com.study.myspringstudydiary: DEBUG
-    org.springframework.jdbc: DEBUG
-    com.zaxxer.hikari: DEBUG
 
-# 서버 설정
+    # Spring 프레임워크 로깅
+    org.springframework.jdbc: DEBUG
+    org.springframework.jdbc.core: DEBUG
+    org.springframework.jdbc.datasource: TRACE
+    org.springframework.boot.autoconfigure.jdbc: DEBUG
+
+    # HikariCP 상세 로깅
+    com.zaxxer.hikari: DEBUG
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    com.zaxxer.hikari.HikariDataSource: DEBUG
+    com.zaxxer.hikari.pool: DEBUG
+
+    # MySQL 드라이버 로깅
+    com.mysql.cj: DEBUG
+    com.mysql.cj.jdbc: TRACE
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
 server:
   port: 8081
-  servlet:
-    context-path: /
-    encoding:
-      charset: UTF-8
+
+# 개발 도구 활성화
+debug: false
+trace: false
+
+---
+# ========================================
+# prod 프로필 (운영 환경 - 최소 로깅)
+# ========================================
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  # MySQL 데이터베이스 설정 (운영용)
+  datasource:
+    url: jdbc:mysql://prod-db-server:3306/diary_db?useSSL=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${DB_USERNAME:produser}
+    password: ${DB_PASSWORD:prodpass}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 20000
+      maximum-pool-size: 20
+      minimum-idle: 10
+      idle-timeout: 300000
+      pool-name: StudyDiaryHikariCP-PROD
+      max-lifetime: 1800000
+
+# 운영 환경 로깅 (최소화)
+logging:
+  level:
+    root: WARN
+    com.study.myspringstudydiary: INFO
+    org.springframework: WARN
+    com.zaxxer.hikari: WARN
+
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n"
+  file:
+    name: logs/study-diary.log
+    max-size: 10MB
+    max-history: 30
+
+server:
+  port: 8080
+
+---
+# ========================================
+# test 프로필 (테스트 환경 - H2 인메모리 DB)
+# ========================================
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  # H2 인메모리 데이터베이스 설정
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    hikari:
+      connection-timeout: 10000
+      maximum-pool-size: 5
+      minimum-idle: 2
+      pool-name: StudyDiaryHikariCP-TEST
+
+  # H2 콘솔 활성화
+  h2:
+    console:
       enabled: true
-      force: true
+      path: /h2-console
+
+  # JPA 설정 (테스트용)
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+# 테스트 환경 로깅
+logging:
+  level:
+    root: INFO
+    com.study.myspringstudydiary: DEBUG
+    org.springframework.test: DEBUG
+    org.springframework.jdbc: DEBUG
+    com.zaxxer.hikari: INFO
+
+server:
+  port: 8082

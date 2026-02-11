@@ -5,7 +5,10 @@
       "mcp__mcp-obsidian__obsidian_append_content",
       "Bash(awk:*)",
       "Bash(xargs kill:*)",
-      "Bash(./gradlew bootRun)"
+      "Bash(./gradlew bootRun)",
+      "Bash(git merge:*)",
+      "Bash(mvn clean compile:*)",
+      "Bash(.gitignore)"
     ],
     "deny": [],
     "ask": []

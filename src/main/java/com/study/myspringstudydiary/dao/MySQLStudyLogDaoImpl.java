@@ -6,6 +6,7 @@ import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -33,6 +34,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
+@Primary
 public class MySQLStudyLogDaoImpl implements StudyLogDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -292,22 +294,4 @@ public class MySQLStudyLogDaoImpl implements StudyLogDao {
         Long count = jdbcTemplate.queryForObject(sql, Long.class, category);
         return count != null ? count : 0;
     }
-
-    // ========== PRIVATE METHODS ==========
-
-    /**
-     * RowMapper: Converts each row of ResultSet to StudyLog object
-     * Can be simply implemented with lambda expression
-     */
-    private final RowMapper<StudyLog> studyLogRowMapper = (rs, rowNum) -> {
-        StudyLog studyLog = new StudyLog();
-        studyLog.setId(rs.getLong("id"));
-        studyLog.setTitle(rs.getString("title"));
-        studyLog.setContent(rs.getString("content"));
-        studyLog.setCategory(Category.valueOf(rs.getString("category")));
-        studyLog.setUnderstanding(Understanding.valueOf(rs.getString("understanding")));
-        studyLog.setStudyTime(rs.getInt("study_time"));
-        studyLog.setStudyDate(rs.getDate("study_date").toLocalDate());
-        return studyLog;
-    };
 }

@@ -58,7 +58,7 @@ public class StudyLogController {
      * POST /api/v1/logs
      */
     @PostMapping
-    public StudyLogResponse createStudyLog(
+    public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
             @RequestBody StudyLogCreateRequest request) {
 
         log.info("POST /api/v1/logs - Creating study log: {}", request.getTitle());
