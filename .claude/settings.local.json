@@ -1,9 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(./gradlew clean build:*)",
-      "Bash(timeout 5 ./gradlew bootRun:*)",
-      "Bash(tree:*)"
+      "WebFetch(domain:github.com)",
+      "mcp__mcp-obsidian__obsidian_append_content",
+      "Bash(awk:*)",
+      "Bash(xargs kill:*)",
+      "Bash(./gradlew bootRun)"
     ],
     "deny": [],
     "ask": []
