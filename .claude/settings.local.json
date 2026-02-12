@@ -9,7 +9,14 @@
       "Bash(git merge:*)",
       "Bash(mvn clean compile:*)",
       "Bash(.gitignore)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(python3:*)",
+      "Bash(mysql:*)",
+      "Bash(pip3 install:*)",
+      "Bash(ACCESS_TOKEN=\"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGVzIjoiUk9MRV9VU0VSIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3MDg2MTIzMCwiZXhwIjoxNzcwODYzMDMwfQ.mJ4xZ0pjpAU55O7klBvgFXEsGiw-MIBmI4s3BtWO8V4x-HjlO9jigbzJRhXV_keYFP0Cm-kS8hxmM6XQstdVQA\")",
+      "Bash(REFRESH_TOKEN=\"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInR5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzcwODYxMjMwLCJleHAiOjE3NzE0NjYwMzB9.3NJ849ENsX8iAT-ir7bDdbg3gAtUQLjej48ODdHnQ3a2OPZk395rfnipDaolOMDqzIbDQ7AydpTZ5NS9kGIVFw\")",
+      "Bash(git log:*)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

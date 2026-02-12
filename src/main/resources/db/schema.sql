@@ -5,6 +5,8 @@ CREATE DATABASE IF NOT EXISTS diary_db CHARACTER SET utf8mb4 COLLATE utf8mb4_uni
 USE diary_db;
 
 -- 기존 테이블 삭제 (초기화를 위해)
+DROP TABLE IF EXISTS refresh_tokens;
+DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS study_logs;
 
 -- 학습 일지 테이블 생성
@@ -35,5 +37,42 @@ INSERT INTO study_logs (title, content, category, understanding, study_time, stu
 ('Spring Boot Global Response', 'Learned about standardizing API responses with ApiResponse wrapper', 'SPRING', 'GOOD', 150, '2026-01-27'),
 ('Lombok 적용 완료', 'Spring Boot 프로젝트에 Lombok을 성공적으로 적용했습니다. @Getter, @Setter, @Builder, @Slf4j 등을 활용했습니다.', 'SPRING', 'VERY_GOOD', 180, '2026-01-27');
 
+-- Users 테이블 생성
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '사용자 ID',
+    email VARCHAR(255) NOT NULL UNIQUE COMMENT '이메일',
+    password VARCHAR(255) NOT NULL COMMENT '비밀번호 (BCrypt)',
+    username VARCHAR(100) NOT NULL COMMENT '사용자명',
+    role VARCHAR(50) NOT NULL DEFAULT 'USER' COMMENT '권한 (USER, ADMIN, MANAGER)',
+    enabled BOOLEAN DEFAULT TRUE COMMENT '활성화 여부',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정 일시'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='사용자 테이블';
+
+-- 인덱스 생성
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_role ON users(role);
+
+-- Refresh Tokens 테이블 생성
+CREATE TABLE refresh_tokens (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '토큰 ID',
+    user_id BIGINT NOT NULL COMMENT '사용자 ID',
+    token VARCHAR(500) NOT NULL UNIQUE COMMENT '리프레시 토큰',
+    expires_at TIMESTAMP NOT NULL COMMENT '만료 시간',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '생성 일시',
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='리프레시 토큰 테이블';
+
+-- 인덱스 생성
+CREATE INDEX idx_refresh_tokens_token ON refresh_tokens(token);
+CREATE INDEX idx_refresh_tokens_user_id ON refresh_tokens(user_id);
+
+-- 샘플 사용자 데이터 (비밀번호: password123)
+INSERT INTO users (email, password, username, role) VALUES
+('admin@example.com', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'Admin User', 'ADMIN'),
+('user@example.com', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'Normal User', 'USER'),
+('manager@example.com', '$2a$10$dXJ3SW6G7P50lGmMkkmwe.20cQQubK3.HZWzG3YB1tlRy.fqvM/BG', 'Manager User', 'MANAGER')
+ON DUPLICATE KEY UPDATE email = email;
+
 -- 테이블 생성 확인
-SELECT 'study_logs table created successfully with initial data' AS message;
+SELECT 'All tables created successfully with initial data' AS message;

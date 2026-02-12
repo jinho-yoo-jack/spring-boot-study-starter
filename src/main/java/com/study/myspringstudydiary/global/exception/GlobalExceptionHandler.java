@@ -1,10 +1,15 @@
 package com.study.myspringstudydiary.global.exception;
 
+import com.study.myspringstudydiary.auth.exception.AuthException;
+import com.study.myspringstudydiary.auth.exception.ExpiredTokenException;
+import com.study.myspringstudydiary.auth.exception.InvalidTokenException;
 import com.study.myspringstudydiary.global.common.ApiResponse;
-import com.study.myspringstudydiary.exception.ResourceNotFoundException;
-import com.study.myspringstudydiary.exception.DuplicateResourceException;
+import com.study.myspringstudydiary.study_log.exception.ResourceNotFoundException;
+import com.study.myspringstudydiary.study_log.exception.DuplicateResourceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -100,6 +105,66 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(ApiResponse.error("INVALID_ARGUMENT", e.getMessage()));
+    }
+
+    /**
+     * Handle BadCredentialsException (invalid username or password)
+     */
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleBadCredentials(
+            BadCredentialsException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("BAD_CREDENTIALS", e.getMessage()));
+    }
+
+    /**
+     * Handle AuthenticationException (general authentication errors)
+     */
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAuthentication(
+            AuthenticationException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("AUTHENTICATION_FAILED", e.getMessage()));
+    }
+
+    /**
+     * Handle AuthException (custom authentication exceptions)
+     */
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ApiResponse<Void>> handleAuthException(
+            AuthException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("AUTH_ERROR", e.getMessage()));
+    }
+
+    /**
+     * Handle InvalidTokenException
+     */
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidToken(
+            InvalidTokenException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("INVALID_TOKEN", e.getMessage()));
+    }
+
+    /**
+     * Handle ExpiredTokenException
+     */
+    @ExceptionHandler(ExpiredTokenException.class)
+    public ResponseEntity<ApiResponse<Void>> handleExpiredToken(
+            ExpiredTokenException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.error("TOKEN_EXPIRED", e.getMessage()));
     }
 
     /**
