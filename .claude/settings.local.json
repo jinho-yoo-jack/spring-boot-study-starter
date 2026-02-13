@@ -30,7 +30,11 @@
       "Bash(./gradlew test:*)",
       "Bash(cat:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "mcp__mcp-obsidian__obsidian_patch_content",
+      "mcp__mcp-obsidian__obsidian_delete_file",
+      "Bash(head:*)",
+      "Bash(wc:*)"
     ],
     "deny": [],
     "ask": []
