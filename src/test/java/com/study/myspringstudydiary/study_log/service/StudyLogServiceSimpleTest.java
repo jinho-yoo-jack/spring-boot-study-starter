@@ -93,9 +93,9 @@ class StudyLogServiceSimpleTest {
         // Given
         StudyLogCreateRequest request = new StudyLogCreateRequest();
         request.setTitle("New Study");
-        request.setContent("New Content");
+        request.setContent("New Content for testing study log creation");
         request.setCategory("SPRING");
-        request.setUnderstanding("GOOD");
+        request.setUnderstanding("VERY_GOOD");
         request.setStudyTime(90);
         request.setStudyDate(LocalDate.now());
 

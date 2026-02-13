@@ -29,7 +29,8 @@
       "Bash(./gradlew clean:*)",
       "Bash(./gradlew test:*)",
       "Bash(cat:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
