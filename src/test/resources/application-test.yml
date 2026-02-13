@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-test.sql
+
+  security:
+    jwt:
+      secret: test-secret-key-for-testing-purposes-only-12345678
+      expiration: 3600000
+      refresh-expiration: 604800000
+
+logging:
+  level:
+    com.study.myspringstudydiary: DEBUG
+    org.springframework.jdbc.core: DEBUG
