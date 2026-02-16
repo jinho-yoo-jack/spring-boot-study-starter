@@ -1,0 +1,365 @@
+### ======================================
+### Spring Boot JWT Authentication API Tests
+### ======================================
+### 이 파일은 IntelliJ IDEA의 HTTP Client를 사용하여
+### REST API를 테스트하기 위한 파일입니다.
+### ======================================
+
+### 환경 변수 설정
+### dev 환경: http://localhost:8080
+### test 환경: http://localhost:8081
+### prod 환경: https://api.example.com
+
+### ======================================
+### 1. 회원가입 (Signup)
+### ======================================
+
+### 회원가입 - 성공 케이스
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Password123!",
+  "email": "testuser@example.com"
+}
+
+> {%
+    client.test("회원가입 성공", function() {
+        client.assert(response.status === 201, "Status code is 201");
+        client.assert(response.body.success === true, "Response success is true");
+        client.assert(response.body.data.username === "testuser", "Username matches");
+    });
+%}
+
+###
+
+### 회원가입 - 중복된 사용자명
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Password123!",
+  "email": "duplicate@example.com"
+}
+
+> {%
+    client.test("중복 사용자명 에러", function() {
+        client.assert(response.status === 409, "Status code is 409");
+        client.assert(response.body.success === false, "Response success is false");
+    });
+%}
+
+###
+
+### 회원가입 - 유효성 검증 실패 (약한 비밀번호)
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "password": "weak",
+  "email": "newuser@example.com"
+}
+
+> {%
+    client.test("약한 비밀번호 검증 실패", function() {
+        client.assert(response.status === 400, "Status code is 400");
+        client.assert(response.body.success === false, "Response success is false");
+    });
+%}
+
+###
+
+### ======================================
+### 2. 로그인 (Login)
+### ======================================
+
+### 로그인 - 성공 케이스
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Password123!"
+}
+
+> {%
+    client.test("로그인 성공", function() {
+        client.assert(response.status === 200, "Status code is 200");
+        client.assert(response.body.success === true, "Response success is true");
+        client.assert(response.body.data.accessToken !== null, "Access token exists");
+        client.assert(response.body.data.refreshToken !== null, "Refresh token exists");
+
+        // 토큰 저장 (이후 테스트에서 사용)
+        client.global.set("access_token", response.body.data.accessToken);
+        client.global.set("refresh_token", response.body.data.refreshToken);
+    });
+%}
+
+###
+
+### 로그인 - 잘못된 비밀번호
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "wrongpassword"
+}
+
+> {%
+    client.test("잘못된 비밀번호", function() {
+        client.assert(response.status === 401, "Status code is 401");
+        client.assert(response.body.success === false, "Response success is false");
+    });
+%}
+
+###
+
+### 로그인 - 존재하지 않는 사용자
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "nonexistent",
+  "password": "Password123!"
+}
+
+> {%
+    client.test("존재하지 않는 사용자", function() {
+        client.assert(response.status === 401, "Status code is 401");
+        client.assert(response.body.success === false, "Response success is false");
+    });
+%}
+
+###
+
+### ======================================
+### 3. 토큰 갱신 (Refresh)
+### ======================================
+
+### 토큰 갱신 - 성공 케이스
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refresh_token}}"
+}
+
+> {%
+    client.test("토큰 갱신 성공", function() {
+        client.assert(response.status === 200, "Status code is 200");
+        client.assert(response.body.success === true, "Response success is true");
+        client.assert(response.body.data.accessToken !== null, "New access token exists");
+
+        // 새 액세스 토큰 저장
+        client.global.set("access_token", response.body.data.accessToken);
+    });
+%}
+
+###
+
+### 토큰 갱신 - 유효하지 않은 리프레시 토큰
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "invalid.refresh.token"
+}
+
+> {%
+    client.test("유효하지 않은 리프레시 토큰", function() {
+        client.assert(response.status === 401, "Status code is 401");
+        client.assert(response.body.success === false, "Response success is false");
+    });
+%}
+
+###
+
+### ======================================
+### 4. 인증된 요청 (Protected Endpoints)
+### ======================================
+
+### 사용자 정보 조회 - 인증 성공
+GET http://localhost:8080/api/users/me
+Authorization: Bearer {{access_token}}
+
+> {%
+    client.test("인증된 사용자 정보 조회 성공", function() {
+        client.assert(response.status === 200, "Status code is 200");
+        client.assert(response.body.success === true, "Response success is true");
+        client.assert(response.body.data.username !== null, "Username exists");
+    });
+%}
+
+###
+
+### 사용자 정보 조회 - 인증 실패 (토큰 없음)
+GET http://localhost:8080/api/users/me
+
+> {%
+    client.test("인증 토큰 없음", function() {
+        client.assert(response.status === 401, "Status code is 401");
+        client.assert(response.body.success === false, "Response success is false");
+    });
+%}
+
+###
+
+### 사용자 정보 조회 - 유효하지 않은 토큰
+GET http://localhost:8080/api/users/me
+Authorization: Bearer invalid.token.here
+
+> {%
+    client.test("유효하지 않은 토큰", function() {
+        client.assert(response.status === 401, "Status code is 401");
+        client.assert(response.body.success === false, "Response success is false");
+    });
+%}
+
+###
+
+### ======================================
+### 5. 로그아웃 (Logout)
+### ======================================
+
+### 로그아웃 - 성공 케이스
+POST http://localhost:8080/api/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "refreshToken": "{{refresh_token}}"
+}
+
+> {%
+    client.test("로그아웃 성공", function() {
+        client.assert(response.status === 200, "Status code is 200");
+        client.assert(response.body.success === true, "Response success is true");
+
+        // 토큰 제거
+        client.global.clear("access_token");
+        client.global.clear("refresh_token");
+    });
+%}
+
+###
+
+### ======================================
+### 6. 관리자 권한 테스트 (Admin Endpoints)
+### ======================================
+
+### 관리자 로그인
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "Admin123!"
+}
+
+> {%
+    client.test("관리자 로그인 성공", function() {
+        client.assert(response.status === 200, "Status code is 200");
+        client.global.set("admin_token", response.body.data.accessToken);
+    });
+%}
+
+###
+
+### 모든 사용자 조회 - 관리자 권한
+GET http://localhost:8080/api/admin/users
+Authorization: Bearer {{admin_token}}
+
+> {%
+    client.test("관리자 권한으로 사용자 목록 조회", function() {
+        client.assert(response.status === 200, "Status code is 200");
+        client.assert(response.body.success === true, "Response success is true");
+        client.assert(Array.isArray(response.body.data), "Response data is array");
+    });
+%}
+
+###
+
+### 모든 사용자 조회 - 일반 사용자 (권한 없음)
+GET http://localhost:8080/api/admin/users
+Authorization: Bearer {{access_token}}
+
+> {%
+    client.test("일반 사용자 권한 없음", function() {
+        client.assert(response.status === 403, "Status code is 403");
+        client.assert(response.body.success === false, "Response success is false");
+    });
+%}
+
+###
+
+### ======================================
+### 7. 성능 테스트 (Load Testing)
+### ======================================
+
+### 부하 테스트 - 동시 로그인 요청
+### 주의: 실제 환경에서는 적절한 부하 테스트 도구 사용 권장
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "loadtest{{$randomInt}}",
+  "password": "Password123!"
+}
+
+###
+
+### ======================================
+### 8. 에러 시나리오 테스트
+### ======================================
+
+### 잘못된 Content-Type
+POST http://localhost:8080/api/auth/login
+Content-Type: text/plain
+
+username=testuser&password=Password123!
+
+> {%
+    client.test("잘못된 Content-Type", function() {
+        client.assert(response.status === 415, "Status code is 415");
+    });
+%}
+
+###
+
+### 필수 필드 누락
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser"
+}
+
+> {%
+    client.test("필수 필드 누락", function() {
+        client.assert(response.status === 400, "Status code is 400");
+        client.assert(response.body.success === false, "Response success is false");
+    });
+%}
+
+###
+
+### ======================================
+### 환경 변수 예제
+### ======================================
+### 다음과 같이 http-client.env.json 파일을 생성하여 사용:
+### {
+###   "dev": {
+###     "host": "http://localhost:8080",
+###     "username": "testuser",
+###     "password": "Password123!"
+###   },
+###   "prod": {
+###     "host": "https://api.example.com",
+###     "username": "produser",
+###     "password": "ProdPassword123!"
+###   }
+### }
