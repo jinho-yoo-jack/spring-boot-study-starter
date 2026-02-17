@@ -38,7 +38,8 @@
       "Read(//Users/black/dev/obsidian/jedi-mcp/2-Areas/Learning/Java-Course/4. Spring 중급 과정 - 15일/**)",
       "Bash(curl:*)",
       "Bash(lsof:*)",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "Bash(git pull:*)"
     ],
     "deny": [],
     "ask": []
