@@ -8,15 +8,6 @@ import com.study.myspringstudydiary.study_log.dto.response.StudyLogDeleteRespons
 import com.study.myspringstudydiary.study_log.service.StudyLogService;
 import com.study.myspringstudydiary.global.common.ApiResponse;
 
-// SpringDoc 어노테이션 import
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -52,12 +43,11 @@ import java.util.Map;
  * - SLF4J 로거를 자동으로 생성 (log 변수 사용 가능)
  */
 @Slf4j
-@Tag(name = "학습 기록", description = "학습 기록 CRUD API - JWT 인증 필요")
 @RestController
 @RequiredArgsConstructor  // Lombok이 생성자를 자동 생성
 @RequestMapping("/api/v1/logs")
 @Validated  // PathVariable, RequestParam 검증을 위해 추가
-public class StudyLogController {
+public class StudyLogController implements StudyLogControllerApi {
 
     private final StudyLogService studyLogService;
     // 생성자는 @RequiredArgsConstructor가 자동으로 생성
@@ -72,97 +62,9 @@ public class StudyLogController {
      *
      * POST /api/v1/logs
      */
-    @Operation(
-            summary = "학습 기록 생성",
-            description = """
-                    새로운 학습 기록을 생성합니다.
-
-                    ### 검증 규칙
-                    - **title**: 필수, 1-100자
-                    - **content**: 필수, 1-1000자
-                    - **category**: 필수, JAVA/SPRING/JPA/DATABASE/ALGORITHM/CS/NETWORK/GIT/ETC 중 선택
-                    - **understanding**: 필수, VERY_GOOD/GOOD/NORMAL/BAD/VERY_BAD 중 선택
-                    - **studyTime**: 필수, 1-1440분 (1분~24시간)
-                    - **studyDate**: 선택, 생략 시 현재 날짜
-
-                    ### 주의사항
-                    - 중복된 제목도 허용됩니다
-                    - JWT 토큰 인증이 필요합니다
-                    """
-    )
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "201",
-                    description = "생성 성공",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                              "success": true,
-                                              "data": {
-                                                "id": 1,
-                                                "title": "Spring Security JWT 인증",
-                                                "content": "JWT 토큰 생성 및 검증 로직 구현 완료",
-                                                "category": "SPRING",
-                                                "categoryIcon": "🌱",
-                                                "understanding": "GOOD",
-                                                "understandingEmoji": "😊",
-                                                "studyTime": 120,
-                                                "studyDate": "2024-01-15",
-                                                "createdAt": "2024-01-15T10:30:00",
-                                                "updatedAt": "2024-01-15T10:30:00"
-                                              },
-                                              "error": null
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "400",
-                    description = "입력값 검증 실패",
-                    content = @Content(
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                              "success": false,
-                                              "data": null,
-                                              "error": {
-                                                "code": "VALIDATION_ERROR",
-                                                "message": "학습 주제는 필수입니다"
-                                              }
-                                            }
-                                            """
-                            )
-                    )
-            ),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(
-                    responseCode = "401",
-                    description = "인증 실패 - 토큰 없음 또는 만료"
-            )
-    })
+    @Override
     @PostMapping
     public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "학습 기록 생성 요청 데이터",
-                    required = true,
-                    content = @Content(
-                            schema = @Schema(implementation = StudyLogCreateRequest.class),
-                            examples = @ExampleObject(
-                                    value = """
-                                            {
-                                              "title": "JPA N+1 문제 해결",
-                                              "content": "Fetch Join과 EntityGraph를 사용하여 N+1 문제를 해결했습니다.",
-                                              "category": "JPA",
-                                              "understanding": "GOOD",
-                                              "studyTime": 90,
-                                              "studyDate": "2024-01-15"
-                                            }
-                                            """
-                            )
-                    )
-            )
             @Valid @RequestBody StudyLogCreateRequest request) {
 
         log.info("POST /api/v1/logs - Creating study log: {}", request.getTitle());
@@ -187,6 +89,7 @@ public class StudyLogController {
      *
      * GET /api/v1/logs
      */
+    @Override
     @GetMapping
     public List<StudyLogResponse> getAllStudyLogs() {
         return studyLogService.getAllStudyLogs();
@@ -200,6 +103,7 @@ public class StudyLogController {
      *
      * GET /api/v1/logs/{id}
      */
+    @Override
     @GetMapping("/{id}")
     public StudyLogResponse getStudyLogById(
             @PathVariable @Positive(message = "ID는 양수여야 합니다") Long id) {
@@ -215,6 +119,7 @@ public class StudyLogController {
      * @param date 조회할 날짜 (yyyy-MM-dd 형식)
      * @return 해당 날짜의 학습 일지 리스트
      */
+    @Override
     @GetMapping("/date/{date}")
     public List<StudyLogResponse> getStudyLogsByDate(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -230,6 +135,7 @@ public class StudyLogController {
      * @param category 조회할 카테고리 (SPRING, DATABASE, JAVA, WEB, ALGORITHM, ETC)
      * @return 해당 카테고리의 학습 일지 리스트
      */
+    @Override
     @GetMapping("/category/{category}")
     public List<StudyLogResponse> getStudyLogsByCategory(
             @PathVariable String category) {
@@ -244,6 +150,7 @@ public class StudyLogController {
      *
      * @return 오늘 작성된 학습 일지 리스트
      */
+    @Override
     @GetMapping("/today")
     public List<StudyLogResponse> getTodayStudyLogs() {
         return studyLogService.getStudyLogsByDate(LocalDate.now());
@@ -261,6 +168,7 @@ public class StudyLogController {
      * @param size 페이지 크기 (기본값: 10, 최대: 100)
      * @return 페이징된 학습 일지
      */
+    @Override
     @GetMapping("/page")
     public Page<StudyLogResponse> getStudyLogsPage(
             @RequestParam(defaultValue = "0") @Min(value = 0, message = "페이지 번호는 0 이상이어야 합니다") int page,
@@ -279,6 +187,7 @@ public class StudyLogController {
      * @param size 페이지 크기
      * @return 페이징된 학습 일지
      */
+    @Override
     @GetMapping("/category/{category}/page")
     public Page<StudyLogResponse> getStudyLogsByCategoryPage(
             @PathVariable String category,
@@ -304,6 +213,7 @@ public class StudyLogController {
      * @param size 페이지 크기
      * @return 페이징된 검색 결과
      */
+    @Override
     @GetMapping("/search")
     public Page<StudyLogResponse> searchStudyLogs(
             @RequestParam(required = false) String title,
@@ -327,6 +237,7 @@ public class StudyLogController {
      * @param category 조회할 카테고리
      * @return 카테고리명과 개수를 포함한 Map
      */
+    @Override
     @GetMapping("/category/{category}/count")
     public Map<String, Object> getStudyLogCountByCategory(
             @PathVariable String category) {
@@ -352,6 +263,7 @@ public class StudyLogController {
      * @PathVariable: URL의 {id} 부분을 파라미터로 받음
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
      */
+    @Override
     @PutMapping("/{id}")
     public StudyLogResponse updateStudyLog(
             @PathVariable @Positive(message = "ID는 양수여야 합니다") Long id,
@@ -370,6 +282,7 @@ public class StudyLogController {
      * @param id 삭제할 학습 일지 ID
      * @return 삭제 결과
      */
+    @Override
     @DeleteMapping("/{id}")
     public StudyLogDeleteResponse deleteStudyLog(
             @PathVariable @Positive(message = "ID는 양수여야 합니다") Long id) {
