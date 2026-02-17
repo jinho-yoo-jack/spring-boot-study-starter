@@ -7,6 +7,16 @@ import com.study.myspringstudydiary.study_log.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.study_log.dto.response.StudyLogDeleteResponse;
 import com.study.myspringstudydiary.study_log.service.StudyLogService;
 import com.study.myspringstudydiary.global.common.ApiResponse;
+
+// SpringDoc 어노테이션 import
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,6 +52,7 @@ import java.util.Map;
  * - SLF4J 로거를 자동으로 생성 (log 변수 사용 가능)
  */
 @Slf4j
+@Tag(name = "학습 기록", description = "학습 기록 CRUD API - JWT 인증 필요")
 @RestController
 @RequiredArgsConstructor  // Lombok이 생성자를 자동 생성
 @RequestMapping("/api/v1/logs")
@@ -61,8 +72,97 @@ public class StudyLogController {
      *
      * POST /api/v1/logs
      */
+    @Operation(
+            summary = "학습 기록 생성",
+            description = """
+                    새로운 학습 기록을 생성합니다.
+
+                    ### 검증 규칙
+                    - **title**: 필수, 1-100자
+                    - **content**: 필수, 1-1000자
+                    - **category**: 필수, JAVA/SPRING/JPA/DATABASE/ALGORITHM/CS/NETWORK/GIT/ETC 중 선택
+                    - **understanding**: 필수, VERY_GOOD/GOOD/NORMAL/BAD/VERY_BAD 중 선택
+                    - **studyTime**: 필수, 1-1440분 (1분~24시간)
+                    - **studyDate**: 선택, 생략 시 현재 날짜
+
+                    ### 주의사항
+                    - 중복된 제목도 허용됩니다
+                    - JWT 토큰 인증이 필요합니다
+                    """
+    )
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "201",
+                    description = "생성 성공",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "success": true,
+                                              "data": {
+                                                "id": 1,
+                                                "title": "Spring Security JWT 인증",
+                                                "content": "JWT 토큰 생성 및 검증 로직 구현 완료",
+                                                "category": "SPRING",
+                                                "categoryIcon": "🌱",
+                                                "understanding": "GOOD",
+                                                "understandingEmoji": "😊",
+                                                "studyTime": 120,
+                                                "studyDate": "2024-01-15",
+                                                "createdAt": "2024-01-15T10:30:00",
+                                                "updatedAt": "2024-01-15T10:30:00"
+                                              },
+                                              "error": null
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "400",
+                    description = "입력값 검증 실패",
+                    content = @Content(
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "success": false,
+                                              "data": null,
+                                              "error": {
+                                                "code": "VALIDATION_ERROR",
+                                                "message": "학습 주제는 필수입니다"
+                                              }
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                    responseCode = "401",
+                    description = "인증 실패 - 토큰 없음 또는 만료"
+            )
+    })
     @PostMapping
     public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "학습 기록 생성 요청 데이터",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = StudyLogCreateRequest.class),
+                            examples = @ExampleObject(
+                                    value = """
+                                            {
+                                              "title": "JPA N+1 문제 해결",
+                                              "content": "Fetch Join과 EntityGraph를 사용하여 N+1 문제를 해결했습니다.",
+                                              "category": "JPA",
+                                              "understanding": "GOOD",
+                                              "studyTime": 90,
+                                              "studyDate": "2024-01-15"
+                                            }
+                                            """
+                            )
+                    )
+            )
             @Valid @RequestBody StudyLogCreateRequest request) {
 
         log.info("POST /api/v1/logs - Creating study log: {}", request.getTitle());

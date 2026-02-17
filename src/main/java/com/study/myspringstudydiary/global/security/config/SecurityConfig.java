@@ -62,6 +62,15 @@ public class SecurityConfig {
                                 "/api/auth/logout"
                         ).permitAll()
 
+                        // Swagger/OpenAPI endpoints
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
+
                         // Health check endpoints
                         .requestMatchers(
                                 "/actuator/health",
