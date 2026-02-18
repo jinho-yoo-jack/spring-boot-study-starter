@@ -1,15 +1,16 @@
 package com.study.myspringstudydiary.study_log.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * Study Log Entity with Lombok
- *
- * Before: 90 lines
- * After: 45 lines (50% reduction)
+ * StudyLog JPA Entity
+ * 학습 기록을 저장하는 엔티티
  */
+@Entity  // JPA 엔티티 선언
+@Table(name = "study_logs")  // 테이블 이름 지정
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,19 +20,35 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = "id")  // Use only id for equals and hashCode
 public class StudyLog {
 
+    @Id  // 기본 키 지정
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // AUTO_INCREMENT
     private Long id;
+
+    @Column(nullable = false, length = 100)
     private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
+
+    @Enumerated(EnumType.STRING)  // Enum을 문자열로 저장
+    @Column(nullable = false, length = 20)
     private Category category;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private Understanding understanding;
+
+    @Column(name = "study_time", nullable = false)
     private Integer studyTime;
+
+    @Column(name = "study_date")
     private LocalDate studyDate;
 
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
-    @Builder.Default
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     /**
      * Update study log information
@@ -92,5 +109,22 @@ public class StudyLog {
     public void updateStudyDate(LocalDate studyDate) {
         this.studyDate = studyDate;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    // ========== JPA 생명주기 콜백 ==========
+
+    @PrePersist
+    protected void onCreate() {
+        if (createdAt == null) {
+            createdAt = LocalDateTime.now();
+        }
+        if (studyDate == null) {
+            studyDate = LocalDate.now();
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

@@ -1,6 +1,6 @@
 package com.study.myspringstudydiary.auth.service;
 
-import com.study.myspringstudydiary.auth.dao.UserDao;
+import com.study.myspringstudydiary.auth.repository.UserRepository;
 import com.study.myspringstudydiary.auth.entity.User;
 import com.study.myspringstudydiary.auth.entity.UserRole;
 import lombok.RequiredArgsConstructor;
@@ -11,29 +11,31 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * Custom UserDetailsService implementation
+ * Custom UserDetailsService implementation with JPA Repository
  * Loads user-specific data from the database
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)  // 읽기 전용 트랜잭션
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("Loading user by username: {}", username);
 
         // Try to find user by username first, then by email
-        User user = userDao.findByUsername(username)
-                .orElseGet(() -> userDao.findByEmail(username)
+        User user = userRepository.findByUsername(username)
+                .orElseGet(() -> userRepository.findByEmail(username)
                         .orElseThrow(() -> new UsernameNotFoundException(
                                 "User not found with username or email: " + username)));
 

@@ -1,6 +1,6 @@
 package com.study.myspringstudydiary.auth.service;
 
-import com.study.myspringstudydiary.auth.dao.UserDao;
+import com.study.myspringstudydiary.auth.repository.UserRepository;
 import com.study.myspringstudydiary.auth.dto.*;
 import com.study.myspringstudydiary.auth.entity.User;
 import com.study.myspringstudydiary.auth.entity.UserRole;
@@ -21,23 +21,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Authentication Service
+ * Authentication Service with JPA Repository
  * Handles login, signup, and token refresh operations
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)  // 기본적으로 읽기 전용
 public class AuthService {
 
-    private final UserDao userDao;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+
+    // Refresh token 저장소 (임시 - 실제로는 별도 Entity/Table 권장)
+    private static final Map<String, Long> refreshTokenStore = new HashMap<>();
 
     @Value("${jwt.access-token-validity}")
     private long accessTokenValidity;
@@ -48,7 +53,7 @@ public class AuthService {
     /**
      * User login
      */
-    @Transactional
+    @Transactional  // 쓰기 작업
     public LoginResponse login(LoginRequest request) {
         try {
             log.info("Login attempt for user: {}", request.getUsername());
@@ -61,9 +66,9 @@ public class AuthService {
                     )
             );
 
-            // Get user details
-            User user = userDao.findByUsername(request.getUsername())
-                    .orElseGet(() -> userDao.findByEmail(request.getUsername())
+            // Get user details (username 또는 email로 조회)
+            User user = userRepository.findByUsername(request.getUsername())
+                    .orElseGet(() -> userRepository.findByEmail(request.getUsername())
                             .orElseThrow(() -> new AuthException("User not found")));
 
             // Generate tokens
@@ -74,9 +79,8 @@ public class AuthService {
             String accessToken = jwtTokenProvider.generateAccessToken(user.getUsername(), roles);
             String refreshToken = jwtTokenProvider.generateRefreshToken(user.getUsername());
 
-            // Save refresh token to database
-            Date refreshTokenExpiry = jwtTokenProvider.getExpirationFromToken(refreshToken);
-            userDao.saveRefreshToken(user.getId(), refreshToken, new Timestamp(refreshTokenExpiry.getTime()));
+            // Save refresh token (임시 메모리 저장)
+            refreshTokenStore.put(refreshToken, user.getId());
 
             log.info("Login successful for user: {}", user.getUsername());
 
@@ -97,17 +101,17 @@ public class AuthService {
     /**
      * User signup
      */
-    @Transactional
+    @Transactional  // 쓰기 작업
     public SignupResponse signup(SignupRequest request) {
         log.info("Signup attempt for username: {}, email: {}", request.getUsername(), request.getEmail());
 
         // Check if username already exists
-        if (userDao.existsByUsername(request.getUsername())) {
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new DuplicateResourceException("Username already exists: " + request.getUsername());
         }
 
         // Check if email already exists
-        if (userDao.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateResourceException("Email already exists: " + request.getEmail());
         }
 
@@ -118,9 +122,11 @@ public class AuthService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.USER)
                 .enabled(true)
+                .createdAt(LocalDateTime.now())  // JPA @PrePersist를 사용할 수도 있음
                 .build();
 
-        User savedUser = userDao.save(newUser);
+        // JPA Repository를 통한 저장
+        User savedUser = userRepository.save(newUser);
 
         log.info("User registered successfully: {}", savedUser.getUsername());
 
@@ -134,7 +140,7 @@ public class AuthService {
     /**
      * Refresh access token using refresh token
      */
-    @Transactional
+    @Transactional  // 쓰기 작업
     public TokenResponse refresh(RefreshTokenRequest request) {
         String refreshToken = request.getRefreshToken();
 
@@ -150,9 +156,14 @@ public class AuthService {
             throw new InvalidTokenException("Token is not a refresh token");
         }
 
-        // Find user by refresh token
-        User user = userDao.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new InvalidTokenException("Refresh token not found or expired"));
+        // Find user by refresh token (임시 메모리에서 조회)
+        Long userId = refreshTokenStore.get(refreshToken);
+        if (userId == null) {
+            throw new InvalidTokenException("Refresh token not found or expired");
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new InvalidTokenException("User not found"));
 
         // Get user roles
         UserRole userRole = user.getRole() != null ? user.getRole() : UserRole.USER;
@@ -162,9 +173,9 @@ public class AuthService {
         String newAccessToken = jwtTokenProvider.generateAccessToken(user.getUsername(), roles);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(user.getUsername());
 
-        // Update refresh token in database
-        Date refreshTokenExpiry = jwtTokenProvider.getExpirationFromToken(newRefreshToken);
-        userDao.saveRefreshToken(user.getId(), newRefreshToken, new Timestamp(refreshTokenExpiry.getTime()));
+        // Update refresh token in store
+        refreshTokenStore.remove(refreshToken);
+        refreshTokenStore.put(newRefreshToken, user.getId());
 
         log.info("Token refreshed successfully for user: {}", user.getUsername());
 
@@ -178,10 +189,32 @@ public class AuthService {
     /**
      * Logout (invalidate refresh token)
      */
-    @Transactional
+    @Transactional  // 쓰기 작업
     public void logout(String refreshToken) {
         log.info("Logout attempt");
-        userDao.deleteRefreshToken(refreshToken);
+        refreshTokenStore.remove(refreshToken);
         log.info("Logout successful");
+    }
+
+    /**
+     * Get user profile
+     */
+    public User getUserProfile(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new AuthException("User not found: " + username));
+    }
+
+    /**
+     * Update user password
+     */
+    @Transactional  // 쓰기 작업
+    public void updatePassword(Long userId, String newPassword) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AuthException("User not found"));
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        userRepository.updatePassword(userId, encodedPassword, LocalDateTime.now());
+
+        log.info("Password updated for user: {}", user.getUsername());
     }
 }

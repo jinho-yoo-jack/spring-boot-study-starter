@@ -28,9 +28,13 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // MySQL 및 JDBC 의존성
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    // JPA 및 MySQL 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java:8.0.33'
+
+    // H2 Database (테스트 및 개발용)
+    runtimeOnly 'com.h2database:h2'
+    testImplementation 'com.h2database:h2'
 
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'

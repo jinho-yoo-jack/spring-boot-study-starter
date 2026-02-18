@@ -39,7 +39,10 @@
       "Bash(curl:*)",
       "Bash(lsof:*)",
       "Bash(kill:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Read(//Users/black/dev/**)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Prometheus & Grafana 모니터링 스택 구성\n\n- Spring Boot Actuator 및 Micrometer 의존성 추가\n- Prometheus 메트릭 수집을 위한 설정 추가\n- Docker Compose에 모니터링 스택 구성\n  - Prometheus: 메트릭 수집 및 저장\n  - Grafana: 데이터 시각화 대시보드\n  - AlertManager: 알림 관리\n- Actuator 엔드포인트 설정 (전용 포트 9090)\n- Prometheus 설정 파일 작성\n  - prometheus.yml: 스크랩 설정\n  - alert-rules.yml: 알림 규칙 정의\n  - alertmanager.yml: 알림 라우팅 설정\n- 메트릭 태깅 및 히스토그램 설정 추가\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(SPRING_PROFILES_ACTIVE=test ./gradlew bootRun:*)"
     ],
     "deny": [],
     "ask": []

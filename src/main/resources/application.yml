@@ -7,6 +7,18 @@ spring:
   profiles:
     active: dev
 
+  # JPA 설정 (공통)
+  jpa:
+    hibernate:
+      ddl-auto: update  # 개발: update, 운영: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+
   # SQL 초기화 설정 (공통)
   sql:
     init:
@@ -185,11 +197,14 @@ logging:
     root: INFO
     com.study.myspringstudydiary: DEBUG
 
+    # Hibernate/JPA 로깅
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.type: TRACE
+
     # Spring 프레임워크 로깅
-    org.springframework.jdbc: DEBUG
-    org.springframework.jdbc.core: DEBUG
-    org.springframework.jdbc.datasource: TRACE
-    org.springframework.boot.autoconfigure.jdbc: DEBUG
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
 
     # HikariCP 상세 로깅
     com.zaxxer.hikari: DEBUG
