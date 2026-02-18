@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # MySQL 데이터베이스
   mysql:
     image: mysql:8.0
     container_name: diary-mysql
@@ -8,10 +9,10 @@ services:
     ports:
       - "${DB_PORT:-3306}:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-diary_db}
+      MYSQL_USER: ${MYSQL_USER:-diaryuser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-diarypass}
       TZ: ${TZ:-Asia/Seoul}
     volumes:
       - mysql-data:/var/lib/mysql
@@ -22,9 +23,94 @@ services:
       - --skip-character-set-client-handshake
     networks:
       - diary-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Spring Boot 애플리케이션 (개발용 - 필요시 주석 해제)
+  # app:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: diary-app
+  #   ports:
+  #     - "8081:8081"      # 메인 애플리케이션 포트
+  #     - "9090:9090"      # Actuator 포트
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=dev
+  #     - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/diary_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+  #     - SPRING_DATASOURCE_USERNAME=root
+  #     - SPRING_DATASOURCE_PASSWORD=${MYSQL_ROOT_PASSWORD:-rootpass}
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
+  #   networks:
+  #     - diary-network
+
+  # Prometheus: 메트릭 수집 및 저장
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: diary-prometheus
+    ports:
+      - "9091:9090"  # 9090은 Actuator가 사용하므로 9091로 변경
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert-rules.yml:/etc/prometheus/alert-rules.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+    networks:
+      - diary-network
+    restart: unless-stopped
+
+  # Grafana: 시각화 대시보드
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: diary-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GF_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_ADMIN_PASSWORD:-admin123}
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    networks:
+      - diary-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  # AlertManager: 알림 관리 (선택사항)
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    container_name: diary-alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./prometheus/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager-data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+    networks:
+      - diary-network
+    restart: unless-stopped
 
 volumes:
   mysql-data:
+    driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+  alertmanager-data:
     driver: local
 
 networks:
