@@ -5,8 +5,11 @@ import com.study.myspringstudydiary.dto.request.StudyLogCreateRequest;
 import com.study.myspringstudydiary.dto.request.StudyLogUpdateRequest;
 import com.study.myspringstudydiary.dto.response.StudyLogResponse;
 import com.study.myspringstudydiary.dto.response.StudyLogDeleteResponse;
+import com.study.myspringstudydiary.global.ApiResponse;
 import com.study.myspringstudydiary.service.StudyLogService;
 import com.study.myspringstudydiary.entity.Category;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,6 +17,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * 학습 일지 컨트롤러
@@ -22,7 +26,6 @@ import java.util.Map;
  * - @Controller + @ResponseBody 의 조합
  * - 이 클래스의 모든 메서드 반환값을 JSON으로 변환하여 응답
  * - REST API 개발 시 사용
- *
  * @RequestMapping 어노테이션 설명:
  * - 이 컨트롤러의 기본 URL 경로를 설정
  * - 모든 메서드의 URL 앞에 "/api/v1/logs"가 붙음
@@ -49,15 +52,14 @@ public class StudyLogController {
      *
      * @PostMapping: POST 요청을 처리
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
-     *
+     * <p>
      * POST /api/v1/logs
      */
     @PostMapping
-    public StudyLogResponse createStudyLog(
+    public ResponseEntity<ApiResponse<StudyLogResponse>> createStudyLog(
             @RequestBody StudyLogCreateRequest request) {
-
-        // Service 호출하여 학습 일지 생성
-        return studyLogService.createStudyLog(request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(studyLogService.createStudyLog(request)));
     }
 
     // ========== READ ==========
@@ -66,7 +68,7 @@ public class StudyLogController {
      * 모든 학습 일지 조회 (READ - All)
      *
      * @GetMapping: GET 요청을 처리
-     *
+     * <p>
      * GET /api/v1/logs
      */
     @GetMapping
@@ -79,7 +81,7 @@ public class StudyLogController {
      *
      * @GetMapping("/{id}"): GET 요청을 처리 (경로 변수 포함)
      * @PathVariable: URL 경로의 {id} 값을 매개변수로 받음
-     *
+     * <p>
      * GET /api/v1/logs/{id}
      */
     @GetMapping("/{id}")
@@ -91,7 +93,7 @@ public class StudyLogController {
 
     /**
      * 날짜로 학습 일지 조회
-     *
+     * <p>
      * GET /api/v1/logs/date/{date}
      *
      * @param date 조회할 날짜 (yyyy-MM-dd 형식)
@@ -106,7 +108,7 @@ public class StudyLogController {
 
     /**
      * 카테고리로 학습 일지 조회
-     *
+     * <p>
      * GET /api/v1/logs/category/{category}
      *
      * @param category 조회할 카테고리 (SPRING, DATABASE, JAVA, WEB, ALGORITHM, ETC)
@@ -121,7 +123,7 @@ public class StudyLogController {
 
     /**
      * 오늘의 학습 일지 조회
-     *
+     * <p>
      * GET /api/v1/logs/today
      *
      * @return 오늘 작성된 학습 일지 리스트
@@ -135,7 +137,7 @@ public class StudyLogController {
 
     /**
      * 전체 학습 일지 페이징 조회
-     *
+     * <p>
      * GET /api/v1/logs/page?page=0&size=10
      * GET /api/v1/logs/page (기본값: page=0, size=10)
      *
@@ -152,12 +154,12 @@ public class StudyLogController {
 
     /**
      * 카테고리별 학습 일지 페이징 조회
-     *
+     * <p>
      * GET /api/v1/logs/category/{category}/page?page=0&size=10
      *
      * @param category 카테고리
-     * @param page 페이지 번호
-     * @param size 페이지 크기
+     * @param page     페이지 번호
+     * @param size     페이지 크기
      * @return 페이징된 학습 일지
      */
     @GetMapping("/category/{category}/page")
@@ -172,17 +174,17 @@ public class StudyLogController {
 
     /**
      * 검색 + 페이징 조회
-     *
+     * <p>
      * GET /api/v1/logs/search?title=Spring&category=SPRING
-     *     &startDate=2026-01-01&endDate=2026-12-31
-     *     &page=0&size=10
+     * &startDate=2026-01-01&endDate=2026-12-31
+     * &page=0&size=10
      *
-     * @param title 제목 키워드 (선택)
-     * @param category 카테고리 (선택)
+     * @param title     제목 키워드 (선택)
+     * @param category  카테고리 (선택)
      * @param startDate 시작 날짜 (선택)
-     * @param endDate 종료 날짜 (선택)
-     * @param page 페이지 번호
-     * @param size 페이지 크기
+     * @param endDate   종료 날짜 (선택)
+     * @param page      페이지 번호
+     * @param size      페이지 크기
      * @return 페이징된 검색 결과
      */
     @GetMapping("/search")
@@ -202,7 +204,7 @@ public class StudyLogController {
 
     /**
      * 카테고리별 학습 일지 개수 조회
-     *
+     * <p>
      * GET /api/v1/logs/category/{category}/count
      *
      * @param category 조회할 카테고리
@@ -228,8 +230,7 @@ public class StudyLogController {
      * PUT /api/v1/logs/{id}
      *
      * @PutMapping: PUT 요청을 처리하는 어노테이션
-     *              리소스의 전체 또는 일부를 수정할 때 사용
-     *
+     * 리소스의 전체 또는 일부를 수정할 때 사용
      * @PathVariable: URL의 {id} 부분을 파라미터로 받음
      * @RequestBody: HTTP Body의 JSON을 객체로 변환
      */
@@ -245,7 +246,7 @@ public class StudyLogController {
 
     /**
      * 학습 일지 삭제 API
-     *
+     * <p>
      * DELETE /api/v1/logs/{id}
      *
      * @param id 삭제할 학습 일지 ID

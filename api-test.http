@@ -37,7 +37,7 @@ Content-Type: application/json
 
 {
   "title": "Java Stream API 심화",
-  "content": "Stream의 중간 연산과 최종 연산을 깊이 있게 학습했습니다.",
+  "content": "",
   "category": "JAVA",
   "understanding": "GOOD",
   "studyTime": 90,

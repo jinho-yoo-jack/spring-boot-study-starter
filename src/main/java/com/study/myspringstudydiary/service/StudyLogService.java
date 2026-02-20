@@ -10,6 +10,7 @@ import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.entity.Understanding;
 import com.study.myspringstudydiary.dao.StudyLogDao;
+import com.study.myspringstudydiary.global.ExecutionTimer;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -52,6 +53,7 @@ public class StudyLogService {
      * @param request 생성 요청 DTO
      * @return 생성된 학습 일지 응답 DTO
      */
+    @ExecutionTimer
     public StudyLogResponse createStudyLog(StudyLogCreateRequest request) {
 
         // 1. 요청 데이터 유효성 검증
