@@ -7,6 +7,7 @@ import com.study.myspringstudydiary.dto.response.StudyLogDeleteResponse;
 import com.study.myspringstudydiary.entity.Category;
 import com.study.myspringstudydiary.service.StudyLogService;
 import com.study.myspringstudydiary.global.common.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,19 +29,12 @@ import java.util.List;
  * - 모든 메서드의 URL 앞에 "/api/v1/logs"가 붙음
  */
 @RestController  // ⭐ REST API 컨트롤러로 등록!
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/logs")  // 기본 URL 경로 설정
 public class StudyLogController {
 
     // ⭐ 의존성 주입: Service를 주입받음
     private final StudyLogService studyLogService;
-
-    /**
-     * 생성자 주입
-     * Spring이 StudyLogService Bean을 찾아서 자동으로 주입해줍니다.
-     */
-    public StudyLogController(StudyLogService studyLogService) {
-        this.studyLogService = studyLogService;
-    }
 
     /**
      * 학습 일지 생성 (CREATE)

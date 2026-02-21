@@ -26,9 +26,9 @@ spring:
 logging:
   level:
     root: INFO
-    com.study.myspringstudydiary: DEBUG
-    org.springframework.jdbc: DEBUG
-    com.zaxxer.hikari: DEBUG
+    com.study.myspringstudydiary: INFO
+    org.springframework.jdbc: INFO
+    com.zaxxer.hikari: INFO
 
 # 서버 설정
 server:

@@ -2,6 +2,8 @@ package com.study.myspringstudydiary.dao;
 
 import com.study.myspringstudydiary.entity.StudyLog;
 import com.study.myspringstudydiary.global.common.Page;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
  * - Service에서 StudyLogDao 주입 시 이 클래스가 우선 주입됨
  */
 @Repository
+@Slf4j
 public class InMemoryStudyLogDao implements StudyLogDao {
 
     // 데이터 저장소 (실제 DB 대신 Map 사용)
@@ -231,14 +234,14 @@ public class InMemoryStudyLogDao implements StudyLogDao {
 
     @PostConstruct
     public void init() {
-        System.out.println("========================================");
-        System.out.println("📦 InMemoryStudyLogDao 초기화 완료!");
-        System.out.println("   - StudyLogDao 인터페이스 구현");
-        System.out.println("   - 메모리 기반 데이터 저장소(HashMap) 준비");
-        System.out.println("   - 페이징 기능 지원");
-        System.out.println("   - ID 생성기 준비됨");
-        System.out.println("   - DIP 원칙 준수");
-        System.out.println("========================================");
+        log.debug("========================================");
+        log.debug("📦 InMemoryStudyLogDao 초기화 완료!");
+        log.debug("   - StudyLogDao 인터페이스 구현");
+        log.debug("   - 메모리 기반 데이터 저장소(HashMap) 준비");
+        log.debug("   - 페이징 기능 지원");
+        log.debug("   - ID 생성기 준비됨");
+        log.debug("   - DIP 원칙 준수");
+        log.debug("========================================");
     }
 
     @PreDestroy

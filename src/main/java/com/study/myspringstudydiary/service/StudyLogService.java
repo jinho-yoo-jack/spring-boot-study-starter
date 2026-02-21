@@ -124,9 +124,10 @@ public class StudyLogService {
      * @return 해당 카테고리의 학습 일지 응답 DTO 리스트
      */
     public List<StudyLogResponse> getStudyLogsByCategory(Category category) {
+        System.out.println("getStudyLogsByCategory 시작");
         // Repository의 findByCategory 메소드 사용
         List<StudyLog> studyLogs = studyLogRepository.findByCategory(category.name());
-
+        System.out.println("getStudyLogsByCategory 종료");
         return studyLogs.stream()
                 .map(StudyLogResponse::from)
                 .collect(Collectors.toList());
@@ -137,6 +138,8 @@ public class StudyLogService {
      * @return 오늘 작성한 학습 일지 응답 DTO 리스트
      */
     public List<StudyLogResponse> getTodayStudyLogs() {
+        System.out.println("getTodayStudyLogs 시작");
+        System.out.println("getTodayStudyLogs 종료");
         return getStudyLogsByDate(LocalDate.now());
     }
 
