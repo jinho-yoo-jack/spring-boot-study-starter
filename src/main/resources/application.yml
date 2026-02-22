@@ -130,6 +130,17 @@ spring:
       idle-timeout: 600000
       pool-name: StudyDiaryHikariCP
 
+  # JPA 설정 (기본)
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        default_batch_fetch_size: 100
+    open-in-view: false
+
 # 기본 로깅 설정
 logging:
   level:
@@ -173,11 +184,16 @@ spring:
 
   # JPA 설정 (개발용)
   jpa:
+    hibernate:
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         use_sql_comments: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        default_batch_fetch_size: 100
+    open-in-view: false
 
 # 개발 환경 상세 로깅
 logging:
@@ -233,6 +249,21 @@ spring:
       idle-timeout: 300000
       pool-name: StudyDiaryHikariCP-PROD
       max-lifetime: 1800000
+
+  # JPA 설정 (운영)
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        default_batch_fetch_size: 100
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
 
 # 운영 환경 로깅 (최소화)
 logging:

@@ -39,7 +39,12 @@
       "Bash(curl:*)",
       "Bash(lsof:*)",
       "Bash(kill:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Read(//Users/black/dev/obsidian/jedi-mcp/2-Areas/Learning/Java-Course/5. DB와 ORM/**)",
+      "Bash(docker exec:*)",
+      "Bash(./gradlew build:*)",
+      "Bash(xargs:*)",
+      "mcp__mcp-obsidian__obsidian_batch_get_file_contents"
     ],
     "deny": [],
     "ask": []

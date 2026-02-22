@@ -1,0 +1,218 @@
+### ===================================
+### StudyLog 테스트 시나리오
+### 1. 회원가입 -> 2. 로그인 -> 3. StudyLog 생성
+### ===================================
+
+### 1. 회원가입 (새로운 테스트 사용자 생성)
+POST http://localhost:8080/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "email": "testuser@example.com",
+  "password": "Test1234!@"
+}
+
+### 2. 로그인 (토큰 발급)
+# @name login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Test1234!@"
+}
+
+### 로그인 응답에서 토큰 추출
+# 응답 예시:
+# {
+#   "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+#   "refreshToken": "eyJhbGciOiJIUzI1NiJ9...",
+#   "tokenType": "Bearer"
+# }
+
+### ===================================
+### 인증이 필요한 API 테스트
+### ===================================
+
+### 3. StudyLog 생성 (JPA 버전 - /api/v2)
+POST http://localhost:8080/api/v2/study-logs
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "title": "Spring Boot와 JPA 학습",
+  "content": "오늘은 Spring Boot에서 JPA 연관관계 매핑에 대해 학습했습니다. @ManyToOne과 @OneToMany 관계를 구현하고, 양방향 매핑의 주의사항을 이해했습니다.",
+  "category": "JPA",
+  "understanding": "GOOD",
+  "studyTime": 120,
+  "studyDate": "2024-02-21"
+}
+
+### 4. 내 StudyLog 목록 조회
+GET http://localhost:8080/api/v2/study-logs/my
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### 5. 전체 StudyLog 조회 (페이징 없음)
+GET http://localhost:8080/api/v2/study-logs
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### 6. 카테고리별 StudyLog 조회
+GET http://localhost:8080/api/v2/study-logs/category/JPA
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### 7. 오늘의 StudyLog 조회
+GET http://localhost:8080/api/v2/study-logs/today
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### 8. StudyLog 검색 (다중 조건)
+GET http://localhost:8080/api/v2/study-logs/search?title=Spring&category=JPA
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### 9. 특정 StudyLog 조회 (ID로)
+GET http://localhost:8080/api/v2/study-logs/1
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### 10. StudyLog 수정
+PUT http://localhost:8080/api/v2/study-logs/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "title": "Spring Boot와 JPA 심화 학습",
+  "content": "JPA 연관관계 매핑 심화 내용을 추가로 학습했습니다. Cascade와 orphanRemoval 옵션의 차이점을 이해하고, N+1 문제 해결 방법을 익혔습니다.",
+  "category": "JPA",
+  "understanding": "VERY_GOOD",
+  "studyTime": 180,
+  "studyDate": "2024-02-21"
+}
+
+### 11. StudyLog 삭제
+DELETE http://localhost:8080/api/v2/study-logs/1
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### ===================================
+### 추가 테스트 시나리오
+### ===================================
+
+### 12. 여러 StudyLog 생성 (다양한 카테고리)
+POST http://localhost:8080/api/v2/study-logs
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "title": "Spring Security 인증 구현",
+  "content": "JWT 토큰 기반 인증을 구현했습니다. @CurrentUser 어노테이션을 만들어 인증 정보를 쉽게 가져올 수 있도록 했습니다.",
+  "category": "SPRING",
+  "understanding": "NORMAL",
+  "studyTime": 90,
+  "studyDate": "2024-02-20"
+}
+
+###
+POST http://localhost:8080/api/v2/study-logs
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "title": "MySQL 인덱스 최적화",
+  "content": "복합 인덱스를 활용한 쿼리 성능 개선 방법을 학습했습니다.",
+  "category": "DATABASE",
+  "understanding": "GOOD",
+  "studyTime": 60,
+  "studyDate": "2024-02-19"
+}
+
+###
+POST http://localhost:8080/api/v2/study-logs
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "title": "알고리즘 - 동적 계획법",
+  "content": "백준 문제를 풀면서 DP의 기본 개념을 익혔습니다.",
+  "category": "ALGORITHM",
+  "understanding": "BAD",
+  "studyTime": 150,
+  "studyDate": "2024-02-18"
+}
+
+### 13. 내 카테고리별 학습 시간 통계
+GET http://localhost:8080/api/v2/study-logs/my/stats/time-by-category
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### 14. 날짜 범위로 내 StudyLog 조회
+GET http://localhost:8080/api/v2/study-logs/my/date-range?startDate=2024-02-18&endDate=2024-02-21
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### 15. 내 StudyLog 개수 조회
+GET http://localhost:8080/api/v2/study-logs/my/count
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### ===================================
+### 권한 테스트 (실패 케이스)
+### ===================================
+
+### 16. 인증 없이 StudyLog 생성 시도 (실패 예상 - 401)
+POST http://localhost:8080/api/v2/study-logs
+Content-Type: application/json
+
+{
+  "title": "인증 없이 생성 시도",
+  "content": "이 요청은 실패해야 합니다.",
+  "category": "JPA",
+  "understanding": "GOOD",
+  "studyTime": 60,
+  "studyDate": "2024-02-21"
+}
+
+### 17. 잘못된 토큰으로 접근 시도 (실패 예상 - 401)
+GET http://localhost:8080/api/v2/study-logs/my
+Authorization: Bearer invalid.token.here
+
+### ===================================
+### 토큰 갱신 테스트
+### ===================================
+
+### 18. Refresh Token으로 새 Access Token 발급
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{login.response.body.refreshToken}}"
+}
+
+### 19. 로그아웃
+POST http://localhost:8080/api/auth/logout
+Authorization: Bearer {{login.response.body.accessToken}}
+
+### ===================================
+### 테스트 데이터 정리
+### ===================================
+
+### 20. 테스트 사용자로 다시 로그인
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "password": "Test1234!@"
+}
+
+### 사용 가능한 카테고리:
+# - JAVA
+# - SPRING
+# - JPA
+# - DATABASE
+# - ALGORITHM
+# - NETWORK
+# - CS
+# - GIT
+# - ETC
+
+### 사용 가능한 이해도:
+# - VERY_GOOD (매우 잘 이해함)
+# - GOOD (잘 이해함)
+# - NORMAL (보통)
+# - BAD (이해 못함)
+# - VERY_BAD (전혀 이해 못함)
