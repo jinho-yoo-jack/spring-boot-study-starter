@@ -14,6 +14,7 @@ public enum Category {
     CS("💻", "컴퓨터 과학 기초"),
     NETWORK("🌐", "네트워크/HTTP"),
     GIT("📂", "Git/버전 관리"),
+    FRONT("",""),
     ETC("📝", "기타");
 
     private final String icon;
