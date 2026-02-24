@@ -165,17 +165,26 @@ public class StudyLogController {
             )
             @Valid @RequestBody StudyLogCreateRequest request) {
 
-        log.info("POST /api/v1/logs - Creating study log: {}", request.getTitle());
+        log.info("학습 일지 생성 요청: title={}, category={}, studyTime={}분",
+                request.getTitle(), request.getCategory(), request.getStudyTime());
+        log.debug("학습 일지 상세 내용: understanding={}, studyDate={}, contentLength={}",
+                request.getUnderstanding(), request.getStudyDate(),
+                request.getContent() != null ? request.getContent().length() : 0);
 
-        // Service 호출하여 학습 일지 생성
-        StudyLogResponse response = studyLogService.createStudyLog(request);
+        try {
+            // Service 호출하여 학습 일지 생성
+            StudyLogResponse response = studyLogService.createStudyLog(request);
 
-        log.info("Study log created successfully with ID: {}", response.getId());
+            log.info("학습 일지 생성 성공: id={}, title={}", response.getId(), response.getTitle());
 
-        // 201 Created 상태 코드와 함께 응답
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
+            // 201 Created 상태 코드와 함께 응답
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(ApiResponse.success(response));
+        } catch (Exception e) {
+            log.error("학습 일지 생성 실패: title={}", request.getTitle(), e);
+            throw e;
+        }
     }
 
     // ========== READ ==========
@@ -189,7 +198,15 @@ public class StudyLogController {
      */
     @GetMapping
     public List<StudyLogResponse> getAllStudyLogs() {
-        return studyLogService.getAllStudyLogs();
+        log.info("모든 학습 일지 조회 요청");
+        try {
+            List<StudyLogResponse> logs = studyLogService.getAllStudyLogs();
+            log.info("학습 일지 조회 완료: 총 {}개", logs.size());
+            return logs;
+        } catch (Exception e) {
+            log.error("학습 일지 조회 실패", e);
+            throw e;
+        }
     }
 
     /**
@@ -204,7 +221,15 @@ public class StudyLogController {
     public StudyLogResponse getStudyLogById(
             @PathVariable @Positive(message = "ID는 양수여야 합니다") Long id) {
 
-        return studyLogService.getStudyLogById(id);
+        log.info("학습 일지 단건 조회 요청: id={}", id);
+        try {
+            StudyLogResponse response = studyLogService.getStudyLogById(id);
+            log.debug("학습 일지 조회 성공: id={}, title={}", id, response.getTitle());
+            return response;
+        } catch (Exception e) {
+            log.error("학습 일지 조회 실패: id={}", id, e);
+            throw e;
+        }
     }
 
     /**
@@ -357,7 +382,18 @@ public class StudyLogController {
             @PathVariable @Positive(message = "ID는 양수여야 합니다") Long id,
             @Valid @RequestBody StudyLogUpdateRequest request) {
 
-        return studyLogService.updateStudyLog(id, request);
+        log.info("학습 일지 수정 요청: id={}, title={}", id, request.getTitle());
+        log.debug("수정 내용: category={}, understanding={}, studyTime={}",
+                request.getCategory(), request.getUnderstanding(), request.getStudyTime());
+
+        try {
+            StudyLogResponse response = studyLogService.updateStudyLog(id, request);
+            log.info("학습 일지 수정 성공: id={}", id);
+            return response;
+        } catch (Exception e) {
+            log.error("학습 일지 수정 실패: id={}", id, e);
+            throw e;
+        }
     }
 
     // ========== DELETE ==========
@@ -374,6 +410,14 @@ public class StudyLogController {
     public StudyLogDeleteResponse deleteStudyLog(
             @PathVariable @Positive(message = "ID는 양수여야 합니다") Long id) {
 
-        return studyLogService.deleteStudyLog(id);
+        log.info("학습 일지 삭제 요청: id={}", id);
+        try {
+            StudyLogDeleteResponse response = studyLogService.deleteStudyLog(id);
+            log.info("학습 일지 삭제 성공: id={}, message={}", id, response.getMessage());
+            return response;
+        } catch (Exception e) {
+            log.error("학습 일지 삭제 실패: id={}", id, e);
+            throw e;
+        }
     }
 }

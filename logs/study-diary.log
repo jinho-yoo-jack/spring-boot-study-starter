@@ -1,0 +1,830 @@
+2026-02-24 11:51:26.248 INFO  [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : Starting MySpringStudyDiaryApplication using Java 17.0.15 with PID 98597 (/Users/black/dev/spring-boot-study-starter/build/classes/java/main started by black in /Users/black/dev/spring-boot-study-starter)
+2026-02-24 11:51:26.248 DEBUG [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : Running with Spring Boot v3.5.10-SNAPSHOT, Spring v6.2.15
+2026-02-24 11:51:26.248 INFO  [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : The following 1 profile is active: "dev"
+2026-02-24 11:51:26.359 INFO  [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-02-24 11:51:26.362 INFO  [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 2 ms. Found 0 JPA repository interfaces.
+2026-02-24 11:51:26.420 INFO  [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2026-02-24 11:51:26.420 INFO  [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-24 11:51:26.420 INFO  [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-02-24 11:51:26.424 INFO  [  restartedMain] o.a.c.c.C.[Tomcat-2].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-02-24 11:51:26.425 INFO  [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 176 ms
+2026-02-24 11:51:26.452 DEBUG [  restartedMain] c.s.m.g.s.jwt.JwtAuthenticationFilter    : Filter 'jwtAuthenticationFilter' configured for use
+2026-02-24 11:51:26.452 DEBUG [  restartedMain] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
+2026-02-24 11:51:26.463 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : Class com.mysql.cj.jdbc.Driver found in Thread context class loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader@6c2a6e3d
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : StudyDiaryHikariCP-DEV - configuration:
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : allowPoolSuspension.............false
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : autoCommit......................true
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : catalog.........................none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : connectionInitSql...............none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : connectionTestQuery............."SELECT 1"
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : connectionTimeout...............30000
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : credentials.....................com.zaxxer.hikari.util.Credentials@456ff60c
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : dataSource......................none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : dataSourceClassName.............none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : dataSourceJNDI..................none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : dataSourceProperties............{password=<masked>, profileSQL=true, logger=com.mysql.cj.log.Slf4JLogger}
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : driverClassName................."com.mysql.cj.jdbc.Driver"
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : exceptionOverride...............none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : exceptionOverrideClassName......none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : healthCheckProperties...........{}
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : healthCheckRegistry.............none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : idleTimeout.....................600000
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : initializationFailTimeout.......1
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : isolateInternalQueries..........false
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : jdbcUrl.........................jdbc:mysql://localhost:3306/diary_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : keepaliveTime...................120000
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : leakDetectionThreshold..........60000
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : maxLifetime.....................1800000
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : maximumPoolSize.................10
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : metricRegistry..................none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : metricsTrackerFactory...........none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : minimumIdle.....................5
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : password........................<masked>
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : poolName........................"StudyDiaryHikariCP-DEV"
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : readOnly........................false
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : registerMbeans..................true
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : scheduledExecutor...............none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : schema..........................none
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : threadFactory...................internal
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : transactionIsolation............default
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : username........................"root"
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : validationTimeout...............5000
+2026-02-24 11:51:26.477 INFO  [  restartedMain] com.zaxxer.hikari.HikariDataSource       : StudyDiaryHikariCP-DEV - Starting...
+2026-02-24 11:51:26.477 DEBUG [  restartedMain] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (90fec3ae-1b49-46d1-a9d9-245f32da62a8)
+2026-02-24 11:51:26.482 INFO  [  restartedMain] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 0, connection-id: 359, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.482 INFO  [  restartedMain] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 0, connection-id: 359, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.484 INFO  [  restartedMain] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 1, connection-id: 359, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.executeSql(PoolBase.java:599)]
+2026-02-24 11:51:26.484 INFO  [  restartedMain] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 0, connection-id: 359, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.executeSql(PoolBase.java:599)]
+2026-02-24 11:51:26.484 DEBUG [  restartedMain] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (90fec3ae-1b49-46d1-a9d9-245f32da62a8)
+2026-02-24 11:51:26.485 INFO  [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@11be0268
+2026-02-24 11:51:26.485 INFO  [  restartedMain] com.zaxxer.hikari.HikariDataSource       : StudyDiaryHikariCP-DEV - Start completed.
+2026-02-24 11:51:26.486 INFO  [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-02-24 11:51:26.487 INFO  [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-02-24 11:51:26.492 INFO  [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-02-24 11:51:26.505 INFO  [  restartedMain] MySQL                                    : [QUERY] SELECT @@character_set_database, @@sql_mode [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 1, connection-id: 359, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyStatement.executeQuery(ProxyStatement.java:111)]
+2026-02-24 11:51:26.505 INFO  [  restartedMain] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 0, connection-id: 359, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyStatement.executeQuery(ProxyStatement.java:111)]
+2026-02-24 11:51:26.506 INFO  [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (StudyDiaryHikariCP-DEV)']
+	Database driver: undefined/unknown
+	Database version: 8.0.44
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-02-24 11:51:26.517 INFO  [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-02-24 11:51:26.518 INFO  [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-02-24 11:51:26.543 INFO  [  restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-02-24 11:51:26.543 WARN  [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-02-24 11:51:26.578 WARN  [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-02-24 11:51:26.588 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=1/10, idle=1/5, active=0, waiting=0)
+2026-02-24 11:51:26.588 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=1/10, idle=1/5, active=0, waiting=0)
+2026-02-24 11:51:26.588 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (e25b20f1-4345-433d-a06e-910b98c125d9)
+2026-02-24 11:51:26.594 INFO  [onnection-adder] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 1, connection-id: 360, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.594 INFO  [onnection-adder] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 0, connection-id: 360, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.594 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (e25b20f1-4345-433d-a06e-910b98c125d9)
+2026-02-24 11:51:26.595 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@6ef34571
+2026-02-24 11:51:26.606 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : 23 mappings in 'requestMappingHandlerMapping'
+2026-02-24 11:51:26.626 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After adding stats (total=2/10, idle=2/5, active=0, waiting=0)
+2026-02-24 11:51:26.626 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (aa3f1d95-0394-4c20-b625-16f0dace1e5e)
+2026-02-24 11:51:26.630 INFO  [onnection-adder] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 0, connection-id: 361, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.630 INFO  [onnection-adder] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 0, connection-id: 361, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.631 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (aa3f1d95-0394-4c20-b625-16f0dace1e5e)
+2026-02-24 11:51:26.631 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@edcba3e
+2026-02-24 11:51:26.646 DEBUG [  restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2026-02-24 11:51:26.666 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After adding stats (total=3/10, idle=3/5, active=0, waiting=0)
+2026-02-24 11:51:26.666 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (27302d39-6791-4817-b05f-4d7ced1ff34d)
+2026-02-24 11:51:26.670 INFO  [onnection-adder] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 1, connection-id: 362, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.670 INFO  [onnection-adder] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 0, connection-id: 362, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.671 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (27302d39-6791-4817-b05f-4d7ced1ff34d)
+2026-02-24 11:51:26.671 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@a924053
+2026-02-24 11:51:26.705 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After adding stats (total=4/10, idle=4/5, active=0, waiting=0)
+2026-02-24 11:51:26.705 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (a4e24021-cb88-448d-ab99-d1d957ace4a8)
+2026-02-24 11:51:26.710 INFO  [onnection-adder] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 1, connection-id: 363, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.710 INFO  [onnection-adder] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:51:26 KST 2026, duration: 0, connection-id: 363, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:51:26.711 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (a4e24021-cb88-448d-ab99-d1d957ace4a8)
+2026-02-24 11:51:26.711 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@6f092574
+2026-02-24 11:51:26.712 DEBUG [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-02-24 11:51:26.740 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-02-24 11:51:26.743 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After adding stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:51:26.751 DEBUG [  restartedMain] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-02-24 11:51:26.820 INFO  [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-02-24 11:51:26.831 INFO  [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2026-02-24 11:51:26.850 INFO  [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9090 (http)
+2026-02-24 11:51:26.850 INFO  [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-24 11:51:26.851 INFO  [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-02-24 11:51:26.855 INFO  [  restartedMain] o.a.c.c.C.[Tomcat-3].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-02-24 11:51:26.855 INFO  [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 23 ms
+2026-02-24 11:51:26.858 INFO  [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 5 endpoints beneath base path '/actuator'
+2026-02-24 11:51:26.862 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : 1 mappings in 'requestMappingHandlerMapping'
+2026-02-24 11:51:26.864 DEBUG [  restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2026-02-24 11:51:26.869 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-02-24 11:51:26.872 INFO  [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9090 (http) with context path '/'
+2026-02-24 11:51:26.879 INFO  [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : Started MySpringStudyDiaryApplication in 0.711 seconds (process running for 62894.223)
+2026-02-24 11:51:26.881 INFO  [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   JpaBaseConfiguration.JpaWebConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.web.servlet.config.annotation.WebMvcConfigurer' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - @ConditionalOnBooleanProperty (spring.jpa.open-in-view=true) matched (OnPropertyCondition)
+      - @ConditionalOnMissingBean (types: org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor,org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   JpaRepositoriesAutoConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.data.jpa.repository.JpaRepository' (OnClassCondition)
+      - @ConditionalOnBooleanProperty (spring.data.jpa.repositories.enabled=true) matched (OnPropertyCondition)
+      - @ConditionalOnBean (types: javax.sql.DataSource; SearchStrategy: all) found bean 'dataSource'; @ConditionalOnMissingBean (types: org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean,org.springframework.data.jpa.repository.config.JpaRepositoryConfigExtension; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   TransactionAutoConfiguration.EnableTransactionManagementConfiguration matched:
+      - @ConditionalOnBean (types: org.springframework.transaction.TransactionManager; SearchStrategy: all) found bean 'transactionManager'; @ConditionalOnMissingBean (types: org.springframework.transaction.annotation.AbstractTransactionManagementConfiguration; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   TransactionAutoConfiguration.EnableTransactionManagementConfiguration.CglibAutoProxyConfiguration matched:
+      - @ConditionalOnBooleanProperty (spring.aop.proxy-target-class=true) matched (OnPropertyCondition)
+
+
+Negative matches:
+-----------------
+
+   JpaRepositoriesAutoConfiguration#entityManagerFactoryBootstrapExecutorCustomizer:
+      Did not match:
+         - AnyNestedCondition 0 matched 2 did not; NestedCondition on JpaRepositoriesAutoConfiguration.BootstrapExecutorCondition.LazyBootstrapMode @ConditionalOnProperty (spring.data.jpa.repositories.bootstrap-mode=lazy) did not find property 'spring.data.jpa.repositories.bootstrap-mode'; NestedCondition on JpaRepositoriesAutoConfiguration.BootstrapExecutorCondition.DeferredBootstrapMode @ConditionalOnProperty (spring.data.jpa.repositories.bootstrap-mode=deferred) did not find property 'spring.data.jpa.repositories.bootstrap-mode' (JpaRepositoriesAutoConfiguration.BootstrapExecutorCondition)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-02-24 11:51:38.638 INFO  [kground-preinit] o.h.validator.internal.util.Version      : HV000001: Hibernate Validator 8.0.3.Final
+2026-02-24 11:51:38.653 INFO  [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : Starting MySpringStudyDiaryApplication using Java 17.0.15 with PID 87302 (/Users/black/dev/spring-boot-study-starter/build/classes/java/main started by black in /Users/black/dev/spring-boot-study-starter)
+2026-02-24 11:51:38.653 DEBUG [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : Running with Spring Boot v3.5.10-SNAPSHOT, Spring v6.2.15
+2026-02-24 11:51:38.653 INFO  [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : The following 1 profile is active: "dev"
+2026-02-24 11:51:38.666 INFO  [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-02-24 11:51:38.666 INFO  [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-02-24 11:51:39.173 INFO  [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2026-02-24 11:51:39.177 INFO  [  restartedMain] o.a.coyote.http11.Http11NioProtocol      : Initializing ProtocolHandler ["http-nio-8081"]
+2026-02-24 11:51:39.178 INFO  [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-24 11:51:39.178 INFO  [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-02-24 11:51:39.193 INFO  [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-02-24 11:51:39.193 INFO  [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 526 ms
+2026-02-24 11:51:39.247 DEBUG [  restartedMain] c.s.m.g.s.jwt.JwtAuthenticationFilter    : Filter 'jwtAuthenticationFilter' configured for use
+2026-02-24 11:51:39.247 DEBUG [  restartedMain] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
+2026-02-24 11:51:39.267 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : Class com.mysql.cj.jdbc.Driver found in Thread context class loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader@5ae0d7c1
+2026-02-24 11:51:39.301 INFO  [  restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-02-24 11:51:39.301 WARN  [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-02-24 11:51:39.394 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : 23 mappings in 'requestMappingHandlerMapping'
+2026-02-24 11:51:39.438 DEBUG [  restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2026-02-24 11:51:39.524 DEBUG [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-02-24 11:51:39.559 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-02-24 11:51:39.579 DEBUG [  restartedMain] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-02-24 11:51:39.656 WARN  [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
+2026-02-24 11:51:39.674 INFO  [  restartedMain] o.a.coyote.http11.Http11NioProtocol      : Starting ProtocolHandler ["http-nio-8081"]
+2026-02-24 11:51:39.676 WARN  [  restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-02-24 11:51:39.688 INFO  [  restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-02-24 11:51:39.693 ERROR [  restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8081 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8081 or configure this application to listen on another port.
+
+2026-02-24 11:51:57.765 INFO  [kground-preinit] o.h.validator.internal.util.Version      : HV000001: Hibernate Validator 8.0.3.Final
+2026-02-24 11:51:57.780 INFO  [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : Starting MySpringStudyDiaryApplication using Java 17.0.15 with PID 87374 (/Users/black/dev/spring-boot-study-starter/build/classes/java/main started by black in /Users/black/dev/spring-boot-study-starter)
+2026-02-24 11:51:57.780 DEBUG [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : Running with Spring Boot v3.5.10-SNAPSHOT, Spring v6.2.15
+2026-02-24 11:51:57.781 INFO  [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : The following 1 profile is active: "dev"
+2026-02-24 11:51:57.794 INFO  [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-02-24 11:51:57.794 INFO  [  restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-02-24 11:51:58.277 INFO  [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2026-02-24 11:51:58.281 INFO  [  restartedMain] o.a.coyote.http11.Http11NioProtocol      : Initializing ProtocolHandler ["http-nio-8081"]
+2026-02-24 11:51:58.281 INFO  [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-24 11:51:58.281 INFO  [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-02-24 11:51:58.296 INFO  [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-02-24 11:51:58.296 INFO  [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 502 ms
+2026-02-24 11:51:58.351 DEBUG [  restartedMain] c.s.m.g.s.jwt.JwtAuthenticationFilter    : Filter 'jwtAuthenticationFilter' configured for use
+2026-02-24 11:51:58.351 DEBUG [  restartedMain] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
+2026-02-24 11:51:58.371 DEBUG [  restartedMain] com.zaxxer.hikari.HikariConfig           : Class com.mysql.cj.jdbc.Driver found in Thread context class loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader@5ed8e6cf
+2026-02-24 11:51:58.404 INFO  [  restartedMain] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-02-24 11:51:58.404 WARN  [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-02-24 11:51:58.493 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : 23 mappings in 'requestMappingHandlerMapping'
+2026-02-24 11:51:58.535 DEBUG [  restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2026-02-24 11:51:58.621 DEBUG [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, LogoutFilter, JwtAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-02-24 11:51:58.654 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-02-24 11:51:58.672 DEBUG [  restartedMain] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2026-02-24 11:51:58.745 INFO  [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-02-24 11:51:58.760 INFO  [  restartedMain] o.a.coyote.http11.Http11NioProtocol      : Starting ProtocolHandler ["http-nio-8081"]
+2026-02-24 11:51:58.765 INFO  [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2026-02-24 11:51:58.791 INFO  [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 9090 (http)
+2026-02-24 11:51:58.791 INFO  [  restartedMain] o.a.coyote.http11.Http11NioProtocol      : Initializing ProtocolHandler ["http-nio-9090"]
+2026-02-24 11:51:58.791 INFO  [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-02-24 11:51:58.791 INFO  [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.50]
+2026-02-24 11:51:58.798 INFO  [  restartedMain] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2026-02-24 11:51:58.798 INFO  [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 32 ms
+2026-02-24 11:51:58.802 INFO  [  restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 5 endpoints beneath base path '/actuator'
+2026-02-24 11:51:58.807 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerMapping : 1 mappings in 'requestMappingHandlerMapping'
+2026-02-24 11:51:58.808 DEBUG [  restartedMain] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2026-02-24 11:51:58.813 DEBUG [  restartedMain] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2026-02-24 11:51:58.814 INFO  [  restartedMain] o.a.coyote.http11.Http11NioProtocol      : Starting ProtocolHandler ["http-nio-9090"]
+2026-02-24 11:51:58.815 INFO  [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 9090 (http) with context path '/'
+2026-02-24 11:51:58.823 INFO  [  restartedMain] c.s.m.MySpringStudyDiaryApplication      : Started MySpringStudyDiaryApplication in 1.238 seconds (process running for 1.362)
+2026-02-24 11:52:55.914 INFO  [nio-8081-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-02-24 11:52:55.914 INFO  [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-02-24 11:52:55.914 DEBUG [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2026-02-24 11:52:55.914 DEBUG [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2026-02-24 11:52:55.914 DEBUG [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2026-02-24 11:52:55.915 DEBUG [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@2f98f903
+2026-02-24 11:52:55.915 DEBUG [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@71674175
+2026-02-24 11:52:55.915 DEBUG [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2026-02-24 11:52:55.915 INFO  [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-02-24 11:52:55.924 DEBUG [nio-8081-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/login
+2026-02-24 11:52:55.929 DEBUG [nio-8081-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-02-24 11:52:55.932 DEBUG [nio-8081-exec-1] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/login
+2026-02-24 11:52:55.933 DEBUG [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : POST "/api/auth/login", parameters={}
+2026-02-24 11:52:55.934 DEBUG [nio-8081-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.study.myspringstudydiary.auth.controller.AuthController#login(LoginRequest)
+2026-02-24 11:52:55.966 DEBUG [nio-8081-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [com.study.myspringstudydiary.auth.dto.LoginRequest@28866909]
+2026-02-24 11:52:55.980 INFO  [nio-8081-exec-1] c.s.m.auth.controller.AuthController     : 로그인 요청 시작: username=testuser
+2026-02-24 11:52:55.980 DEBUG [nio-8081-exec-1] c.s.m.auth.controller.AuthController     : 로그인 요청 상세 정보: username=testuser
+2026-02-24 11:52:55.982 DEBUG [nio-8081-exec-1] o.s.jdbc.support.JdbcTransactionManager  : Creating new transaction with name [com.study.myspringstudydiary.auth.service.AuthService.login]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2026-02-24 11:52:55.982 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : StudyDiaryHikariCP-DEV - configuration:
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : allowPoolSuspension.............false
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : autoCommit......................true
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : catalog.........................none
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : connectionInitSql...............none
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : connectionTestQuery............."SELECT 1"
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : connectionTimeout...............30000
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : credentials.....................com.zaxxer.hikari.util.Credentials@1f618055
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : dataSource......................none
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : dataSourceClassName.............none
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : dataSourceJNDI..................none
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : dataSourceProperties............{password=<masked>, profileSQL=true, logger=com.mysql.cj.log.Slf4JLogger}
+2026-02-24 11:52:55.983 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : driverClassName................."com.mysql.cj.jdbc.Driver"
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : exceptionOverride...............none
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : exceptionOverrideClassName......none
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : healthCheckProperties...........{}
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : healthCheckRegistry.............none
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : idleTimeout.....................600000
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : initializationFailTimeout.......1
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : isolateInternalQueries..........false
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : jdbcUrl.........................jdbc:mysql://localhost:3306/diary_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : keepaliveTime...................120000
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : leakDetectionThreshold..........60000
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : maxLifetime.....................1800000
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : maximumPoolSize.................10
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : metricRegistry..................none
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : metricsTrackerFactory...........com.zaxxer.hikari.metrics.micrometer.MicrometerMetricsTrackerFactory@f5a5775
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : minimumIdle.....................5
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : password........................<masked>
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : poolName........................"StudyDiaryHikariCP-DEV"
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : readOnly........................false
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : registerMbeans..................true
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : scheduledExecutor...............none
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : schema..........................none
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : threadFactory...................internal
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : transactionIsolation............default
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : username........................"root"
+2026-02-24 11:52:55.984 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.HikariConfig           : validationTimeout...............5000
+2026-02-24 11:52:55.984 INFO  [nio-8081-exec-1] com.zaxxer.hikari.HikariDataSource       : StudyDiaryHikariCP-DEV - Starting...
+2026-02-24 11:52:55.989 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (df2175a4-2a84-4e90-acfc-eeda4744a165)
+2026-02-24 11:52:56.040 INFO  [nio-8081-exec-1] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 2, connection-id: 364, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.041 INFO  [nio-8081-exec-1] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 364, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.048 INFO  [nio-8081-exec-1] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 1, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.executeSql(PoolBase.java:599)]
+2026-02-24 11:52:56.048 INFO  [nio-8081-exec-1] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 1, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.executeSql(PoolBase.java:599)]
+2026-02-24 11:52:56.049 DEBUG [nio-8081-exec-1] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (df2175a4-2a84-4e90-acfc-eeda4744a165)
+2026-02-24 11:52:56.049 INFO  [nio-8081-exec-1] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@5e557f3f
+2026-02-24 11:52:56.052 INFO  [nio-8081-exec-1] com.zaxxer.hikari.HikariDataSource       : StudyDiaryHikariCP-DEV - Start completed.
+2026-02-24 11:52:56.053 DEBUG [nio-8081-exec-1] o.s.jdbc.support.JdbcTransactionManager  : Acquired Connection [HikariProxyConnection@597036852 wrapping com.mysql.cj.jdbc.ConnectionImpl@5e557f3f] for JDBC transaction
+2026-02-24 11:52:56.054 DEBUG [nio-8081-exec-1] o.s.jdbc.support.JdbcTransactionManager  : Switching JDBC Connection [HikariProxyConnection@597036852 wrapping com.mysql.cj.jdbc.ConnectionImpl@5e557f3f] to manual commit
+2026-02-24 11:52:56.056 INFO  [nio-8081-exec-1] MySQL                                    : [QUERY] SET autocommit=0 [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 2, connection-id: 364, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyConnection.setAutoCommit(ProxyConnection.java:412)]
+2026-02-24 11:52:56.056 INFO  [nio-8081-exec-1] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 364, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyConnection.setAutoCommit(ProxyConnection.java:412)]
+2026-02-24 11:52:56.056 INFO  [nio-8081-exec-1] c.s.m.auth.service.AuthService           : 로그인 시도: username=testuser
+2026-02-24 11:52:56.056 DEBUG [nio-8081-exec-1] c.s.m.auth.service.AuthService           : 인증 프로세스 시작: username=testuser
+2026-02-24 11:52:56.126 DEBUG [nio-8081-exec-1] c.s.m.a.s.CustomUserDetailsService       : Loading user by username: testuser
+2026-02-24 11:52:56.127 DEBUG [nio-8081-exec-1] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL query
+2026-02-24 11:52:56.127 DEBUG [nio-8081-exec-1] o.s.jdbc.core.JdbcTemplate               : Executing prepared SQL statement [SELECT * FROM users WHERE username = ?]
+2026-02-24 11:52:56.132 INFO  [nio-8081-exec-1] MySQL                                    : [QUERY] SELECT * FROM users WHERE username = 'testuser' [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 2, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)]
+2026-02-24 11:52:56.133 INFO  [nio-8081-exec-1] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyPreparedStatement.executeQuery(ProxyPreparedStatement.java:52)]
+2026-02-24 11:52:56.135 DEBUG [nio-8081-exec-1] .s.a.DefaultAuthenticationEventPublisher : No event was found for the exception org.springframework.security.authentication.InternalAuthenticationServiceException
+2026-02-24 11:52:56.135 DEBUG [nio-8081-exec-1] o.s.s.authentication.ProviderManager     : Authentication service failed internally for user 'testuser'
+org.springframework.security.authentication.InternalAuthenticationServiceException: Cannot invoke "java.sql.Timestamp.toLocalDateTime()" because the return value of "java.sql.ResultSet.getTimestamp(String)" is null
+	at org.springframework.security.authentication.dao.DaoAuthenticationProvider.retrieveUser(DaoAuthenticationProvider.java:136)
+	at org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider.authenticate(AbstractUserDetailsAuthenticationProvider.java:136)
+	at org.springframework.security.authentication.ProviderManager.authenticate(ProviderManager.java:182)
+	at com.study.myspringstudydiary.auth.service.AuthService.login(AuthService.java:58)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:360)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:380)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at com.study.myspringstudydiary.auth.service.AuthService$$SpringCGLIB$$0.login(<generated>)
+	at com.study.myspringstudydiary.auth.controller.AuthController.login(AuthController.java:114)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:490)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:351)
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:83)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:129)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at com.study.myspringstudydiary.global.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:68)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:334)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:225)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$4(HandlerMappingIntrospector.java:267)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "java.sql.Timestamp.toLocalDateTime()" because the return value of "java.sql.ResultSet.getTimestamp(String)" is null
+	at com.study.myspringstudydiary.auth.dao.UserDao.lambda$new$0(UserDao.java:57)
+	at org.springframework.jdbc.core.RowMapperResultSetExtractor.extractData(RowMapperResultSetExtractor.java:94)
+	at org.springframework.jdbc.core.RowMapperResultSetExtractor.extractData(RowMapperResultSetExtractor.java:61)
+	at org.springframework.jdbc.core.JdbcTemplate$1.doInPreparedStatement(JdbcTemplate.java:733)
+	at org.springframework.jdbc.core.JdbcTemplate.execute(JdbcTemplate.java:658)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:723)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:754)
+	at org.springframework.jdbc.core.JdbcTemplate.query(JdbcTemplate.java:767)
+	at org.springframework.jdbc.core.JdbcTemplate.queryForObject(JdbcTemplate.java:896)
+	at com.study.myspringstudydiary.auth.dao.UserDao.findByUsername(UserDao.java:84)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:360)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.dao.support.PersistenceExceptionTranslationInterceptor.invoke(PersistenceExceptionTranslationInterceptor.java:138)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at com.study.myspringstudydiary.auth.dao.UserDao$$SpringCGLIB$$0.findByUsername(<generated>)
+	at com.study.myspringstudydiary.auth.service.CustomUserDetailsService.loadUserByUsername(CustomUserDetailsService.java:35)
+	at org.springframework.security.authentication.dao.DaoAuthenticationProvider.retrieveUser(DaoAuthenticationProvider.java:121)
+	... 154 common frames omitted
+2026-02-24 11:52:56.136 ERROR [nio-8081-exec-1] c.s.m.auth.service.AuthService           : 로그인 실패: username=testuser, error=Cannot invoke "java.sql.Timestamp.toLocalDateTime()" because the return value of "java.sql.ResultSet.getTimestamp(String)" is null
+2026-02-24 11:52:56.136 DEBUG [nio-8081-exec-1] o.s.jdbc.support.JdbcTransactionManager  : Initiating transaction rollback
+2026-02-24 11:52:56.136 DEBUG [nio-8081-exec-1] o.s.jdbc.support.JdbcTransactionManager  : Rolling back JDBC transaction on Connection [HikariProxyConnection@597036852 wrapping com.mysql.cj.jdbc.ConnectionImpl@5e557f3f]
+2026-02-24 11:52:56.138 INFO  [nio-8081-exec-1] MySQL                                    : [QUERY] ROLLBACK [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 1, connection-id: 364, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyConnection.rollback(ProxyConnection.java:386)]
+2026-02-24 11:52:56.138 INFO  [nio-8081-exec-1] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 364, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyConnection.rollback(ProxyConnection.java:386)]
+2026-02-24 11:52:56.139 INFO  [nio-8081-exec-1] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 1, connection-id: 364, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyConnection.setAutoCommit(ProxyConnection.java:412)]
+2026-02-24 11:52:56.139 INFO  [nio-8081-exec-1] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 364, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.pool.ProxyConnection.setAutoCommit(ProxyConnection.java:412)]
+2026-02-24 11:52:56.139 DEBUG [nio-8081-exec-1] o.s.jdbc.support.JdbcTransactionManager  : Releasing JDBC Connection [HikariProxyConnection@597036852 wrapping com.mysql.cj.jdbc.ConnectionImpl@5e557f3f] after transaction
+2026-02-24 11:52:56.140 ERROR [nio-8081-exec-1] c.s.m.auth.controller.AuthController     : 로그인 실패: username=testuser
+org.springframework.security.authentication.BadCredentialsException: Invalid username or password
+	at com.study.myspringstudydiary.auth.service.AuthService.login(AuthService.java:100)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:360)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:380)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at com.study.myspringstudydiary.auth.service.AuthService$$SpringCGLIB$$0.login(<generated>)
+	at com.study.myspringstudydiary.auth.controller.AuthController.login(AuthController.java:114)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:258)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:191)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:991)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:896)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:490)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:351)
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:83)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:129)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:125)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:119)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at com.study.myspringstudydiary.global.security.jwt.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:68)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:228)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:241)
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:334)
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:225)
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:138)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.ServletRequestPathFilter.doFilter(ServletRequestPathFilter.java:52)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebSecurityConfiguration.java:319)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$4(HandlerMappingIntrospector.java:267)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:240)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:110)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:138)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:165)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:88)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:482)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:113)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:83)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:72)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:903)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1774)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:973)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:491)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-02-24 11:52:56.142 DEBUG [nio-8081-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Using @ExceptionHandler com.study.myspringstudydiary.global.exception.GlobalExceptionHandler#handleBadCredentials(BadCredentialsException)
+2026-02-24 11:52:56.143 WARN  [nio-8081-exec-1] c.s.m.g.e.GlobalExceptionHandler         : 인증 실패 - 잘못된 인증 정보: Invalid username or password
+2026-02-24 11:52:56.148 DEBUG [nio-8081-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2026-02-24 11:52:56.149 DEBUG [nio-8081-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [com.study.myspringstudydiary.global.common.ApiResponse@715a8b04]
+2026-02-24 11:52:56.152 WARN  [nio-8081-exec-1] .m.m.a.ExceptionHandlerExceptionResolver : Resolved [org.springframework.security.authentication.BadCredentialsException: Invalid username or password]
+2026-02-24 11:52:56.152 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=1/10, idle=1/5, active=0, waiting=0)
+2026-02-24 11:52:56.152 DEBUG [nio-8081-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 401 UNAUTHORIZED
+2026-02-24 11:52:56.153 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=1/10, idle=1/5, active=0, waiting=0)
+2026-02-24 11:52:56.153 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (e471cf89-15e4-4fa2-94ae-f697c24580d6)
+2026-02-24 11:52:56.159 INFO  [onnection-adder] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 365, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.159 INFO  [onnection-adder] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 365, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.160 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (e471cf89-15e4-4fa2-94ae-f697c24580d6)
+2026-02-24 11:52:56.160 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@32005e7e
+2026-02-24 11:52:56.190 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After adding stats (total=2/10, idle=2/5, active=0, waiting=0)
+2026-02-24 11:52:56.190 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (0ad0fa54-17d5-4432-aab6-9d8a27b6e78b)
+2026-02-24 11:52:56.196 INFO  [onnection-adder] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 1, connection-id: 366, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.196 INFO  [onnection-adder] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 366, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.197 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (0ad0fa54-17d5-4432-aab6-9d8a27b6e78b)
+2026-02-24 11:52:56.197 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@522fa131
+2026-02-24 11:52:56.231 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After adding stats (total=3/10, idle=3/5, active=0, waiting=0)
+2026-02-24 11:52:56.231 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (321d9689-dd79-474c-8ed4-0ebed1c05b52)
+2026-02-24 11:52:56.236 INFO  [onnection-adder] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 367, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.237 INFO  [onnection-adder] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 367, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.237 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (321d9689-dd79-474c-8ed4-0ebed1c05b52)
+2026-02-24 11:52:56.238 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@56619fa7
+2026-02-24 11:52:56.273 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After adding stats (total=4/10, idle=4/5, active=0, waiting=0)
+2026-02-24 11:52:56.273 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Attempting to create/setup new connection (3813d26c-ffdd-48b5-8f45-8b5c1d7e68b7)
+2026-02-24 11:52:56.279 INFO  [onnection-adder] MySQL                                    : [QUERY] SET autocommit=1 [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 368, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.279 INFO  [onnection-adder] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:52:56 KST 2026, duration: 0, connection-id: 368, statement-id: -1, resultset-id: 0,	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:144)]
+2026-02-24 11:52:56.280 DEBUG [onnection-adder] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Established new connection (3813d26c-ffdd-48b5-8f45-8b5c1d7e68b7)
+2026-02-24 11:52:56.280 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Added connection com.mysql.cj.jdbc.ConnectionImpl@4230a527
+2026-02-24 11:52:56.310 DEBUG [onnection-adder] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After adding stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:53:26.158 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:53:26.159 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:53:26.159 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:53:56.164 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:53:56.164 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:53:56.164 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:54:26.167 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:54:26.168 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:54:26.168 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:54:36.122 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:54:36 KST 2026, duration: 2, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:36.122 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:54:36 KST 2026, duration: 1, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:36.123 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@5e557f3f is alive
+2026-02-24 11:54:48.845 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:54:48 KST 2026, duration: 2, connection-id: 365, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:48.845 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:54:48 KST 2026, duration: 1, connection-id: 365, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:48.846 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@32005e7e is alive
+2026-02-24 11:54:50.418 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:54:50 KST 2026, duration: 3, connection-id: 366, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:50.419 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:54:50 KST 2026, duration: 1, connection-id: 366, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:50.419 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@522fa131 is alive
+2026-02-24 11:54:51.668 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:54:51 KST 2026, duration: 2, connection-id: 368, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:51.668 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:54:51 KST 2026, duration: 0, connection-id: 368, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:51.669 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@4230a527 is alive
+2026-02-24 11:54:53.851 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:54:53 KST 2026, duration: 2, connection-id: 367, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:53.851 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:54:53 KST 2026, duration: 0, connection-id: 367, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:54:53.852 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@56619fa7 is alive
+2026-02-24 11:54:56.173 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:54:56.174 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:54:56.174 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:55:26.179 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:55:26.180 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:55:26.180 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:55:56.184 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:55:56.185 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:55:56.185 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:56:16.201 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:56:16 KST 2026, duration: 3, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:16.202 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:56:16 KST 2026, duration: 0, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:16.202 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@5e557f3f is alive
+2026-02-24 11:56:26.188 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:56:26.189 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:56:26.189 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:56:41.535 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:56:41 KST 2026, duration: 3, connection-id: 365, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:41.536 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:56:41 KST 2026, duration: 0, connection-id: 365, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:41.536 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@32005e7e is alive
+2026-02-24 11:56:44.641 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:56:44 KST 2026, duration: 2, connection-id: 366, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:44.642 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:56:44 KST 2026, duration: 1, connection-id: 366, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:44.642 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@522fa131 is alive
+2026-02-24 11:56:47.054 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:56:47 KST 2026, duration: 2, connection-id: 368, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:47.055 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:56:47 KST 2026, duration: 0, connection-id: 368, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:47.055 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@4230a527 is alive
+2026-02-24 11:56:51.465 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:56:51 KST 2026, duration: 3, connection-id: 367, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:51.465 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:56:51 KST 2026, duration: 1, connection-id: 367, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:56:51.466 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@56619fa7 is alive
+2026-02-24 11:56:56.192 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:56:56.192 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:56:56.193 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:57:26.198 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:57:26.199 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:57:26.199 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:57:56.202 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:57:56.202 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:57:56.202 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:57:56.280 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:57:56 KST 2026, duration: 3, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:57:56.281 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:57:56 KST 2026, duration: 1, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:57:56.281 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@5e557f3f is alive
+2026-02-24 11:58:26.207 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:58:26.208 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:58:26.208 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:58:34.221 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:58:34 KST 2026, duration: 2, connection-id: 365, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:58:34.221 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:58:34 KST 2026, duration: 1, connection-id: 365, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:58:34.222 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@32005e7e is alive
+2026-02-24 11:58:38.865 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:58:38 KST 2026, duration: 3, connection-id: 366, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:58:38.866 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:58:38 KST 2026, duration: 0, connection-id: 366, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:58:38.866 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@522fa131 is alive
+2026-02-24 11:58:42.440 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:58:42 KST 2026, duration: 2, connection-id: 368, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:58:42.440 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:58:42 KST 2026, duration: 1, connection-id: 368, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:58:42.441 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@4230a527 is alive
+2026-02-24 11:58:49.077 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:58:49 KST 2026, duration: 3, connection-id: 367, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:58:49.078 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:58:49 KST 2026, duration: 1, connection-id: 367, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:58:49.078 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@56619fa7 is alive
+2026-02-24 11:58:56.212 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:58:56.212 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:58:56.213 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:59:26.216 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:59:26.217 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 11:59:26.217 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 11:59:36.365 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 11:59:36 KST 2026, duration: 4, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:59:36.365 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 11:59:36 KST 2026, duration: 0, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 11:59:36.365 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@5e557f3f is alive
+2026-02-24 12:01:28.420 WARN  [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Thread starvation or clock leap detected (housekeeper delta=2m2s204ms).
+2026-02-24 12:01:28.421 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 12:01:28.421 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 12:01:28.421 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 12:01:58.425 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 12:01:58.426 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 12:01:58.426 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 12:01:59.106 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 12:01:59 KST 2026, duration: 3, connection-id: 365, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:01:59.106 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 12:01:59 KST 2026, duration: 0, connection-id: 365, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:01:59.106 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@32005e7e is alive
+2026-02-24 12:02:05.286 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 12:02:05 KST 2026, duration: 3, connection-id: 366, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:02:05.287 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 12:02:05 KST 2026, duration: 0, connection-id: 366, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:02:05.287 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@522fa131 is alive
+2026-02-24 12:02:10.024 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 12:02:10 KST 2026, duration: 2, connection-id: 368, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:02:10.024 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 12:02:10 KST 2026, duration: 1, connection-id: 368, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:02:10.025 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@4230a527 is alive
+2026-02-24 12:02:18.887 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 12:02:18 KST 2026, duration: 2, connection-id: 367, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:02:18.887 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 12:02:18 KST 2026, duration: 1, connection-id: 367, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:02:18.887 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@56619fa7 is alive
+2026-02-24 12:02:28.430 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 12:02:28.431 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  cleanup stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 12:02:28.431 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Fill pool skipped, pool has sufficient level or currently being filled.
+2026-02-24 12:02:48.636 INFO  [DEV:housekeeper] MySQL                                    : [QUERY] SELECT 1 [Created on: Tue Feb 24 12:02:48 KST 2026, duration: 3, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:02:48.636 INFO  [DEV:housekeeper] MySQL                                    : [FETCH]  [Created on: Tue Feb 24 12:02:48 KST 2026, duration: 0, connection-id: 364, statement-id: 0, resultset-id: 0,	at com.zaxxer.hikari.pool.PoolBase.isConnectionDead(PoolBase.java:170)]
+2026-02-24 12:02:48.636 DEBUG [DEV:housekeeper] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - keepalive: connection com.mysql.cj.jdbc.ConnectionImpl@5e557f3f is alive
+2026-02-24 12:02:50.632 INFO  [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-02-24 12:02:50.642 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-02-24 12:02:50.643 INFO  [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-02-24 12:02:50.647 INFO  [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-02-24 12:02:50.657 INFO  [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : StudyDiaryHikariCP-DEV - Shutdown initiated...
+2026-02-24 12:02:50.657 DEBUG [ionShutdownHook] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - Before shutdown stats (total=5/10, idle=5/5, active=0, waiting=0)
+2026-02-24 12:02:50.658 DEBUG [nnection-closer] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Closing connection com.mysql.cj.jdbc.ConnectionImpl@5e557f3f: (connection evicted)
+2026-02-24 12:02:50.660 DEBUG [nnection-closer] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Closing connection com.mysql.cj.jdbc.ConnectionImpl@32005e7e: (connection evicted)
+2026-02-24 12:02:50.660 DEBUG [nnection-closer] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Closing connection com.mysql.cj.jdbc.ConnectionImpl@522fa131: (connection evicted)
+2026-02-24 12:02:50.660 DEBUG [nnection-closer] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Closing connection com.mysql.cj.jdbc.ConnectionImpl@56619fa7: (connection evicted)
+2026-02-24 12:02:50.660 DEBUG [nnection-closer] com.zaxxer.hikari.pool.PoolBase          : StudyDiaryHikariCP-DEV - Closing connection com.mysql.cj.jdbc.ConnectionImpl@4230a527: (connection evicted)
+2026-02-24 12:02:50.660 DEBUG [ionShutdownHook] com.zaxxer.hikari.pool.HikariPool        : StudyDiaryHikariCP-DEV - After  shutdown stats (total=0/10, idle=0/5, active=0, waiting=0)
+2026-02-24 12:02:50.661 INFO  [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : StudyDiaryHikariCP-DEV - Shutdown completed.

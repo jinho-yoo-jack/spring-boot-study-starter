@@ -107,11 +107,17 @@ public class AuthController {
                     )
             )
             @Valid @RequestBody LoginRequest request) {
-        log.info("Login request for username: {}", request.getUsername());
+        log.info("로그인 요청 시작: username={}", request.getUsername());
+        log.debug("로그인 요청 상세 정보: username={}", request.getUsername());
 
-        LoginResponse response = authService.login(request);
-
-        return ResponseEntity.ok(ApiResponse.success(response));
+        try {
+            LoginResponse response = authService.login(request);
+            log.info("로그인 성공: username={}, tokenType={}", request.getUsername(), response.getTokenType());
+            return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (Exception e) {
+            log.error("로그인 실패: username={}", request.getUsername(), e);
+            throw e;
+        }
     }
 
     /**
@@ -194,13 +200,20 @@ public class AuthController {
                     )
             )
             @Valid @RequestBody SignupRequest request) {
-        log.info("Signup request for username: {}, email: {}", request.getUsername(), request.getEmail());
+        log.info("회원가입 요청 시작: username={}, email={}", request.getUsername(), request.getEmail());
+        log.debug("회원가입 상세 정보: username={}, email={}", request.getUsername(), request.getEmail());
 
-        SignupResponse response = authService.signup(request);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(response));
+        try {
+            SignupResponse response = authService.signup(request);
+            log.info("회원가입 성공: userId={}, username={}, email={}",
+                    response.getUserId(), response.getUsername(), response.getEmail());
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(ApiResponse.success(response));
+        } catch (Exception e) {
+            log.error("회원가입 실패: username={}, email={}", request.getUsername(), request.getEmail(), e);
+            throw e;
+        }
     }
 
     /**
@@ -246,11 +259,17 @@ public class AuthController {
     })
     @PostMapping("/refresh")
     public ResponseEntity<ApiResponse<TokenResponse>> refresh(@Valid @RequestBody RefreshTokenRequest request) {
-        log.info("Token refresh request");
+        log.info("토큰 갱신 요청 시작");
+        log.debug("Refresh token 길이: {}", request.getRefreshToken() != null ? request.getRefreshToken().length() : 0);
 
-        TokenResponse response = authService.refresh(request);
-
-        return ResponseEntity.ok(ApiResponse.success(response));
+        try {
+            TokenResponse response = authService.refresh(request);
+            log.info("토큰 갱신 성공: tokenType={}, expiresIn={}", response.getTokenType(), response.getExpiresIn());
+            return ResponseEntity.ok(ApiResponse.success(response));
+        } catch (Exception e) {
+            log.error("토큰 갱신 실패", e);
+            throw e;
+        }
     }
 
     /**
@@ -281,10 +300,17 @@ public class AuthController {
     })
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<String>> logout(@Valid @RequestBody RefreshTokenRequest request) {
-        log.info("Logout request");
+        log.info("로그아웃 요청 시작");
+        log.debug("로그아웃 토큰 길이: {}", request.getRefreshToken() != null ? request.getRefreshToken().length() : 0);
 
-        authService.logout(request.getRefreshToken());
-
-        return ResponseEntity.ok(ApiResponse.success("Logged out successfully"));
+        try {
+            authService.logout(request.getRefreshToken());
+            log.info("로그아웃 성공");
+            return ResponseEntity.ok(ApiResponse.success("Logged out successfully"));
+        } catch (Exception e) {
+            log.warn("로그아웃 처리 중 오류 발생", e);
+            // 로그아웃은 실패해도 성공으로 처리
+            return ResponseEntity.ok(ApiResponse.success("Logged out successfully"));
+        }
     }
 }
