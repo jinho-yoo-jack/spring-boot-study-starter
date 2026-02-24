@@ -9,7 +9,8 @@
       "Bash(git merge:*)",
       "Bash(mvn clean compile:*)",
       "Bash(.gitignore)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(./gradlew clean build:*)"
     ],
     "deny": [],
     "ask": []

@@ -23,6 +23,8 @@ public interface StudyLogMapper {
      * @param studyLog Entity
      * @return DTO
      */
+    @Mapping(target = "categoryIcon", expression = "java(studyLog.getCategory().getIcon())")
+    @Mapping(target = "understandingEmoji", expression = "java(studyLog.getUnderstanding().getEmoji())")
     StudyLogResponse toResponse(StudyLog studyLog);
 
     /**
