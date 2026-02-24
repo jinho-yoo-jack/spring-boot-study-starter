@@ -1,7 +1,7 @@
-package com.study.myspringstudydiary.service;
+package com.study.myspringstudydiary.discord.service;
 
-import com.study.myspringstudydiary.dto.discord.DiscordWebhookMessage;
-import com.study.myspringstudydiary.dto.discord.DiscordWebhookMessage.*;
+import com.study.myspringstudydiary.discord.dto.DiscordWebhookMessage;
+import com.study.myspringstudydiary.discord.dto.DiscordWebhookMessage.*;
 import com.study.myspringstudydiary.study_log.entity.StudyLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

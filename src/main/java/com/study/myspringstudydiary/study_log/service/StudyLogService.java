@@ -10,7 +10,7 @@ import com.study.myspringstudydiary.study_log.entity.Category;
 import com.study.myspringstudydiary.study_log.entity.StudyLog;
 import com.study.myspringstudydiary.study_log.dao.StudyLogDao;
 import com.study.myspringstudydiary.global.mapper.StudyLogMapper;
-import com.study.myspringstudydiary.service.DiscordNotificationService;
+import com.study.myspringstudydiary.discord.service.DiscordNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
-package com.study.myspringstudydiary.controller;
+package com.study.myspringstudydiary.discord.controller;
 
-import com.study.myspringstudydiary.service.DiscordNotificationService;
+import com.study.myspringstudydiary.discord.service.DiscordNotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

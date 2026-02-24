@@ -1,4 +1,4 @@
-package com.study.myspringstudydiary.config;
+package com.study.myspringstudydiary.global.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

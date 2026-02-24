@@ -1,4 +1,4 @@
-package com.study.myspringstudydiary.global.docs.config;
+package com.study.myspringstudydiary.global.config.docs;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

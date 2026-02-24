@@ -1,4 +1,4 @@
-package com.study.myspringstudydiary.dto.discord;
+package com.study.myspringstudydiary.discord.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
