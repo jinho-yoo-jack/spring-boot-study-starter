@@ -81,6 +81,14 @@ info:
     description: Study Log Management System
     version: '@project.version@'
 
+# Discord Webhook 설정 (공통)
+discord:
+  webhook:
+    url: ${DISCORD_WEBHOOK_URL:https://discord.com/api/webhooks/your-webhook-id/your-webhook-token}
+    enabled: ${DISCORD_WEBHOOK_ENABLED:false}
+    username: Study Log Bot
+    avatar-url: https://i.imgur.com/AfFp7pu.png
+
 # SpringDoc OpenAPI 설정 (공통)
 springdoc:
   # Swagger UI 경로 설정
