@@ -18,7 +18,13 @@
       "Bash(git log:*)",
       "Bash(tree:*)",
       "mcp__mcp-obsidian__obsidian_patch_content",
-      "Bash(tail:*)"
+      "Bash(tail:*)",
+      "Bash(./gradlew clean build:*)",
+      "Bash(curl:*)",
+      "Bash(export ACCESS_TOKEN:*)",
+      "Bash(export:*)",
+      "Bash(ACCESS_TOKEN=\"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhcGl0ZXN0Iiwicm9sZXMiOiJST0xFX1VTRVIiLCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNzcyMDA1Njc4LCJleHAiOjE3NzIwMDc0Nzh9.CM9wiGbf8Ide2kbwh8gLSBE-xwtS5PxLHlCC1HaKOBVUJbD0dsvkgy3Cd9V0ZCh_2WZ15VLymOQMbdyNOFTcag\")",
+      "Bash(REFRESH_TOKEN=\"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhcGl0ZXN0IiwidHlwZSI6InJlZnJlc2giLCJpYXQiOjE3NzIwMDU2NzgsImV4cCI6MTc3MjYxMDQ3OH0.jOG1QFCQN1-eVubYyDJ4Sb02grv21MoOldLBktiBDfn5H3pyCVRz-AZUTe8HWAshQ6vxtwCk0_DzTw4f39zuLQ\")"
     ],
     "deny": [],
     "ask": []
