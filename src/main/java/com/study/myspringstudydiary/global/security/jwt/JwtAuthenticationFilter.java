@@ -48,6 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             // Extract JWT token from request
+            // eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGVzIjoiUk9MRV9VU0VSIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3MjAxOTYwMSwiZXhwIjoxNzcyMDIxNDAxfQ.0KYXXfzXsae7kG4ke51peySPqEQqtPgqSo4eJ3-MsjnGC8r_d8qXJKrC0JwzHeLzt8uh5MG761o2heO0KeqlAg
             String token = extractTokenFromRequest(request);
 
             // If token exists and is valid, authenticate the user
@@ -79,6 +80,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     private String extractTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        // Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsInJvbGVzIjoiUk9MRV9VU0VSIiwidHlwZSI6ImFjY2VzcyIsImlhdCI6MTc3MjAxOTYwMSwiZXhwIjoxNzcyMDIxNDAxfQ.0KYXXfzXsae7kG4ke51peySPqEQqtPgqSo4eJ3-MsjnGC8r_d8qXJKrC0JwzHeLzt8uh5MG761o2heO0KeqlAg
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(BEARER_PREFIX.length());
@@ -94,13 +96,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Validate token
         if (jwtTokenProvider.validateToken(token)) {
             // Extract username from token
+            // 로그인할 때, Access Token을 만들 때, 입력했던 or 넣었던 값들 중에
+            // username 꺼내기 메서드
             String username = jwtTokenProvider.getUsernameFromToken(token);
 
             // Extract roles from token
+            // Role(권한 정보) 꺼내기 메서드
             String rolesString = jwtTokenProvider.getRolesFromToken(token);
             List<SimpleGrantedAuthority> authorities = parseAuthorities(rolesString);
 
             // Create UserDetails
+            // Spring Security에서 사용하는 UserDetails 인터페이스를 구현한 User 객체 생성
             UserDetails userDetails = User.builder()
                     .username(username)
                     .password("") // Password is not needed for JWT authentication
@@ -108,6 +114,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .build();
 
             // Create authentication token
+            // 사용자 정보 or 인증된 사용자의 정보를 담고 있는 DTO
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -119,6 +126,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             // Set authentication in SecurityContext
+            // SecurityContext에 저장한다.
+            // 이렇게 저장을 해주는 이유는 -> "Spring Boot 영역에서 비즈니스 로직을 실행할 때, 유저의 정보가 필요한 경우,
+            // 손쉽게 빼서 사용할 수 있도록 하기 위해서"
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             log.debug("Authenticated user: {}", username);

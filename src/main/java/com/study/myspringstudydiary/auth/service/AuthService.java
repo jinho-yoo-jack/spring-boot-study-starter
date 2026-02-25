@@ -54,6 +54,7 @@ public class AuthService {
             log.info("Login attempt for user: {}", request.getUsername());
 
             // Authenticate user
+            // Client 입력한 username과 password를 사용하여 인증(입력 값이 DB에 저장되어 있는 값과 일치하는지를 확인하는 역할)을 수행한다.
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getUsername(),
@@ -112,6 +113,8 @@ public class AuthService {
         }
 
         // Create new user
+        // Password를 평문으로 저장을 하면 안된다.
+        // BCryptPasswordEncoder를 사용하여 암호화된 비밀번호를 저장한다.
         User newUser = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())

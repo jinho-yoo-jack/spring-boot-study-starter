@@ -54,7 +54,7 @@ public class UserDao {
                 .role(role)
                 .enabled(rs.getBoolean("enabled"))
                 .createdAt(rs.getTimestamp("created_at").toLocalDateTime())
-                .updatedAt(rs.getTimestamp("updated_at").toLocalDateTime())
+//                .updatedAt(rs.getTimestamp("updated_at").toLocalDateTime())
                 .build();
     };
 
