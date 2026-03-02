@@ -39,7 +39,8 @@
       "Bash(curl:*)",
       "Bash(lsof:*)",
       "Bash(kill:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Read(//Users/black/dev/obsidian/jedi-mcp/**)"
     ],
     "deny": [],
     "ask": []
