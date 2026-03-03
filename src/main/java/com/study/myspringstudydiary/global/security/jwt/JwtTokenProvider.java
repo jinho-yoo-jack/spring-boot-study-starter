@@ -121,6 +121,8 @@ public class JwtTokenProvider {
 
     /**
      * Validate token
+     *  파싱 후, Redis나 DB에 블랙리스트를 저장하는 테이블이나 공간에
+     *  해당하는 Access Token이 존재하는지?를 확인하는 것이에요.
      */
     public boolean validateToken(String token) {
         try {
