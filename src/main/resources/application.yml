@@ -81,7 +81,7 @@ spring:
 # 기본 로깅 설정
 logging:
   level:
-    root: INFO
+    root: TRACE
     com.study.myspringstudydiary: INFO
     org.springframework.web: INFO
 
