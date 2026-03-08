@@ -34,7 +34,9 @@
       "mcp__mcp-obsidian__obsidian_patch_content",
       "mcp__mcp-obsidian__obsidian_delete_file",
       "Bash(head:*)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Read(//Users/black/.config/**)",
+      "Read(//Users/black/**)"
     ],
     "deny": [],
     "ask": []

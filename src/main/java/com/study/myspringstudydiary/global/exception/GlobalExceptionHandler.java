@@ -6,6 +6,7 @@ import com.study.myspringstudydiary.auth.exception.InvalidTokenException;
 import com.study.myspringstudydiary.global.common.ApiResponse;
 import com.study.myspringstudydiary.study_log.exception.ResourceNotFoundException;
 import com.study.myspringstudydiary.study_log.exception.DuplicateResourceException;
+import com.study.myspringstudydiary.study_log.exception.StudyLogNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -36,6 +37,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(ApiResponse.error("RESOURCE_NOT_FOUND", e.getMessage()));
+    }
+
+    /**
+     * Handle StudyLogNotFoundException
+     */
+    @ExceptionHandler(StudyLogNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleStudyLogNotFound(
+            StudyLogNotFoundException e) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ApiResponse.error("STUDY_LOG_NOT_FOUND", e.getMessage()));
     }
 
     /**

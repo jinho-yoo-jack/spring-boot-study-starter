@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.crypto.SecretKey;
+import java.awt.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Date;
@@ -41,6 +42,14 @@ class JwtTokenProviderTest {
     @Nested
     @DisplayName("토큰 생성 테스트")
     class TokenGenerationTests {
+
+        @Nested
+        @DisplayName("Access 토큰 생성 테스트")
+        class AccessTokenGenerationTests {}
+
+        @Nested
+        @DisplayName("Refresh 토큰 생성 테스트")
+        class RefreshTokenGenerationTests {}
 
         @Test
         @DisplayName("Authentication으로 Access Token 생성 - 성공")
